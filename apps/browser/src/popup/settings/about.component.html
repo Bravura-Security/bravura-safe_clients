@@ -8,27 +8,28 @@
         <p class="text-center">
           <b>Bravura Safe</b>
         </p>
-        <p class="text-center">&copy; 2022, Bitwarden Inc., with modifications &copy; 2022, Bravura Security, Inc.</p>
+        <p class="text-center">&copy; 2023, Bitwarden Inc., with modifications &copy; 2023, Bravura Security, Inc.</p>
         <p class="text-center">{{ "version" | i18n }}: {{ version }}</p>
         <ng-container *ngIf="serverConfig$ | async as serverConfig">
           <p class="text-center" *ngIf="isCloud">
             {{ "serverVersion" | i18n }}: {{ this.serverConfig?.version }}
             <span *ngIf="!serverConfig.isValid()">
-              ({{ "lastSeenOn" | i18n: (serverConfig.utcDate | date: "mediumDate") }})
+              ({{ "lastSeenOn" | i18n : (serverConfig.utcDate | date : "mediumDate") }})
             </span>
           </p>
 
+          <!--
           <ng-container *ngIf="!isCloud">
             <ng-container *ngIf="serverConfig.server">
               <p class="text-center">
                 {{ "serverVersion" | i18n }} <small>({{ "thirdParty" | i18n }})</small>:
                 {{ this.serverConfig?.version }}
                 <span *ngIf="!serverConfig.isValid()">
-                  ({{ "lastSeenOn" | i18n: (serverConfig.utcDate | date: "mediumDate") }})
+                  ({{ "lastSeenOn" | i18n : (serverConfig.utcDate | date : "mediumDate") }})
                 </span>
               </p>
               <div class="text-center">
-                <small>{{ "thirdPartyServerMessage" | i18n: serverConfig.server?.name }}</small>
+                <small>{{ "thirdPartyServerMessage" | i18n : serverConfig.server?.name }}</small>
               </div>
             </ng-container>
 
@@ -36,10 +37,11 @@
               {{ "serverVersion" | i18n }} <small>({{ "selfHosted" | i18n }})</small>:
               {{ this.serverConfig?.version }}
               <span *ngIf="!serverConfig.isValid()">
-                ({{ "lastSeenOn" | i18n: (serverConfig.utcDate | date: "mediumDate") }})
+                ({{ "lastSeenOn" | i18n : (serverConfig.utcDate | date : "mediumDate") }})
               </span>
             </p>
           </ng-container>
+          -->
         </ng-container>
       </div>
       <div class="modal-footer">

@@ -35,7 +35,7 @@
     !loading &&
     (isPaging()
       ? pagedCollections
-      : (collections | search: searchText:'name':'id')) as searchedCollections
+      : (collections | search : searchText : 'name' : 'id')) as searchedCollections
   "
 >
   <p *ngIf="!searchedCollections.length">{{ "noCollectionsInList" | i18n }}</p>
@@ -65,6 +65,16 @@
               <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
+              <a
+                class="dropdown-item"
+                href="#"
+                appStopClick
+                *ngIf="this.canEdit(c)"
+                (click)="edit(c)"
+              >
+                <i class="fa fa-fw fa-pencil-square-o" aria-hidden="true"></i>
+                {{ "edit" | i18n }}
+              </a>
               <a
                 class="dropdown-item"
                 href="#"

@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CipherService } from "@bitwarden/common/abstractions/cipher.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PasswordRepromptService } from "@bitwarden/common/abstractions/passwordReprompt.service";
+import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { CipherView } from "@bitwarden/common/models/view/cipher.view";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
 import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
-import { NgxCaptureService } from 'ngx-capture';
-import { SyncService } from "@bitwarden/common/abstractions/sync/sync.service.abstraction";
+import { NgxCaptureService } from "ngx-capture";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { Icons } from "@bitwarden/components";
 
 import { ExposedPasswordsReportComponent } from "./exposed-passwords-report.component";
@@ -21,6 +21,7 @@ import { ReusedPasswordsReportComponent } from "./reused-passwords-report.compon
 import { WeakPasswordsReportComponent } from "./weak-passwords-report.component";
 import { UnsecuredWebsitesReportComponent } from "./unsecured-websites-report.component";
 import { InactiveTwoFactorReportComponent } from "./inactive-two-factor-report.component";
+import { ConfiguredTwoFactorReportComponent } from "./configured-two-factor-report.component";
 
 @Component({
   selector: "app-security-assessment-report",
@@ -43,6 +44,9 @@ export class SecurityAssessmentReportComponent implements OnInit {
   protected inactiveTwoFactor: InactiveTwoFactorReportComponent;
   protected inactiveTwoFactorCiphers: CipherView[] = [];
   protected inactiveTwoFactorLoaded = false;
+  protected configuredTwoFactor: ConfiguredTwoFactorReportComponent;
+  protected highlightedItemsTotal = 0;
+  protected configuredTwoFactorLoaded = false;
   protected pageLoaded = false;
   protected executionDate: Date;
   protected userEmail = "";
@@ -60,17 +64,18 @@ export class SecurityAssessmentReportComponent implements OnInit {
     protected messagingService: MessagingService,
     protected stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService,
-    protected passwordGenerationService: PasswordGenerationService,
+    protected passwordGenerationService: PasswordGenerationServiceAbstraction,
     protected logService: LogService,
     protected fileDownloadService: FileDownloadService,
     protected captureService: NgxCaptureService,
     protected syncService: SyncService
   ) {
-    this.exposedPasswords = new ExposedPasswordsReportComponent(cipherService, auditService, modalService, messagingService, stateService, passwordRepromptService);
+    this.exposedPasswords = new ExposedPasswordsReportComponent(cipherService, auditService, modalService, messagingService, passwordRepromptService);
     this.reusedPasswords = new ReusedPasswordsReportComponent(cipherService, modalService, messagingService, stateService, passwordRepromptService);
-    this.weakPasswords = new WeakPasswordsReportComponent(cipherService, passwordGenerationService, modalService, messagingService, stateService, passwordRepromptService);
-    this.unsecuredWebsites = new UnsecuredWebsitesReportComponent(cipherService, modalService, messagingService, stateService, passwordRepromptService);
-    this.inactiveTwoFactor = new InactiveTwoFactorReportComponent(cipherService, modalService, messagingService, stateService, logService, passwordRepromptService);
+    this.weakPasswords = new WeakPasswordsReportComponent(cipherService, passwordGenerationService, modalService, messagingService, passwordRepromptService);
+    this.unsecuredWebsites = new UnsecuredWebsitesReportComponent(cipherService, modalService, messagingService, passwordRepromptService);
+    this.inactiveTwoFactor = new InactiveTwoFactorReportComponent(cipherService, modalService, messagingService, logService, passwordRepromptService);
+    this.configuredTwoFactor = new ConfiguredTwoFactorReportComponent(auditService, stateService, apiService);
   }
 
   async ngOnInit() {
@@ -78,11 +83,12 @@ export class SecurityAssessmentReportComponent implements OnInit {
     await this.getCiphersSize();
     if (this.ciphersSize > 0) {
       await Promise.all([ this.loadExposedPasswords(), this.loadReusedPasswords(), this.loadWeakPasswords(), this.loadUnsecuredWebsites(), this.loadInactiveTwoFactor() ]);
+    }
+    await this.loadConfiguredTwoFactor();
       this.executionDate = new Date();
 
       const profile = await this.apiService.getProfile();
       this.userEmail = profile.email;
-    }
     this.pageLoaded = true;
   }
 
@@ -120,6 +126,12 @@ export class SecurityAssessmentReportComponent implements OnInit {
     await this.inactiveTwoFactor.load();
     this.inactiveTwoFactorCiphers = this.inactiveTwoFactor.ciphers;
     this.inactiveTwoFactorLoaded = true;
+  }
+
+  async loadConfiguredTwoFactor() {
+    await this.configuredTwoFactor.load();
+    this.highlightedItemsTotal = this.configuredTwoFactor.configuredProvidersTotal;
+    this.configuredTwoFactorLoaded = true;
   }
 
   async downloadAssessment() {

@@ -77,7 +77,7 @@
     "message": "Copiar nota"
   },
   "copyUri": {
-    "message": "Copiar URL"
+    "message": "Copiar URI"
   },
   "copyUsername": {
     "message": "Copiar usuario"
@@ -195,11 +195,20 @@
   "helpFeedback": {
     "message": "Ayuda y comentarios"
   },
+  "helpCenter": {
+    "message": "Centro de ayuda de Bravura Safe"
+  },
+  "communityForums": {
+    "message": "Explorar los foros de la comunidad Bravura Safe"
+  },
+  "contactSupport": {
+    "message": "Contactar al soporte de Bravura Safe"
+  },
   "sync": {
     "message": "Sincronizar"
   },
   "syncVaultNow": {
-    "message": "Sincronizar caja fuerte ahora"
+    "message": "Sincronizar caja fuerte"
   },
   "lastSync": {
     "message": "Última sincronización:"
@@ -356,7 +365,7 @@
       },
       "hostname": {
         "content": "$2",
-        "example": "bravurasecurity.com"
+        "example": "bravurasafe.com"
       }
     }
   },
@@ -430,7 +439,14 @@
     "message": "Se requiere volver a teclear la contraseña maestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contraseña maestra debe tener al menos 8 caracteres."
+    "message": "La contraseña maestra debe tener al menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmación de contraseña maestra no coincide."
@@ -488,10 +504,10 @@
     "message": "Cambiar contraseña maestra"
   },
   "changeMasterPasswordConfirmation": {
-    "message": "Puedes cambiar tu contraseña maestra en la caja fuerte web de Bravura Safe. ¿Quieres visitar ahora el sitio web?"
+    "message": "Puedes cambiar tu contraseña maestra en la caja fuerte web de bravurasafe.com. ¿Quieres visitar ahora el sitio web?"
   },
   "twoStepLoginConfirmation": {
-    "message": "La autenticación en dos pasos hace que tu cuenta sea mucho más segura, requiriendo que introduzcas un código de seguridad de una aplicación de autenticación cada vez que accedes. La autenticación en dos pasos puede ser habilitada en la caja fuerte web de Bravura Safe. ¿Quieres visitar ahora el sitio web?"
+    "message": "La autenticación en dos pasos hace que tu cuenta sea mucho más segura, requiriendo que introduzcas un código de seguridad de una aplicación de autenticación cada vez que accedes. La autenticación en dos pasos puede ser habilitada en la caja fuerte web de bravurasafe.com. ¿Quieres visitar ahora el sitio web?"
   },
   "editedFolder": {
     "message": "Carpeta editada"
@@ -518,11 +534,11 @@
     "message": "Contraseña copiada"
   },
   "uri": {
-    "message": "URL"
+    "message": "URI"
   },
   "uriPosition": {
-    "message": "URL $POSITION$",
-    "description": "A listing of URLs. Ex: URL 1, URL 2, URL 3, etc.",
+    "message": "URI $POSITION$",
+    "description": "A listing of URIs. Ex: URI 1, URI 2, URI 3, etc.",
     "placeholders": {
       "position": {
         "content": "$1",
@@ -531,7 +547,7 @@
     }
   },
   "newUri": {
-    "message": "Nueva URL"
+    "message": "Nueva URI"
   },
   "addedItem": {
     "message": "Elemento añadido"
@@ -621,11 +637,11 @@
     "message": "Haga clic con el botón secundario para acceder a la generación de contraseñas y a los inicios de sesión correspondientes al sitio web. "
   },
   "defaultUriMatchDetection": {
-    "message": "Detección por defecto de coincidencia de URL",
-    "description": "Default URL match detection for auto-fill."
+    "message": "Detección por defecto de coincidencia de URI",
+    "description": "Default URI match detection for auto-fill."
   },
   "defaultUriMatchDetectionDesc": {
-    "message": "Elija el método de detección por defecto de coincidencia de URL que se utilizará para acciones de inicio de sesión como autorrellenado."
+    "message": "Elija el método de detección por defecto de coincidencia de URI que se utilizará para acciones de inicio de sesión como autorrellenado."
   },
   "theme": {
     "message": "Tema"
@@ -677,7 +693,7 @@
     "message": "Aprende sobre Organizaciones"
   },
   "learnOrgConfirmation": {
-    "message": "Bravura Safe te permite compartir objetos de tu caja fuerte con otros usando una organización. ¿Quieres visitar el sitio web de Bravura Safe para saber más?"
+    "message": "Bravura Safe te permite compartir objetos de tu caja fuerte con otros usando una organización. ¿Quieres visitar el sitio web de bravurasafe.com para saber más?"
   },
   "moveToOrganization": {
     "message": "Mover a la Organización"
@@ -741,7 +757,7 @@
     "message": "Selecciona un archivo."
   },
   "maxFileSize": {
-    "message": "El tamaño máximo de archivo es de 500MB."
+    "message": "El tamaño máximo de archivo es de 1.8GB."
   },
   "featureUnavailable": {
     "message": "Característica no disponible"
@@ -756,7 +772,7 @@
     "message": "Gestionar membresía"
   },
   "premiumManageAlert": {
-    "message": "Puedes gestionar tu membresía en la caja fuerte web de bravurasecurity.com. ¿Quieres visitar el sitio web ahora?"
+    "message": "Puedes gestionar tu membresía en la caja fuerte web de bravurasafe.com. ¿Quieres visitar el sitio web ahora?"
   },
   "premiumRefresh": {
     "message": "Actualizar membresía"
@@ -789,7 +805,7 @@
     "message": "Comprar Premium"
   },
   "premiumPurchaseAlert": {
-    "message": "Puedes comprar la membresía Premium en la caja fuerte web de bravurasecurity.com. ¿Quieres visitar el sitio web ahora?"
+    "message": "Puedes comprar la membresía Premium en la caja fuerte web de bravurasafe.com. ¿Quieres visitar el sitio web ahora?"
   },
   "premiumCurrentMember": {
     "message": "¡Eres un miembro Premium!"
@@ -908,30 +924,6 @@
     "message": "Verificar con Duo Security para tu organización usando la aplicación Duo Mobile, SMS, llamada telefónica o llave de seguridad U2F.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
-  "twoFactorHyprCheckDevice": {
-    "message": "Check device for notification"
-  },
-  "twoFactorHyprVerifyItIsYou": {
-    "message": "Verify it is you by approving the notification sent to your registered device"
-  },
-  "twoFactorHyprSendRegEmail": {
-    "message": "Send registration email"
-  },
-  "twoFactorHyprRegEmailSent": {
-    "message": "Registration email sent"
-  },
-  "twoFactorHyprNoToken": {
-    "message": "Failed to authenticate [no token]"
-  },
-  "twoFactorHyprAuthDenied": {
-    "message": "Authentication denied"
-  },
-  "twoFactorHyprAuthFailed": {
-    "message": "Failed to authenticate via HYPR"
-  },
-  "twoFactorHyprNoUserAndOrDevice": {
-    "message": "HYPR account not found and/or device needs to be registered"
-  },
   "webAuthnTitle": {
     "message": "FIDO2 WebAuthn"
   },
@@ -984,7 +976,10 @@
     "message": "Si se detecta un formulario, realizar automáticamente un autorellenado cuando la web cargue."
   },
   "experimentalFeature": {
-    "message": "Esta es una característica experimental. Úsala bajo tu propio riesgo."
+    "message": "Los sitios web vulnerados o no confiables pueden explotar el autorelleno al cargar la página."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Más información sobre el relleno automático"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Configuración de autorrelleno por defecto para elementos de inicio de sesión"
@@ -1147,6 +1142,9 @@
   "dr": {
     "message": "Dr"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "firstName": {
     "message": "Nombre"
   },
@@ -1295,22 +1293,22 @@
   },
   "matchDetection": {
     "message": "Tipo de detección",
-    "description": "URL match detection for auto-fill."
+    "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
     "message": "Detección por defecto",
-    "description": "Default URL match detection for auto-fill."
+    "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
     "message": "Alternar opciones"
   },
   "toggleCurrentUris": {
-    "message": "Alternar URLs actuales",
-    "description": "Toggle the display of the URLs of the currently open tabs in the browser."
+    "message": "Alternar URIs actuales",
+    "description": "Toggle the display of the URIs of the currently open tabs in the browser."
   },
   "currentUri": {
-    "message": "URL actual",
-    "description": "The URL of one of the current open tabs in the browser."
+    "message": "URI actual",
+    "description": "The URI of one of the current open tabs in the browser."
   },
   "organization": {
     "message": "Organización",
@@ -1458,7 +1456,7 @@
     "message": "Autorellenar y guardar"
   },
   "autoFillSuccessAndSavedUri": {
-    "message": "Objeto autorellenado y URL guardada"
+    "message": "Objeto autorellenado y URI guardada"
   },
   "autoFillSuccess": {
     "message": "Objeto autorellenado"
@@ -1587,7 +1585,7 @@
     "message": "Esta acción no se puede realizar en la barra lateral, por favor, vuelve a intentar la acción en la ventana emergente o popout."
   },
   "personalOwnershipSubmitError": {
-    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su bóveda personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
+    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su caja fuerte personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Una política de organización está afectando a sus opciones de propiedad."
@@ -1612,7 +1610,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "searchSends": {
-    "message": "Buscar Sends",
+    "message": "Buscar Shares",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "addSend": {
@@ -1626,12 +1624,12 @@
     "message": "Archivo"
   },
   "allSends": {
-    "message": "Todos los Sends",
+    "message": "Todos los Shares",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "maxAccessCountReached": {
     "message": "Número máximo de accesos alcanzado",
-    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
+    "description": "This text will be displayed after a Share has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Caducado"
@@ -1835,7 +1833,7 @@
     "message": "Verificación de correo electrónico requerida"
   },
   "emailVerificationRequiredDesc": {
-    "message": "Debes verificar tu correo electrónico para usar esta función. Puedes verificar tu correo electrónico en la bóveda web."
+    "message": "Debes verificar tu correo electrónico para usar esta función. Puedes verificar tu correo electrónico en la caja fuerte web."
   },
   "updatedMasterPassword": {
     "message": "Contraseña maestra actualizada"
@@ -2005,9 +2003,6 @@
   "disabledOrganizationFilterError": {
     "message": "No se puede acceder a los elementos de las organizaciones desactivadas. Póngase en contacto con el personal propietario de la organización para obtener ayuda."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "loggingInTo": {
     "message": "Iniciando sesión en $DOMAIN$",
     "placeholders": {
@@ -2067,5 +2062,116 @@
   },
   "rememberEmail": {
     "message": "Recordar email"
+  },
+  "loginWithDevice": {
+    "message": "Acceder con un dispositivo"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "El acceso con dispositivo debe prepararse en la configuración de la aplicación Bravura Safe. ¿Necesita otra opción?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de huella"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide en el otro dispositivo."
+  },
+  "resendNotification": {
+    "message": "Reenviar notificación"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas las opciones de acceso"
+  },
+  "notificationSentDevice": {
+    "message": "Se ha enviado una notificación a tu dispositivo."
+  },
+  "logInInitiated": {
+    "message": "Inicio de sesión en proceso"
+  },
+  "exposedMasterPassword": {
+    "message": "Contraseña maestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Contraseña encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contraseña maestra débil y comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contraseña débil encontrada en una violación de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "checkForBreaches": {
+    "message": "Comprobar filtración de datos conocidos para esta contraseña"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "Tu contraseña maestra no se puede recuperar si la olvidas"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimo",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "autofillPageLoadPolicyActivated": {
+    "message": "Las políticas de su organización han activado autocompletar al cargar la página."
+  },
+  "howToAutofill": {
+    "message": "Cómo autorellenar"
+  },
+  "autofillSelectInfoWithCommand": {
+    "message": "Seleccione un elemento de esta página o utilice el acceso directo: $COMMAND$",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoWithoutCommand": {
+    "message": "Seleccione un elemento de esta página o establezca un acceso directo en los ajustes."
+  },
+  "gotIt": {
+    "message": "Entendido"
+  },
+  "autofillSettings": {
+    "message": "Ajustes de autocompletar"
+  },
+  "autofillShortcut": {
+    "message": "Atajo de teclado para autocompletar"
+  },
+  "autofillShortcutNotSet": {
+    "message": "El atajo de autocompletar no está establecido. Cambie esto en los ajustes del navegador."
+  },
+  "autofillShortcutText": {
+    "message": "El atajo de autocompletar es $COMMAND$. Cambie esto en los ajustes del navegador.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Atajo de autocompletar predeterminado: $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "shouldBeChecked": {
+    "message": "'$VALUE$' should be checked.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Check known data breaches for this password"
+      }
+    }
   }
 }

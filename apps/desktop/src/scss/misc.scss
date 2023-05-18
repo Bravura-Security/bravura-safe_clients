@@ -191,23 +191,34 @@ p.lead {
 .generated-block {
   font-size: $font-size-large;
   font-family: $font-family-monospace;
-  min-height: 50px;
+  padding: 8px 10px 8px 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: $border-radius;
+  border: 1px solid;
+
+  @include themify($themes) {
+    background-color: transparent;
+    border-color: themed("borderColorAlt");
+  }
 
   .modal-body & {
-    margin: 10px;
+    margin-top: 10px;
   }
 
   .generated-wrapper {
     text-align: left;
     width: 100%;
+    min-width: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    padding: 15px;
   }
 
   .action-buttons {
     display: flex;
     align-self: center;
+    height: 100%;
+    margin-left: 10px;
 
     button {
       margin-left: 10px;
@@ -215,8 +226,8 @@ p.lead {
   }
 }
 
-.generated-wrapper {
-  word-break: break-all;
+.password-wrapper {
+  overflow-wrap: break-word;
   white-space: pre-wrap;
   min-width: 0;
 }
@@ -233,6 +244,30 @@ p.lead {
   }
 }
 
+.password-character {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  height: 36px;
+  font-weight: 600;
+
+  &:nth-child(odd) {
+    @include themify($themes) {
+      background-color: themed("backgroundColorAlt2");
+    }
+  }
+}
+
+.password-count {
+  white-space: nowrap;
+  font-size: 8px;
+
+  @include themify($themes) {
+    color: themed("passwordCountText") !important;
+  }
+}
+
 #duo-frame {
   background: url("../images/loading.svg") 0 0 no-repeat;
   height: 330px;
@@ -243,6 +278,25 @@ p.lead {
     height: 100%;
     border: none;
   }
+}
+
+.one-auth-image {
+  content: url("../images/two-factor/99.png");
+  margin: 0 auto;
+}
+
+#verifyItIsYou {
+  margin-bottom: -1em;
+}
+
+#iconsFaStack {
+  font-size: 750%;
+}
+
+#innerIcon {
+  font-size: 50%;
+  position: relative;
+  top: -10%;
 }
 
 #web-authn-frame {
@@ -337,31 +391,31 @@ form,
       margin-left: -18px;
     }
   }
+}
 
-  .help-block {
-    margin-top: 3px;
-    display: block;
+.help-block {
+  margin-top: 3px;
+  display: block;
+
+  @include themify($themes) {
+    color: themed("mutedColor");
+  }
+
+  a {
+    @extend .btn;
+    @extend .link;
+
+    padding: 0;
+    font-size: inherit;
+    font-weight: bold;
 
     @include themify($themes) {
       color: themed("mutedColor");
     }
 
-    a {
-      @extend .btn;
-      @extend .link;
-
-      padding: 0;
-      font-size: inherit;
-      font-weight: bold;
-
+    &:hover {
       @include themify($themes) {
-        color: themed("mutedColor");
-      }
-
-      &:hover {
-        @include themify($themes) {
-          color: darken(themed("mutedColor"), 6%);
-        }
+        color: darken(themed("mutedColor"), 6%);
       }
     }
   }

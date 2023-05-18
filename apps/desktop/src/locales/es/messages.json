@@ -238,6 +238,9 @@
   "ms": {
     "message": "Srta"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -470,7 +473,7 @@
     "message": "Selecciona un archivo."
   },
   "maxFileSize": {
-    "message": "El tamaño máximo de archivo es de 500MB."
+    "message": "El tamaño máximo de archivo es de 1.8GB."
   },
   "updateKey": {
     "message": "No puedes usar esta característica hasta que actualices tu clave de cifrado."
@@ -539,7 +542,14 @@
     "message": "Se requiere volver a teclear la contraseña maestra."
   },
   "masterPasswordMinlength": {
-    "message": "La contraseña maestra debe tener al menos 8 caracteres."
+    "message": "La contraseña maestra debe tener al menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmación de contraseña maestra no coincide."
@@ -645,6 +655,30 @@
   "duoOrganizationDesc": {
     "message": "Verificar con Duo Security para tu organización usando la aplicación Duo Mobile, SMS, llamada telefónica o llave de seguridad U2F.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
+  },
+  "twoFactorHyprCheckDevice": {
+    "message": "Check device for notification"
+  },
+  "twoFactorHyprVerifyItIsYou": {
+    "message": "Verify it is you by approving the notification sent to your registered device"
+  },
+  "twoFactorHyprSendRegEmail": {
+    "message": "Send registration email"
+  },
+  "twoFactorHyprRegEmailSent": {
+    "message": "Registration email sent"
+  },
+  "twoFactorHyprNoToken": {
+    "message": "Failed to authenticate [no token]"
+  },
+  "twoFactorHyprAuthDenied": {
+    "message": "Authentication denied"
+  },
+  "twoFactorHyprAuthFailed": {
+    "message": "Failed to authenticate via HYPR"
+  },
+  "twoFactorHyprNoUserAndOrDevice": {
+    "message": "HYPR account not found and/or device needs to be registered"
   },
   "webAuthnTitle": {
     "message": "FIDO2 WebAuthn"
@@ -779,7 +813,7 @@
     "message": "Cambiar contraseña maestra"
   },
   "changeMasterPasswordConfirmation": {
-    "message": "Puedes cambiar tu contraseña maestra en la caja fuerte web de hitachi-id.com. ¿Quieres visitar ahora el sitio web?"
+    "message": "Puedes cambiar tu contraseña maestra en la caja fuerte web de bravurasecurity.com. ¿Quieres visitar ahora el sitio web?"
   },
   "fingerprintPhrase": {
     "message": "Frase de huella digital",
@@ -819,7 +853,7 @@
       },
       "hostname": {
         "content": "$2",
-        "example": "hitachi-id.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -827,13 +861,13 @@
     "message": "Contraseña maestra no válida"
   },
   "twoStepLoginConfirmation": {
-    "message": "La autenticación en dos pasos hace que tu cuenta sea mucho más segura, requiriendo que introduzcas un código de seguridad de una aplicación de autenticación cada vez que accedes. La autenticación en dos pasos puede ser habilitada en la caja fuerte web de hitachi-id.com. ¿Quieres visitar ahora el sitio web?"
+    "message": "La autenticación en dos pasos hace que tu cuenta sea mucho más segura, requiriendo que introduzcas un código de seguridad de una aplicación de autenticación cada vez que accedes. La autenticación en dos pasos puede ser habilitada en la caja fuerte web de bravurasecurity.com. ¿Quieres visitar ahora el sitio web?"
   },
   "twoStepLogin": {
     "message": "Autenticación en dos pasos"
   },
   "vaultTimeout": {
-    "message": "Tiempo de espera de la caja fuerte"
+    "message": "Tiempo de espera de la caja fuerte excedido"
   },
   "vaultTimeoutDesc": {
     "message": "Elije cuando se agotará el tiempo de espera de tu caja fuerte y se ejecutará la acción seleccionada."
@@ -1050,7 +1084,7 @@
     "message": "Gestionar membresía"
   },
   "premiumManageAlert": {
-    "message": "Puedes gestionar tu membresía en la caja fuerte web de hitachi-id.com. ¿Quieres visitar el sitio web ahora?"
+    "message": "Puedes gestionar tu membresía en la caja fuerte web de bravurasecurity.com. ¿Quieres visitar el sitio web ahora?"
   },
   "premiumRefresh": {
     "message": "Actualizar membresía"
@@ -1083,7 +1117,7 @@
     "message": "Comprar Premium"
   },
   "premiumPurchaseAlert": {
-    "message": "Puedes comprar la membresía Premium en la caja fuerte web de hitachi-id.com. ¿Quieres visitar el sitio web ahora?"
+    "message": "Puedes comprar la membresía Premium en la caja fuerte web de bravurasecurity.com. ¿Quieres visitar el sitio web ahora?"
   },
   "premiumCurrentMember": {
     "message": "¡Eres un miembro Premium!"
@@ -1319,7 +1353,7 @@
     "description": "WARNING (should stay in capitalized letters if the language permits)"
   },
   "confirmVaultExport": {
-    "message": "Confirmar la exportación de la bóveda"
+    "message": "Confirmar la exportación de la caja fuerte"
   },
   "exportWarningDesc": {
     "message": "Esta exportación contiene tus datos de la caja fuerte en un formato no cifrado. No deberías almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínalo inmediatamente cuando termines de utilizarlo."
@@ -1377,7 +1411,7 @@
     "message": "Código PIN inválido."
   },
   "unlockWithWindowsHello": {
-    "message": "Desbloquear con Windows Hello"
+    "message": "Desbloquear con Smartdevice"
   },
   "windowsHelloConsentMessage": {
     "message": "Verificar para Bravura Safe."
@@ -1389,7 +1423,7 @@
     "message": "Verificar para Bravura Safe."
   },
   "autoPromptWindowsHello": {
-    "message": "Solicitar Windows Hello al iniciar"
+    "message": "Solicitar Smartdevice al iniciar"
   },
   "autoPromptTouchId": {
     "message": "Solicitar Touch ID al iniciar"
@@ -1578,7 +1612,7 @@
     "message": "Permitir integración con el navegador DuckDuckGo"
   },
   "enableDuckDuckGoBrowserIntegrationDesc": {
-    "message": "Usa tu bóveda de Bitwarden cuando navegas con DuckDuckGo."
+    "message": "Usa tu caja fuerte de Bravura Safe cuando navegas con DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "La integración con el navegador no está soportada"
@@ -1608,7 +1642,7 @@
     "message": "Por favor, asegúrese de que la huella digital mostrada es idéntica a la huella que aparece en la extensión del navegador."
   },
   "verifyNativeMessagingConnectionTitle": {
-    "message": "$APPID$ quiere conectarse a Bitwarden",
+    "message": "$APPID$ quiere conectarse a Bravura Safe",
     "placeholders": {
       "appid": {
         "content": "$1",
@@ -1629,7 +1663,7 @@
     "message": "La biometría del navegador requiere habilitar primero la biometría de escritorio en los ajustes."
   },
   "personalOwnershipSubmitError": {
-    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su bóveda personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
+    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su caja fuerte personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
   },
   "hintEqualsPassword": {
     "message": "La pista para la contraseña no puede ser igual que la contraseña."
@@ -1656,7 +1690,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "myVault": {
-    "message": "Mi bóveda"
+    "message": "Mi caja fuerte"
   },
   "text": {
     "message": "Texto"
@@ -1677,7 +1711,7 @@
   },
   "maxAccessCount": {
     "message": "Número máximo de accesos",
-    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
+    "description": "This text will be displayed after a Share has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Si se establece, los usuarios ya no podrán acceder a este Share una vez que se alcance el número máximo de accesos.",
@@ -1928,10 +1962,10 @@
     "message": "Su sesión ha expirado. Por favor, vuelva e intente iniciar sesión de nuevo."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exportando bóveda personal"
+    "message": "Exportando caja fuerte personal"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Solo se exportarán los elementos de la bóveda personal asociados con $EMAIL$. Los elementos de la bóveda de la organización no se incluirán.",
+    "message": "Solo se exportarán los elementos de la caja fuerte personal asociados con $EMAIL$. Los elementos de la bóveda de la organización no se incluirán.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2025,9 +2059,6 @@
   "neverLockWarning": {
     "message": "¿Está seguro de que quieres usar la opción \"Nunca\"? Al ajustar las opciones de bloqueo a \"Nunca\", la clave de cifrado de su caja fuerte se guardará en tu dispositivo. Si usas esta opción, asegúrate de mantener tu dispositivo debidamente protegido."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "Caja fuerte"
   },
@@ -2057,5 +2088,148 @@
   },
   "logInWithAnotherDevice": {
     "message": "Iniciar sesión con otro dispositivo"
+  },
+  "logInInitiated": {
+    "message": "Inicio de sesión en proceso"
+  },
+  "notificationSentDevice": {
+    "message": "Se ha enviado una notificación a tu dispositivo."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide con el otro dispositivo."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de huella dactilar"
+  },
+  "needAnotherOption": {
+    "message": "Iniciar sesión con el dispositivo debe estar habilitado en los ajustes de la aplicación móvil Bravura Safe. ¿Necesitas otra opción?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas las opciones de inicio de sesión"
+  },
+  "resendNotification": {
+    "message": "Reenviar notificación"
+  },
+  "toggleCharacterCount": {
+    "message": "Activar recuento de caracteres",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "¿Estás intentando iniciar sesión?"
+  },
+  "logInAttemptBy": {
+    "message": "Intento de inicio de sesión de $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Tipo de dispositivo"
+  },
+  "ipAddress": {
+    "message": "Dirección IP"
+  },
+  "time": {
+    "message": "Hora"
+  },
+  "confirmLogIn": {
+    "message": "Confirmar inicio de sesión"
+  },
+  "denyLogIn": {
+    "message": "Denegar inicio de sesión"
+  },
+  "approveLoginRequests": {
+    "message": "Aprobar solicitudes de inicio de sesión"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Inicio de sesión confirmado para $EMAIL$ en $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Has denegado un intento de inicio de sesión desde otro dispositivo. Si realmente fuiste tú, intenta iniciar sesión con el dispositivo de nuevo."
+  },
+  "justNow": {
+    "message": "Justo ahora"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Solicitado hace $MINUTES$ minutos",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "La solicitud de acceso ya ha caducado."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Esta solicitud ya no es válida."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Utilice este dispositivo para aprobar las peticiones de inicio de sesión realizadas desde otros dispositivos."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirmar intento de inicio de sesión para $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Inicio de sesión solicitado"
+  },
+  "exposedMasterPassword": {
+    "message": "Contraseña maestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Contraseña encontrada en una filtración de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contraseña maestra débil y comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contraseña débil encontrada en una filtración de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "checkForBreaches": {
+    "message": "Comprobar filtración de datos conocidos para esta contraseña"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "Tu contraseña maestra no se puede recuperar si la olvidas"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimo",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "shouldBeChecked": {
+    "message": "'$VALUE$' should be checked.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Check known data breaches for this password"
+      }
+    }
   }
 }

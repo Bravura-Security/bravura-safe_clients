@@ -22,6 +22,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
   useCustomPermissions: boolean;
   useResetPassword: boolean;
   useSecretsManager: boolean;
+  useActivateAutofillPolicy: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
   seats: number;
@@ -48,6 +49,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
   familySponsorshipValidUntil?: Date;
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
+  accessSecretsManager: boolean;
 
   constructor(response: any) {
     super(response);
@@ -66,6 +68,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
     this.useCustomPermissions = this.getResponseProperty("UseCustomPermissions") ?? false;
     this.useResetPassword = this.getResponseProperty("UseResetPassword");
     this.useSecretsManager = this.getResponseProperty("UseSecretsManager");
+    this.useActivateAutofillPolicy = this.getResponseProperty("UseActivateAutofillPolicy");
     this.selfHost = this.getResponseProperty("SelfHost");
     this.usersGetPremium = this.getResponseProperty("UsersGetPremium");
     this.seats = this.getResponseProperty("Seats");
@@ -102,5 +105,6 @@ export class ProfileOrganizationResponse extends BaseResponse {
     }
     this.familySponsorshipToDelete = this.getResponseProperty("FamilySponsorshipToDelete");
     this.planType = this.getResponseProperty("PlanType");
+    this.accessSecretsManager = this.getResponseProperty("AccessSecretsManager");
   }
 }

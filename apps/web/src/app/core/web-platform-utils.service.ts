@@ -192,6 +192,7 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
       showConfirmButton: true,
       confirmButtonText: confirmText == null ? this.i18nService.t("ok") : confirmText,
       target: target != null ? target : "body",
+      onOpen: () => Swal.getConfirmButton().focus(),
     });
 
     if (bootstrapModal != null) {
@@ -206,6 +207,11 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
   }
 
   isSelfHost(): boolean {
+    return WebPlatformUtilsService.isSelfHost();
+  }
+
+  static isSelfHost(): boolean {
+    // return process.env.ENV.toString() === "selfhosted";
     return true;
   }
 
@@ -218,10 +224,7 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
     } else if (options && options.doc) {
       doc = options.doc;
     }
-    if ((win as any).clipboardData && (win as any).clipboardData.setData) {
-      // IE specific code path to prevent textarea being shown while dialog is visible.
-      (win as any).clipboardData.setData("Text", text);
-    } else if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
+    if (doc.queryCommandSupported && doc.queryCommandSupported("copy")) {
       const textarea = doc.createElement("textarea");
       textarea.textContent = text;
       // Prevent scrolling to bottom of page in MS Edge.
@@ -264,5 +267,9 @@ export class WebPlatformUtilsService implements PlatformUtilsService {
 
   supportsSecureStorage() {
     return false;
+  }
+
+  getAutofillKeyboardShortcut(): Promise<string> {
+    return null;
   }
 }

@@ -60,7 +60,7 @@ const Template: Story<DialogComponent> = (args: DialogComponent) => ({
       <button bitButton buttonType="secondary">Cancel</button>
       <button
         class="tw-ml-auto"
-        bitIconButton="fa-trash"
+        bitIconButton="fa-trash-o"
         buttonType="danger"
         size="default"
         title="Delete"
@@ -80,6 +80,12 @@ export const Small = Template.bind({});
 Small.args = {
   dialogSize: "small",
   title: "Small",
+};
+
+export const LongTitle = Template.bind({});
+LongTitle.args = {
+  dialogSize: "small",
+  title: "Long_Title_That_Should_Be_Truncated",
 };
 
 export const Large = Template.bind({});

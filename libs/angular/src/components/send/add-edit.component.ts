@@ -175,8 +175,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
 
       file = files[0];
-      if (files[0].size > 524288000) {
-        // 500 MB
+      if (files[0].size > 2147483648) {
+        // 2 GB hard limit to allow some buffer; language texts will 1.8 GB limit
         this.platformUtilsService.showToast(
           "error",
           this.i18nService.t("errorOccurred"),
@@ -201,25 +201,14 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
       this.onSavedSend.emit(this.send);
       if (this.copyLink && this.link != null) {
-        const copySuccess = await this.copyLinkToClipboard(this.link);
-        if (copySuccess ?? true) {
-          this.platformUtilsService.showToast(
-            "success",
-            null,
-            this.i18nService.t(this.editMode ? "editedSend" : "createdSend")
-          );
-        } else {
-          await this.platformUtilsService.showDialog(
-            this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
-            null,
-            this.i18nService.t("ok"),
-            null,
-            "success",
-            null
-          );
-          await this.copyLinkToClipboard(this.link);
-        }
+        await this.handleCopyLinkToClipboard();
+        return;
       }
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t(this.editMode ? "editedSend" : "createdSend")
+      );
     });
     try {
       await this.formPromise;
@@ -307,5 +296,25 @@ export class AddEditComponent implements OnInit, OnDestroy {
   protected togglePasswordVisible() {
     this.showPassword = !this.showPassword;
     document.getElementById("password").focus();
+  }
+  private async handleCopyLinkToClipboard() {
+    const copySuccess = await this.copyLinkToClipboard(this.link);
+    if (copySuccess ?? true) {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t(this.editMode ? "editedSend" : "createdSend")
+      );
+    } else {
+      await this.platformUtilsService.showDialog(
+        this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
+        null,
+        this.i18nService.t("ok"),
+        null,
+        "success",
+        null
+      );
+      await this.copyLinkToClipboard(this.link);
+    }
   }
 }

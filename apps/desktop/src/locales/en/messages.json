@@ -33,7 +33,7 @@
     "message": "Collections"
   },
   "searchVault": {
-    "message": "Search vault"
+    "message": "Search safe"
   },
   "addItem": {
     "message": "Add item"
@@ -237,6 +237,9 @@
   },
   "ms": {
     "message": "Ms"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "dr": {
     "message": "Dr"
@@ -470,7 +473,7 @@
     "message": "Select a file"
   },
   "maxFileSize": {
-    "message": "Maximum file size is 500 MB."
+    "message": "Maximum file size is 1.8 GB."
   },
   "updateKey": {
     "message": "You cannot use this feature until you update your encryption key."
@@ -539,7 +542,14 @@
     "message": "Master password retype is required."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least 8 characters long."
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Master password confirmation does not match."
@@ -646,6 +656,30 @@
     "message": "Verify with Duo Security for your team using the Duo Mobile app, SMS, phone call, or U2F security key.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
+  "twoFactorHyprCheckDevice": {
+    "message": "Check device for notification"
+  },
+  "twoFactorHyprVerifyItIsYou": {
+    "message": "Verify it is you by approving the notification sent to your registered device"
+  },
+  "twoFactorHyprSendRegEmail": {
+    "message": "Send registration email"
+  },
+  "twoFactorHyprRegEmailSent": {
+    "message": "Registration email sent"
+  },
+  "twoFactorHyprNoToken": {
+    "message": "Failed to authenticate [no token]"
+  },
+  "twoFactorHyprAuthDenied": {
+    "message": "Authentication denied"
+  },
+  "twoFactorHyprAuthFailed": {
+    "message": "Failed to authenticate via HYPR"
+  },
+  "twoFactorHyprNoUserAndOrDevice": {
+    "message": "HYPR account not found and/or device needs to be registered"
+  },
   "webAuthnTitle": {
     "message": "FIDO2 WebAuthn"
   },
@@ -674,7 +708,7 @@
     "message": "Cloud-hosted environment"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Specify the base URL of your on-premises hosted Bravura Safe installation."
+    "message": "Specify the base URL of your Bravura Safe installation."
   },
   "customEnvironment": {
     "message": "Custom environment"
@@ -752,7 +786,7 @@
     "message": "Loading..."
   },
   "lockVault": {
-    "message": "Lock vault"
+    "message": "Lock safe"
   },
   "passwordGenerator": {
     "message": "Password generator"
@@ -773,7 +807,7 @@
     "message": "Follow us"
   },
   "syncVault": {
-    "message": "Sync vault"
+    "message": "Sync safe"
   },
   "changeMasterPass": {
     "message": "Change master password"
@@ -790,7 +824,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
-    "message": "Go to web vault"
+    "message": "Go to web safe"
   },
   "getMobileApp": {
     "message": "Get mobile app"
@@ -827,7 +861,7 @@
     "message": "Invalid master password"
   },
   "twoStepLoginConfirmation": {
-    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bravurasafe.com web vault. Do you want to visit the website now?"
+    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as an authenticator app, or email. Two-step login can be set up on the bravurasafe.com web vault. Do you want to visit the website now?"
   },
   "twoStepLogin": {
     "message": "Two-step login"
@@ -1275,7 +1309,7 @@
     "description": "ex. Date this password was updated"
   },
   "exportVault": {
-    "message": "Export vault"
+    "message": "Export safe"
   },
   "fileFormat": {
     "message": "File format"
@@ -1377,7 +1411,7 @@
     "message": "Invalid PIN code."
   },
   "unlockWithWindowsHello": {
-    "message": "Unlock with Windows Hello"
+    "message": "Unlock with Smartdevice"
   },
   "windowsHelloConsentMessage": {
     "message": "Verify for Bravura Safe."
@@ -1389,7 +1423,7 @@
     "message": "unlock your vault"
   },
   "autoPromptWindowsHello": {
-    "message": "Ask for Windows Hello on launch"
+    "message": "Ask for Smartdevice on launch"
   },
   "autoPromptTouchId": {
     "message": "Ask for Touch ID on launch"
@@ -1895,7 +1929,7 @@
     "message": "Key connector error: make sure key connector is available and working correctly."
   },
   "lockAllVaults": {
-    "message": "Lock all vaults"
+    "message": "Lock all safes"
   },
   "accountLimitReached": {
     "message": "No more than 5 accounts may be logged in at the same time."
@@ -1989,7 +2023,7 @@
     "message": "Service"
   },
   "allVaults": {
-    "message": "All vaults"
+    "message": "All safes"
   },
   "searchOrganization": {
     "message": "Search team"
@@ -2025,11 +2059,8 @@
   "neverLockWarning": {
     "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
-    "message": "Vault"
+    "message": "Safe"
   },
   "loginWithMasterPassword": {
     "message": "Log in with master password"
@@ -2057,5 +2088,148 @@
   },
   "logInWithAnotherDevice": {
     "message": "Log in with another device"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bravura Safe app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+  }
+}
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "shouldBeChecked": {
+    "message": "'$VALUE$' should be checked.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Check known data breaches for this password"
+      }
+    }
   }
 }

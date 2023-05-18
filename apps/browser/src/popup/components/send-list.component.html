@@ -50,14 +50,14 @@
         </ng-container>
         <ng-container *ngIf="s.pendingDelete">
           <i
-            class="fa fa-trash text-muted"
+            class="fa fa-trash-o text-muted"
             title="{{ 'pendingDeletion' | i18n }}"
             aria-hidden="true"
           ></i>
           <span class="sr-only">{{ "pendingDeletion" | i18n }}</span>
         </ng-container>
       </span>
-      <span class="detail">{{ s.deletionDate | date: "medium" }}</span>
+      <span class="detail">{{ s.deletionDate | date : "medium" }}</span>
     </div>
   </button>
   <div class="action-buttons">

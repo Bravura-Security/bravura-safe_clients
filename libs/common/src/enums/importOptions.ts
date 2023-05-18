@@ -67,8 +67,10 @@ export const regularImportOptions = [
   { id: "encryptrcsv", name: "Encryptr (csv)" },
   { id: "yoticsv", name: "Yoti (csv)" },
   { id: "nordpasscsv", name: "Nordpass (csv)" },
+  { id: "psonojson", name: "Psono (json)" },
+  { id: "passkyjson", name: "Passky (json)" },
 ] as const;
 
 export type ImportType =
-  | typeof featuredImportOptions[number]["id"]
-  | typeof regularImportOptions[number]["id"];
+  | (typeof featuredImportOptions)[number]["id"]
+  | (typeof regularImportOptions)[number]["id"];

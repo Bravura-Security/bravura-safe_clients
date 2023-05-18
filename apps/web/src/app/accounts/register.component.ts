@@ -6,13 +6,14 @@ import { first } from "rxjs/operators";
 
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { AuthService } from "@bitwarden/common/abstractions/auth.service";
+import { AuditService } from "@bitwarden/common/abstractions/audit.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { FormValidationErrorsService } from "@bitwarden/common/abstractions/formValidationErrors.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PasswordGenerationService } from "@bitwarden/common/abstractions/passwordGeneration.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
@@ -48,12 +49,13 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     private route: ActivatedRoute,
     stateService: StateService,
     platformUtilsService: PlatformUtilsService,
-    passwordGenerationService: PasswordGenerationService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
     private policyApiService: PolicyApiServiceAbstraction,
     private policyService: PolicyService,
     environmentService: EnvironmentService,
     logService: LogService,
-    private routerService: RouterService
+    private routerService: RouterService,
+    auditService: AuditService
   ) {
     super(
       formValidationErrorService,
@@ -67,7 +69,8 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
       platformUtilsService,
       passwordGenerationService,
       environmentService,
-      logService
+      logService,
+      auditService
     );
   }
 

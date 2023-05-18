@@ -26,6 +26,7 @@ export class Organization {
   useCustomPermissions: boolean;
   useResetPassword: boolean;
   useSecretsManager: boolean;
+  useActivateAutofillPolicy: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
   seats: number;
@@ -49,6 +50,7 @@ export class Organization {
   familySponsorshipValidUntil?: Date;
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
+  accessSecretsManager: boolean;
 
   constructor(obj?: OrganizationData) {
     if (obj == null) {
@@ -73,6 +75,7 @@ export class Organization {
     this.useCustomPermissions = obj.useCustomPermissions;
     this.useResetPassword = obj.useResetPassword;
     this.useSecretsManager = obj.useSecretsManager;
+    this.useActivateAutofillPolicy = obj.useActivateAutofillPolicy;
     this.selfHost = obj.selfHost;
     this.usersGetPremium = obj.usersGetPremium;
     this.seats = obj.seats;
@@ -96,6 +99,7 @@ export class Organization {
     this.familySponsorshipValidUntil = obj.familySponsorshipValidUntil;
     this.familySponsorshipToDelete = obj.familySponsorshipToDelete;
     this.planType = obj.planType;
+    this.accessSecretsManager = obj.accessSecretsManager;
   }
 
   get canAccess() {
@@ -134,23 +138,19 @@ export class Organization {
   }
 
   get canCreateNewCollections() {
-    return (
-      this.isManager ||
-      (this.permissions.createNewCollections ?? this.permissions.manageAllCollections)
-    );
+    return this.isManager || this.permissions.createNewCollections;
   }
 
   get canEditAnyCollection() {
-    return (
-      this.isAdmin || (this.permissions.editAnyCollection ?? this.permissions.manageAllCollections)
-    );
+    return this.isAdmin || this.permissions.editAnyCollection;
+  }
+
+  get canUseAdminCollections() {
+    return this.canEditAnyCollection;
   }
 
   get canDeleteAnyCollection() {
-    return (
-      this.isAdmin ||
-      (this.permissions.deleteAnyCollection ?? this.permissions.manageAllCollections)
-    );
+    return this.isAdmin || this.permissions.deleteAnyCollection;
   }
 
   get canViewAllCollections() {
@@ -158,17 +158,11 @@ export class Organization {
   }
 
   get canEditAssignedCollections() {
-    return (
-      this.isManager ||
-      (this.permissions.editAssignedCollections ?? this.permissions.manageAssignedCollections)
-    );
+    return this.isManager || this.permissions.editAssignedCollections;
   }
 
   get canDeleteAssignedCollections() {
-    return (
-      this.isManager ||
-      (this.permissions.deleteAssignedCollections ?? this.permissions.manageAssignedCollections)
-    );
+    return this.isManager || this.permissions.deleteAssignedCollections;
   }
 
   get canViewAssignedCollections() {
@@ -180,6 +174,10 @@ export class Organization {
   }
 
   get canManageSso() {
+    return (this.isAdmin || this.permissions.manageSso) && this.useSso;
+  }
+
+  get canManageDomainVerification() {
     return (this.isAdmin || this.permissions.manageSso) && this.useSso;
   }
 
@@ -203,12 +201,16 @@ export class Organization {
     return this.canManagePolicies;
   }
 
+  get canManageBilling() {
+    return this.isOwner && (this.isProviderUser || !this.hasProvider);
+  }
+
   get hasProvider() {
     return this.providerId != null || this.providerName != null;
   }
 
   get canAccessSecretsManager() {
-    return this.useSecretsManager;
+    return this.useSecretsManager && this.accessSecretsManager;
   }
 
   get isBravuraEnterprise() {

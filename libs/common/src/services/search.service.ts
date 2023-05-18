@@ -1,14 +1,14 @@
 import * as lunr from "lunr";
 
-import { CipherService } from "../abstractions/cipher.service";
 import { I18nService } from "../abstractions/i18n.service";
 import { LogService } from "../abstractions/log.service";
 import { SearchService as SearchServiceAbstraction } from "../abstractions/search.service";
-import { CipherType } from "../enums/cipherType";
 import { FieldType } from "../enums/fieldType";
 import { UriMatchType } from "../enums/uriMatchType";
-import { CipherView } from "../models/view/cipher.view";
 import { SendView } from "../models/view/send.view";
+import { CipherService } from "../vault/abstractions/cipher.service";
+import { CipherType } from "../vault/enums/cipher-type";
+import { CipherView } from "../vault/models/view/cipher.view";
 
 export class SearchService implements SearchServiceAbstraction {
   private static registeredPipeline = false;
@@ -16,7 +16,7 @@ export class SearchService implements SearchServiceAbstraction {
   indexedEntityId?: string = null;
   private indexing = false;
   private index: lunr.Index = null;
-  private readonly immediateSearchLocales: string[] = ["zh-CN", "zh-TW", "ja", "ko", "vi"];
+  private readonly immediateSearchLocales: string[] = ["zh-CN", "ja"];
   private readonly defaultSearchableMinLength: number = 2;
   private searchableMinLength: number = this.defaultSearchableMinLength;
 
