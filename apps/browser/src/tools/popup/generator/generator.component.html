@@ -287,6 +287,14 @@
         <div class="box-content-row" role="radiogroup" aria-labelledby="usernameTypeHeading">
           <label id="usernameTypeHeading" class="radio-header">
             {{ "usernameType" | i18n }}
+            <a
+              href="https://bravurasecuritydocs.com/safe/#/home/31914/10/11"
+              target="_blank"
+              rel="noopener"
+              appA11yTitle="{{ 'learnMore' | i18n }}"
+            >
+              <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+            </a>
           </label>
           <div
             class="radio-group align-start text-default"
@@ -393,6 +401,28 @@
               type="password"
               name="FastmailApiToken"
               [(ngModel)]="usernameOptions.forwardedFastmailApiToken"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="usernameOptions.forwardedService === 'forwardemail'">
+          <div class="box-content-row" appBoxRow>
+            <label for="forwardemail-accessToken">{{ "apiAccessToken" | i18n }}</label>
+            <input
+              id="forwardemail-accessToken"
+              type="password"
+              name="ForwardEmailAccessToken"
+              [(ngModel)]="usernameOptions.forwardedForwardEmailApiToken"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+          <div class="box-content-row" appBoxRow>
+            <label for="forwardemail-domain">{{ "domainName" | i18n }}</label>
+            <input
+              id="forwardemail-domain"
+              type="text"
+              name="ForwardEmailDomain"
+              [(ngModel)]="usernameOptions.forwardedForwardEmailDomain"
               (blur)="saveUsernameOptions()"
             />
           </div>

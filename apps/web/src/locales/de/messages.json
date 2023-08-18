@@ -730,7 +730,7 @@
     "message": "Anmelden"
   },
   "logInInitiated": {
-    "message": "Anmeldung eingeleitet"
+    "message": "Passwortloses Anmelden/Entsperren initiiert"
   },
   "submit": {
     "message": "Absenden"
@@ -1063,8 +1063,14 @@
   "confirmVaultExport": {
     "message": "Tresor-Export bestätigen"
   },
+  "confirmSecretsExport": {
+    "message": "Geheimnis-Export bestätigen"
+  },
   "exportWarningDesc": {
     "message": "Dieser Export enthält deine Tresor-Daten in einem unverschlüsseltem Format. Du solltest die Datei daher nicht über unsichere Kanäle (z.B. E-Mail) versenden oder speichern. Lösche die Datei sofort nach ihrer Verwendung."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "Dieser Export enthält deine Geheimnis-Daten in einem unverschlüsseltem Format. Du solltest die Datei daher nicht über unsichere Kanäle (z.B. E-Mail) versenden oder speichern. Lösche die Datei sofort nach ihrer Verwendung."
   },
   "encExportKeyWarningDesc": {
     "message": "Dieser Export verschlüsselt deine Daten mit dem Verschlüsselungscode deines Kontos. Falls du deinen Verschlüsselungscode erneuerst, solltest du den Export erneut durchführen, da du die zuvor erstellte Datei ansonsten nicht mehr entschlüsseln kannst."
@@ -1077,6 +1083,9 @@
   },
   "exportVault": {
     "message": "Tresor exportieren"
+  },
+  "exportSecrets": {
+    "message": "Geheimnisse exportieren"
   },
   "fileFormat": {
     "message": "Dateiformat"
@@ -1353,6 +1362,15 @@
   },
   "importSuccess": {
     "message": "Daten erfolgreich importiert"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Insgesamt wurden $AMOUNT$ Einträge importiert.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "Daten erfolgreich exportiert"
@@ -1750,7 +1768,7 @@
     "message": "Gib dem Sicherheitsschlüssel einen eigenen Namen, um ihn zu erkennen."
   },
   "twoFactorU2fPlugInReadKey": {
-    "message": "Stecken Sie den Sicherheitsschlüssel in den USB-Port Ihres Computers und drücken Sie den \"Schlüssel erfassen\" Knopf."
+    "message": "Stecke den Sicherheitsschlüssel in den USB-Port deines Computers und drücke den \"Schlüssel erfassen\" Knopf."
   },
   "twoFactorU2fTouchButton": {
     "message": "Wenn der Sicherheitsschlüssel eine Taste hat, drücken Sie die."
@@ -1804,13 +1822,13 @@
     "message": "Ungesicherte Websites"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "URLs, die mit http:// beginnen, verwenden nicht die bestmögliche Verschlüsselung. Ändere die Anmelde-URIs für diese Konten zu https:// für sicheres Surfen."
+    "message": "URLs, die mit http:// beginnen, verwenden nicht die bestmögliche Verschlüsselung. Ändere die Anmelde-URLs für diese Konten zu https:// für sicheres Surfen."
   },
   "unsecuredWebsitesFound": {
     "message": "Ungesicherte Websites gefunden"
   },
   "unsecuredWebsitesFoundDesc": {
-    "message": "Wir haben $COUNT$ Einträge in deinem Tresor mit ungesicherten URIs gefunden. Du solltest ihr URI-Präfix auf https:// ändern, wenn die Website dies zulässt.",
+    "message": "Wir haben $COUNT$ Einträge in deinem Tresor mit ungesicherten URLs gefunden. Du solltest ihr URL-Präfix auf https:// ändern, wenn die Website dies zulässt.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1819,7 +1837,7 @@
     }
   },
   "noUnsecuredWebsites": {
-    "message": "Es gibt keine Einträge in deinem Tresor, die unsichere URIs benutzen."
+    "message": "Es gibt keine Einträge in deinem Tresor, die unsichere URLs benutzen."
   },
   "inactive2faReport": {
     "message": "Inaktive Zwei-Faktor-Authentifizierung"
@@ -2010,7 +2028,7 @@
     "description": "Add more credit to your account's balance."
   },
   "amount": {
-    "message": "Anzahl",
+    "message": "Betrag",
     "description": "Dollar amount, or quantity."
   },
   "creditDelayed": {
@@ -2171,6 +2189,9 @@
   },
   "cancelSubscription": {
     "message": "Abonnement kündigen"
+  },
+  "subscriptionExpiration": {
+    "message": "Ablauf des Abonnements"
   },
   "subscriptionCanceled": {
     "message": "Das Abonnement wurde gekündigt."
@@ -2640,7 +2661,7 @@
     "message": "Externe ID"
   },
   "externalIdDesc": {
-    "message": "Die externe ID kann als Referenz oder zur Verbindung zu einem externen System, wie einem Benutzerverzeichnis, verwendet werden."
+    "message": "Die externe ID ist eine unverschlüsselte Referenz, die vom Bravura Safe Directory Connector und der API verwendet wird."
   },
   "nestCollectionUnder": {
     "message": "Sammlung verschachteln unter"
@@ -2718,7 +2739,7 @@
     "message": "Bestätigt"
   },
   "clientOwnerEmail": {
-    "message": "Kunden-E-Mail"
+    "message": "E-Mail-Adresse des Kundenorganisation-Eigentümers"
   },
   "owner": {
     "message": "Besitzer"
@@ -2800,6 +2821,12 @@
   },
   "failedLogin2fa": {
     "message": "Anmeldeversuch mit falscher Zwei-Faktor-Anmeldung fehlgeschlagen."
+  },
+  "incorrectPassword": {
+    "message": "Falsches Passwort"
+  },
+  "incorrectCode": {
+    "message": "Falscher Code"
   },
   "exportedVault": {
     "message": "Tresor exportiert."
@@ -2891,6 +2918,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "Sammlung anzeigen - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Eintrag bearbeiten - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -3268,6 +3313,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Du kannst der Organisation beitreten, sobald ein Administrator deine Mitgliedschaft bestätigt hat. Wir werden dich dann per E-Mail benachrichtigen."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "Du kannst nun auf diese Organisation zugreifen."
   },
   "inviteAcceptFailed": {
     "message": "Einladung kann nicht angenommen werden. Bitte einen Administrator der Organisation, eine neue Einladung zu senden."
@@ -3660,7 +3708,7 @@
     "message": "Ausgewählt"
   },
   "ownership": {
-    "message": "Besitzer"
+    "message": "Eigentümer"
   },
   "whoOwnsThisItem": {
     "message": "Wem gehört dieser Eintrag?"
@@ -3951,7 +3999,7 @@
     }
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "Nach dem Ausloggen verlierst du jeglichen Zugriff auf deinen Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchtest?"
+    "message": "Nach dem Abmelden verlierst du jeglichen Zugriff auf deinen Tresor und nach Ablauf der Timeout-Zeit ist eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchtest?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "Bestätigung der Timeout-Aktion"
@@ -3987,7 +4035,7 @@
     "message": "Melde dich über das Single Sign-on-Portal deiner Organisation an. Bitte gib die SSO-Kennung deiner Organisation ein, um zu beginnen."
   },
   "enterpriseSingleSignOn": {
-    "message": "Enterprise Single-Sign-On"
+    "message": "Enterprise Single Sign-on"
   },
   "ssoHandOff": {
     "message": "Du kannst diesen Tab nun schließen und in der Erweiterung fortfahren."
@@ -4619,14 +4667,14 @@
   "hintEqualsPassword": {
     "message": "Dein Passwort-Hinweis darf nicht identisch mit deinem Passwort sein."
   },
-  "enrollPasswordReset": {
-    "message": "Für Passwortzurücksetzung registrieren"
+  "enrollAccountRecovery": {
+    "message": "Für Kontowiederherstellung registrieren"
   },
-  "enrolledPasswordReset": {
-    "message": "Für Passwortzurücksetzung registriert"
+  "enrolledAccountRecovery": {
+    "message": "Für Kontowiederherstellung registriert"
   },
-  "withdrawPasswordReset": {
-    "message": "Von Passwortzurücksetzung abmelden"
+  "withdrawAccountRecovery": {
+    "message": "Von Kontowiederherstellung abmelden"
   },
   "enrollPasswordResetSuccess": {
     "message": "Registrierung erfolgreich!"
@@ -4634,8 +4682,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Abmeldung erfolgreich!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "Der Benutzer $ID$ hat sich für die Passwortzurücksetzung registriert.",
+  "eventEnrollAccountRecovery": {
+    "message": "Der Benutzer $ID$ hat sich für die Kontowiederherstellung registriert.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4643,8 +4691,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Der Benutzer $ID$ hat sich von der Passwortzurücksetzung abgemeldet.",
+  "eventWithdrawAccountRecovery": {
+    "message": "Der Benutzer $ID$ hat sich von der Kontowiederherstellung abgemeldet.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4703,11 +4751,11 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Die Registrierung erlaubt Administratoren der Organisation, dein Master-Passwort zu ändern. Bist du sicher, dass du dich registrieren möchtest?"
   },
-  "resetPasswordPolicy": {
-    "message": "Master-Passwort-Zurücksetzung"
+  "accountRecoveryPolicy": {
+    "message": "Kontowiederherstellungsverwaltung"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Administratoren in der Organisation erlauben, das Master-Passwort der Organisationsbenutzer zurückzusetzen."
+  "accountRecoveryPolicyDescription": {
+    "message": "Mitgliederkonten wiederherstellen, falls das Master-Passwort oder vertrauenswürdige Geräte vergessen werden oder verloren gehen. Der Wiederherstellungsprozess basiert auf der Verschlüsselungsmethode des Kontos."
   },
   "resetPasswordPolicyWarning": {
     "message": "Benutzer in der Organisation müssen sich selbst registrieren oder automatisch registriert sein, bevor Administratoren deren Master-Passwort zurücksetzen können."
@@ -4821,7 +4869,7 @@
     "message": "Fehler"
   },
   "resetPasswordManageUsers": {
-    "message": "Benutzer verwalten muss ebenfalls mit der Passwort zurücksetzen Berechtigung aktiviert werden"
+    "message": "\"Benutzer verwalten\" muss ebenfalls mit der \"Passwort zurücksetzen\"-Berechtigung aktiviert werden"
   },
   "setupProvider": {
     "message": "Anbieter-Einrichtung"
@@ -4830,7 +4878,7 @@
     "message": "Du wurdest eingeladen, einen neuen Anbieter einzurichten. Um fortzufahren, musst du dich anmelden oder ein neues Bravura Safe-Konto erstellen."
   },
   "setupProviderDesc": {
-    "message": "Bitte gib die nachstehenden Daten ein, um die Einrichtung des Providers abzuschließen. Wende dich an den Kundensupport, wenn du Fragen hast."
+    "message": "Bitte gib die nachstehenden Daten ein, um die Einrichtung des Anbieters abzuschließen. Wende dich an den Kundensupport, wenn du Fragen hast."
   },
   "providerName": {
     "message": "Anbietername"
@@ -4957,6 +5005,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Dein Master-Passwort entspricht nicht den Anforderungen der Richtlinie dieser Organisation. Um der Organisation beizutreten, musst du dein Master-Passwort jetzt aktualisieren. Ein Fortfahren wird deine aktuelle Sitzung abmelden. Danach musst du dich wieder anmelden. Aktive Sitzungen auf anderen Geräten können weiterhin bis zu einer Stunde aktiv bleiben."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben."
+  },
   "maximumVaultTimeout": {
     "message": "Tresor-Timeout"
   },
@@ -4976,7 +5027,7 @@
     "message": "Minuten"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Deine Unternehmensrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout ist $HOURS$ Stunde(n) und $MINUTES$ Minute(n)",
+    "message": "Deine Unternehmensrichtlinien haben das maximal zulässige Tresor-Timeout auf $HOURS$ Stunde(n) und $MINUTES$ Minute(n) festgelegt.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -4985,6 +5036,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Deine Organisationsrichtlinien beeinflussen dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout beträgt $HOURS$ Stunde(n) und $MINUTES$ Minute(n). Deine Tresor-Timeout-Aktion ist auf $ACTION$ gesetzt.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Deine Organisationsrichtlinien haben deine Tresor-Timeout-Aktion auf $ACTION$ gesetzt.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -5009,14 +5086,17 @@
   "vaultExportDisabled": {
     "message": "Tresor-Export entfernt"
   },
+  "pleaseUnlockVault": {
+    "message": "Bitte stellen Sie sicher, dass Ihr Tresor entsperrt ist."
+  },
   "personalVaultExportPolicyInEffect": {
     "message": "Eine oder mehrere Unternehmensrichtlinien verhindern es, dass du deinen persönlichen Tresor exportieren kannst."
   },
   "activateAutofill": {
     "message": "Auto-Ausfüllen aktivieren"
   },
-  "activateAutofillDesc": {
-    "message": "Aktiviere Auto-Ausfüllen mit den Seitenladeeinstellungen der Browser-Erweiterung für alle bestehenden und neuen Mitglieder."
+  "activateAutofillPolicyDesc": {
+    "message": "Aktiviere die Einstellung \"Auto-Ausfüllen beim Laden einer Seite\" in der Browser-Erweiterung für alle bestehenden und neuen Mitglieder."
   },
   "experimentalFeature": {
     "message": "Kompromittierte oder nicht vertrauenswürdige Websites können Auto-Ausfüllen beim Laden der Seite ausnutzen."
@@ -5064,16 +5144,16 @@
     "message": "Ansprüche vom Benutzer Info-Endpunkt erhalten"
   },
   "additionalScopes": {
-    "message": "Zusätzliche/Benutzerdefinierte Bereiche (durch Komma getrennt)"
+    "message": "Benutzerdefinierte Bereiche"
   },
   "additionalUserIdClaimTypes": {
-    "message": "Zusätzliche/benutzerdefinierte Client-ID Anspruchstypen (durch Komma getrennt)"
+    "message": "Benutzerdefinierte Client-ID Anspruchstypen"
   },
   "additionalEmailClaimTypes": {
-    "message": "Zusätzliche/Benutzerdefinierte E-Mail Anspruchstypen (durch Komma getrennt)"
+    "message": "Benutzerdefinierte E-Mail Anspruchstypen"
   },
   "additionalNameClaimTypes": {
-    "message": "Zusätzliche/Benutzerdefinierte Namen Anspruchstypen (durch Komma getrennt)"
+    "message": "Benutzerdefinierte Namen Anspruchstypen"
   },
   "acrValues": {
     "message": "Angeforderte Authentifizierungskontextklassen Referenzwerte (acr_values)"
@@ -5103,7 +5183,7 @@
     "message": "Minimal eingehender Signaturalgorithmus"
   },
   "spWantAssertionsSigned": {
-    "message": "Möchte Zusicherungen signieren"
+    "message": "Signierte Assertions erwarten"
   },
   "spValidateCertificates": {
     "message": "Zertifikate validieren"
@@ -5315,9 +5395,6 @@
     "message": ", um zu erzwingen, dass sich alle Mitglieder mit SSO anmelden müssen.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "SSO-Authentifizierung und Richtlinien für eine einzelne Organisation werden benötigt, um die Key Connector Entschlüsselung einzurichten."
-  },
   "memberDecryptionOption": {
     "message": "Entschlüsselungsoptionen für Mitglieder"
   },
@@ -5327,8 +5404,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Verbinde die Anmeldung über SSO mit deinem selbst gehosteten Entschlüsselungsschlüssel-Server. Mit dieser Option müssen Mitglieder ihre Master-Passwörter nicht verwenden, um Tresordaten zu entschlüsseln."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Verbinde die Anmeldung über SSO mit deinem selbst gehosteten Entschlüsselungsschlüssel-Server. Mit dieser Option müssen Mitglieder ihre Master-Passwörter nicht verwenden, um Tresordaten zu entschlüsseln. Die",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single team policies are required to set up Key Connector decryption. Contact Bravura Safe Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "Richtlinien zum Verlangen einer SSO-Authentifizierung und für einzelne Organisationen",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single team policies are required to set up Key Connector decryption. Contact Bravura Safe Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "werden benötigt, um die Key Connector Entschlüsselung einzurichten. Kontaktiere den Bravura Safe Support für Hilfe beim Einrichten.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single team policies are required to set up Key Connector decryption. Contact Bravura Safe Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Anmelden mit SSO und Key-Connector-Entschlüsselung\" ist aktiviert. Diese Richtlinie gilt nur für Eigentümer und Adminstratoren."
@@ -5388,7 +5474,7 @@
     "message": "Rechnungssynchronisations-Token generieren"
   },
   "copyPasteBillingSync": {
-    "message": "Kopiere dieses Token und füge es in die Rechnungssynchronisations-Einstellungen deiner selbst gehosteten Organisation ein."
+    "message": "Kopiere diesen Token und füge ihn in die Rechnungssynchronisations-Einstellungen deiner selbst gehosteten Organisation ein."
   },
   "billingSyncCanAccess": {
     "message": "Dein Rechnungssynchronisations-Token kann auf die Abonnement-Einstellungen dieser Organisation zugreifen und diese bearbeiten."
@@ -5409,7 +5495,7 @@
     "message": "Wenn du fortfährt, musst du die Rechnungssynchronisation auf deinem selbst gehosteten Server neu einrichten."
   },
   "rotateBillingSyncTokenTitle": {
-    "message": "Durch Erneuerung des Rechnungssynchronisierungs-Tokens wird der vorherige Token ungültig."
+    "message": "Durch Erneuerung des Rechnungssynchronisierungs-Token wird der vorherige Token ungültig."
   },
   "selfHostingTitle": {
     "message": "Selbst gehostet"
@@ -5544,6 +5630,15 @@
     "message": "Aktuelle Organisation",
     "description": "This is used by screen readers to indicate the team that is currently being shown to the user."
   },
+  "accountLoggedInAsName": {
+    "message": "Konto: Angemeldet als $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
   "accountSettings": {
     "message": "Kontoeinstellungen"
   },
@@ -5576,7 +5671,7 @@
     "message": "Catch-All E-Mail-Adresse"
   },
   "catchallEmailDesc": {
-    "message": "Verwenden den konfigurierten Catch-All-Posteingang deiner Domain."
+    "message": "Verwende den konfigurierten Catch-All-Posteingang deiner Domain."
   },
   "random": {
     "message": "Zufällig",
@@ -5623,7 +5718,7 @@
   },
   "lastSync": {
     "message": "Zuletzt synchronisiert:",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Selbst gehostetes Sponsoring synchronisiert."
@@ -5768,6 +5863,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "Der Eingabewert muss mindestens $MIN$ betragen.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Der Eingabewert darf $MAX$ nicht überschreiten.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "Mindestens 1 E-Mail-Adresse ist ungültig"
   },
@@ -5865,11 +5978,11 @@
     "message": "Alles löschen"
   },
   "toggleCharacterCount": {
-    "message": "Zeichenzählung ein-/ausschalten",
+    "message": "Zeichenanzahl umschalten",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "passwordCharacterCount": {
-    "message": "Passwort Zeichenzählung",
+    "message": "Passwort-Zeichenanzahl",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "hide": {
@@ -6038,7 +6151,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Das Dienstkonto wurde gelöscht"
+    "message": "Dienstkonto gelöscht"
   },
   "deleteServiceAccountsToast": {
     "message": "Dienstkonten gelöscht"
@@ -6196,11 +6309,11 @@
     "message": "Geheimnis dauerhaft gelöscht"
   },
   "accessTokens": {
-    "message": "Zugriffstokens",
+    "message": "Zugriffstoken",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Zugriffstoken erstellen",
+  "newAccessToken": {
+    "message": "Neuer Zugriffstoken",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6216,7 +6329,7 @@
     "description": "Title to be displayed when there are no access tokens to display in the list."
   },
   "accessTokensNoItemsDesc": {
-    "message": "Um loszulegen, erstelle ein Zugriffstoken",
+    "message": "Um loszulegen, erstelle einen Zugriffstoken",
     "description": "Message to be displayed when there are no access tokens to display in the list."
   },
   "downloadAccessToken": {
@@ -6247,23 +6360,23 @@
     "message": "Zugriffstoken erstellt und in Zwischenablage kopiert",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Die Berechtigungsverwaltung ist in der Beta nicht verfügbar.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Zugriffstoken widerrufen",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
   },
   "revokeAccessTokens": {
-    "message": "Zugriffstokens widerrufen"
+    "message": "Zugriffstoken widerrufen"
   },
   "revokeAccessTokenDesc": {
-    "message": "Das Widerrufen von Zugriffstokens ist dauerhaft und unwiderruflich."
+    "message": "Das Widerrufen von Zugriffstoken ist dauerhaft und unwiderruflich."
   },
   "accessTokenRevoked": {
-    "message": "Zugriffstokens widerrufen",
+    "message": "Zugriffstoken widerrufen",
     "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "noAccessTokenSelected": {
+    "message": "Kein Zugriffstoken zum Widerrufen ausgewählt",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
     "message": "Untermenü"
@@ -6468,7 +6581,7 @@
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
-        "example": "bravurasafe.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -6477,7 +6590,7 @@
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
-        "example": "bravurasafe.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -6507,7 +6620,7 @@
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
-        "example": "bravurasafe.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -6516,7 +6629,7 @@
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
-        "example": "bravurasafe.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -6525,7 +6638,7 @@
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
-        "example": "bravurasafe.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -6534,7 +6647,7 @@
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
-        "example": "bravurasafe.com"
+        "example": "bravurasecurity.com"
       }
     }
   },
@@ -6670,6 +6783,18 @@
   "billingSyncHelp": {
     "message": "Hilfe zur Rechnungssynchronisation"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "Hilfe zur Lizenzierung von bezahlten Funktionen"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "Nachdem dein Abonnement abgelaufen ist, hast du 60 Tage Zeit, um eine aktualisierte Lizenzdatei für deine Organisation anzuwenden. Die Nachfrist endet am $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Lizenz hochladen"
   },
@@ -6709,23 +6834,23 @@
   "lowKdfIterations": {
     "message": "Geringe KDF-Iterationen"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Erhöhe deine KDF-Verschlüsselungseinstellungen, um die Sicherheit deines Kontos zu verbessern."
-  },
-  "changeKdfSettings": {
-    "message": "KDF-Einstellungen ändern"
+  "updateLowKdfIterationsDesc": {
+    "message": "Aktualisiere deine Verschlüsselungseinstellungen, um neue Sicherheitsempfehlungen zu erfüllen und den Kontoschutz zu verbessern."
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Wenn du fortfährst, wirst du von allen aktiven Sitzungen abgemeldet. Du musst dich erneut anmelden und die Zwei-Faktor-Authentifizierung durchführen. Wir empfehlen, deinen Tresor zu exportieren, bevor du deine Verschlüsselungseinstellungen änderst, um Datenverluste zu vermeiden."
   },
   "secretsManagerBeta": {
     "message": "Secrets Manager Beta"
   },
-  "secretsManagerBetaDesc": {
-    "message": "Aktiviere kostenlosen Benutzerzugriff auf den Secrets Manager während des Beta-Programms."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "userAccessSecretsManager": {
-    "message": "Dieser Benutzer kann auf die Secrets Manager Beta zugreifen"
+  "secretsManagerAccessDescription": {
+    "message": "Activate user access to Secrets Manager."
+  },
+  "userAccessSecretsManagerGA": {
+    "message": "Dieser Benutzer kann auf Secrets Manager zugreifen."
   },
   "important": {
     "message": "Wichtig:"
@@ -6831,7 +6956,7 @@
     "message": "Secrets Manager Beta aktivieren"
   },
   "saPeopleWarningTitle": {
-    "message": "Zugriffstokens weiterhin verfügbar"
+    "message": "Zugriffstoken weiterhin verfügbar"
   },
   "saPeopleWarningMessage": {
     "message": "Das Entfernen von Personen aus einem Dienstkonto entfernt nicht die von ihnen erstellten Zugriffstoken. Aus Sicherheitsgründen wird empfohlen, Zugriffstoken zu widerrufen, die von Personen erstellt wurden, die aus einem Dienstkonto entfernt wurden."
@@ -6883,6 +7008,10 @@
         "example": "14"
       }
     }
+  },
+  "inputTrimValidator": {
+    "message": "Eingabe darf nicht nur Leerzeichen enthalten.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "dismiss": {
     "message": "Verwerfen"
@@ -6938,6 +7067,38 @@
       }
     }
   },
+  "notAvailableForFreeOrganization": {
+    "message": "Diese Funktion ist für kostenlose Organisationen nicht verfügbar. Kontaktiere deinen Organisationseigentümer zum Upgraden."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Kontaktiere den Administrator deiner Organisation, um Geheimnisse für dieses Projekt zu verwalten.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Bestehende Mitglieder auffordern, ihre Passwörter zu ändern"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "us": {
+    "message": "US",
+    "description": "United States"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "Dir fehlen die Berechtigungen, dieses Projekt zu löschen",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "Die folgenden Projekte können nicht gelöscht werden. Möchtest du fortfahren?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "KDF-Einstellungen aktualisieren"
+  },
   "turnedOff": {
     "message": "Turned off"
   },
@@ -6949,5 +7110,128 @@
         "example": "Check known data breaches for this password"
       }
     }
+  },
+  "trustedDeviceEncryption": {
+    "message": "Vertrauenswürdige Geräteverschlüsselung"
+  },
+  "memberDecryptionTdeDescriptionStart": {
+    "message": "Einmal authentifiziert, entschlüsseln Mitglieder Tresordaten mit einem Schlüssel auf ihrem Gerät. Die",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLink": {
+    "message": "Verwaltungsrichtlinie zur Kontowiederherstellung",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionEnd": {
+    "message": "mit automatischer Registrierung wird aktiviert, wenn diese Option verwendet wird.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ nicht gefunden",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "recoverAccount": {
+    "message": "Konto wiederherstellen"
+  },
+  "updatedTempPassword": {
+    "message": "Der Benutzer hat ein Passwort aktualisiert, das durch die Kontowiederherstellung ausgestellt wurde."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Activated access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Activate access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Den folgenden Mitgliedern Zugriff auf Secrets Manager gewähren. Die im Passwort-Manager zugewiesene Rolle wird auf Secrets Manager angewendet.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Activate Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Fingerabdruck-Phrase deiner Organisation",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their team's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Geräte-Genehmigungen"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Bestätige die Anmeldeanfragen unten, damit das anfragende Mitglied die Anmeldung abschließen kann. Nicht genehmigte Anfragen laufen nach einer Woche ab. Überprüfe die Informationen des Mitglieds vor der Genehmigung."
+  },
+  "deviceInfo": {
+    "message": "Geräteinformation"
+  },
+  "time": {
+    "message": "Zeit"
+  },
+  "denyAllRequests": {
+    "message": "Alle Anfragen ablehnen"
+  },
+  "denyRequest": {
+    "message": "Anfrage ablehnen"
+  },
+  "approveRequest": {
+    "message": "Anfrage genehmigen"
+  },
+  "noDeviceRequests": {
+    "message": "Keine Geräteanfragen"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Geräte-Genehmigungsanfragen von Mitgliedern werden hier erscheinen"
+  },
+  "loginRequestDenied": {
+    "message": "Anmeldeanfrage abgelehnt"
+  },
+  "allLoginRequestsDenied": {
+    "message": "Alle Anmeldeanfragen abgelehnt"
+  },
+  "loginRequestApproved": {
+    "message": "Anmeldeanfrage genehmigt"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Konto hat kein Master-Passwort"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "$USER$ zu entfernen, ohne ein Master-Passwort zu setzen, könnte den Zugang zum gesamten Konto einschränken. Bist du sicher, dass du fortfahren möchtest?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "Kein Master-Passwort"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Mitglieder ohne Master-Passwort zu entfernen, ohne ein solches zu setzen, kann den Zugang zu deren gesamtem Konto einschränken."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Starte deine 7-tägige kostenlose Testversion von Bravura Safe für $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Team name"
+      }
+    }
+  },
+  "next": {
+    "message": "Weiter"
+  },
+  "usFlag": {
+    "message": "US-Flagge"
+  },
+  "euFlag": {
+    "message": "EU-Flagge"
+  },
+  "selectedRegionFlag": {
+    "message": "Flagge der ausgewählten Region"
   }
 }

@@ -2,10 +2,10 @@ import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 
@@ -36,6 +36,6 @@ export class GeneratorComponent extends BaseGeneratorComponent {
   }
 
   usernameTypesLearnMore() {
-    this.platformUtilsService.launchUri("https://bravurasafe.com/help/generator/#username-types");
+    this.platformUtilsService.launchUri("https://bravurasecuritydocs.com/safe/#/home/31914/10/11");
   }
 }

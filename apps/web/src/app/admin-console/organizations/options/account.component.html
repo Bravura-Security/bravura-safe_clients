@@ -1,0 +1,39 @@
+<div class="page-header">
+  <h1>{{ "myOrganization" | i18n }}</h1>
+</div>
+<div *ngIf="loading">
+  <i
+    class="fa fa-spinner fa-spin text-muted"
+    title="{{ 'loading' | i18n }}"
+    aria-hidden="true"
+  ></i>
+  <span class="sr-only">{{ "loading" | i18n }}</span>
+</div>
+
+<ng-container *ngIf="!loading">
+<div class="secondary-header border-0 mb-0">
+  <h1>{{ "enrollAccountRecovery" | i18n }}</h1>
+</div>
+<button type="submit" class="btn btn-primary btn-submit" (click)="enrollPasswordReset()" [disabled]="!allowEnrollment()">
+  {{ "enrollAccountRecovery" | i18n }}
+</button>
+<div class="secondary-header border-0 mb-0">
+  <h1>{{ "twoFactorHyprDeviceManager" | i18n }}</h1>
+</div>
+<button type="submit" class="btn btn-primary btn-submit" (click)="openOneAuthDeviceManager()" [disabled]="!allowOneAuthDeviceManager()">
+  {{ "twoFactorHyprOpenDeviceManager" | i18n }}
+</button>
+
+<ng-container *ngIf="!loading && organization.useSso && organization.identifier">
+  <div class="secondary-header border-0 mb-0">
+    <h1>{{ "singleSignOn" | i18n }}</h1>
+  </div>
+  <button type="submit" class="btn btn-primary btn-submit" (click)="unlinkSso()" [disabled]="!organization.ssoBound">
+    {{ "unlinkSso" | i18n }}
+  </button>
+  <button type="submit" class="btn btn-primary btn-submit" (click)="linkSso()" [disabled]="organization.ssoBound">
+    {{ "linkSso" | i18n }}
+  </button>
+</ng-container>
+
+</ng-container>

@@ -12,23 +12,49 @@
     </button>
   </div>
   <div id="content" class="content">
-    <img class="logo-image" alt="Bitwarden" />
-    <p class="lead text-center">{{ "logInInitiated" | i18n }}</p>
+    <img class="logo-image" alt="Bravura Safe" />
+    <p class="lead text-center"><b>{{ "logInInitiated" | i18n }}</b></p>
 
     <div class="box last">
       <div class="box-content">
-        <div class="box-content-row" appBoxRow>
+        <div class="box-content-row text-center" appBoxRow>
           <div class="section">
             <p class="section">{{ "notificationSentDevice" | i18n }}</p>
-            <p>
-              {{ "fingerprintMatchInfo" | i18n }}
-            </p>
+            <p><b>
+              {{ "pleaseUnlockVault" | i18n }}
+            </b></p>
           </div>
 
-          <div class="fingerprint section">
-            <h4>{{ "fingerprintPhraseHeader" | i18n }}</h4>
-            <code>{{ passwordlessRequest?.fingerprintPhrase }}</code>
+          <div>
+            <span id="iconsFaStack" class="fa-stack fa-2x" style="font-size: 750%;">
+              <i id="outerIcon" class="fa fa-solid fa-user-o fa-stack-2x"></i>
+              <i id="innerIcon" class="fa fa-mobile"
+                style="
+                  font-size: 80%;
+                  position: relative;
+                  top: 20%;
+              "></i>
+              <i id="innerInnerIcon" class="fa fa-unlock-alt"
+                style="
+                font-size: 25%;
+                position: absolute;
+                top: 70%;
+                width: 100%;
+                left: 0;
+              "></i>
+            </span>
           </div>
+
+          <details>
+            <summary>{{ "details" | i18n }}</summary>
+            <div class="fingerprint section">
+              <p>
+                {{ "fingerprintMatchInfo" | i18n }}
+              </p>
+              <h4>{{ "fingerprintPhraseHeader" | i18n }}</h4>
+              <code>{{ fingerprintPhrase }}</code>
+            </div>
+          </details>
 
           <div class="section" *ngIf="showResendNotification">
             <a [routerLink]="[]" disabled="true" (click)="startPasswordlessLogin()">{{

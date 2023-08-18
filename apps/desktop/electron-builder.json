@@ -2,6 +2,7 @@
   "extraMetadata": {
     "name": "bravurasafe"
   },
+  "buildVersion" : "31",
   "productName": "Bravura Safe",
   "appId": "com.hitachiid.desktop",
   "buildDependenciesFromSource": true,
@@ -19,7 +20,7 @@
     "**/node_modules/@bitwarden/desktop-native/index.js",
     "**/node_modules/@bitwarden/desktop-native/desktop_native.${platform}-${arch}*.node"
   ],
-  "electronVersion": "21.3.1",
+  "electronVersion": "24.1.1",
   "generateUpdatesFilesForAllChannels": true,
   "publish": {
     "provider": "generic",
@@ -41,6 +42,7 @@
       ],
       "CFBundleDevelopmentRegion": "en"
     },
+    "singleArchFiles": "node_modules/@bitwarden/desktop-native/desktop_native.darwin-*.node",
     "target": ["dmg", "zip"]
   },
   "win": {
@@ -141,7 +143,7 @@
   "protocols": [
     {
       "name": "Bravura Safe",
-      "schemes": ["bitwarden"]
+      "schemes": ["bravurasafe"]
     }
   ]
 }

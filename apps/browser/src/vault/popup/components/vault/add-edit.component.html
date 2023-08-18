@@ -163,6 +163,7 @@
                 class="monospaced"
                 type="{{ showCardNumber ? 'text' : 'password' }}"
                 name="Card.Number"
+                (input)="onCardNumberChange()"
                 [(ngModel)]="cipher.card.number"
                 appInputVerbatim
                 [readonly]="!cipher.edit && editMode"
@@ -591,7 +592,7 @@
               target="_blank"
               rel="noopener"
               appA11yTitle="{{ 'learnMore' | i18n }}"
-              href="https://bravurasecuritydocs.com/safe/#/home/27665/10/11"
+              href="https://bravurasecuritydocs.com/safe/#/home/42012/10/11"
             >
               <i class="fa fa-question-circle-o" aria-hidden="true"></i>
             </a>

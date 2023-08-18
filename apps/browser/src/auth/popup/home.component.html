@@ -9,9 +9,9 @@
             <label for="email">{{ "emailAddress" | i18n }}</label>
             <input id="email" type="email" formControlName="email" appInputVerbatim="false" />
           </div>
-        <div class="box-footer no-margin" *ngIf="selfHostedDomain">
+          <div class="box-footer no-margin" *ngIf="selfHostedDomain">
             {{ "loggingInTo" | i18n : selfHostedDomain }}
-        </div>
+          </div>
           <div class="remember-email-check">
             <input
               id="rememberEmail"

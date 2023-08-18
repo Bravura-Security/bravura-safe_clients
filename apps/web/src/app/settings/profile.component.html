@@ -46,12 +46,11 @@
           Customize
         </button>
       </div>
-      <hr />
-      <p *ngIf="fingerprint">
-        {{ "yourAccountsFingerprint" | i18n }}:
-        <br />
-        <code>{{ fingerprint }}</code>
-      </p>
+      <app-account-fingerprint
+        [fingerprintMaterial]="fingerprintMaterial"
+        fingerprintLabel="{{ 'yourAccountsFingerprint' | i18n }}"
+      >
+      </app-account-fingerprint>
     </div>
   </div>
   <button type="submit" class="btn btn-primary btn-submit" [disabled]="form.loading">

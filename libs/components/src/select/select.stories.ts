@@ -1,6 +1,6 @@
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { MultiSelectComponent } from "../multi-select/multi-select.component";
 import { I18nMockService } from "../utils/i18n-mock.service";
@@ -37,7 +37,10 @@ export default {
   },
 } as Meta;
 
-const DefaultTemplate: Story<MultiSelectComponent> = (args: MultiSelectComponent) => ({
+type Story = StoryObj<MultiSelectComponent>;
+
+export const Default: Story = {
+  render: (args) => ({
   props: {
     ...args,
   },
@@ -47,12 +50,13 @@ const DefaultTemplate: Story<MultiSelectComponent> = (args: MultiSelectComponent
       <bit-option value="value3" label="Value 3" icon="fa-cube"></bit-option>
       <bit-option value="value4" label="Value 4" icon="fa-cube" disabled></bit-option>
     </bit-select>`,
-});
+  }),
+  args: {},
+};
 
-export const Default = DefaultTemplate.bind({});
-Default.args = {};
-
-export const Disabled = DefaultTemplate.bind({});
-Disabled.args = {
+export const Disabled: Story = {
+  ...Default,
+  args: {
   disabled: true,
+  },
 };
