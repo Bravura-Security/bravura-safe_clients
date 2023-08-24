@@ -20,10 +20,11 @@ module.exports = {
     "<rootDir>/apps/web/jest.config.js",
 
     "<rootDir>/libs/angular/jest.config.js",
+    "<rootDir>/libs/auth/jest.config.js",
     "<rootDir>/libs/common/jest.config.js",
     "<rootDir>/libs/components/jest.config.js",
-    "<rootDir>/libs/importer/jest.config.js",
     "<rootDir>/libs/exporter/jest.config.js",
+    "<rootDir>/libs/importer/jest.config.js",
     "<rootDir>/libs/node/jest.config.js",
   ],
 

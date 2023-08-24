@@ -56,6 +56,7 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
+import { SecretsManagerBillingModule } from "../billing/organizations/secrets-manager/sm-billing.module";
 import { AddCreditComponent } from "../billing/settings/add-credit.component";
 import { AdjustPaymentComponent } from "../billing/settings/adjust-payment.component";
 import { BillingHistoryViewComponent } from "../billing/settings/billing-history-view.component";
@@ -85,7 +86,6 @@ import { DeleteAccountComponent } from "../settings/delete-account.component";
 import { DomainRulesComponent } from "../settings/domain-rules.component";
 import { LowKdfComponent } from "../settings/low-kdf.component";
 import { PreferencesComponent } from "../settings/preferences.component";
-import { PremiumComponent } from "../settings/premium.component";
 import { ProfileComponent } from "../settings/profile.component";
 import { PurgeVaultComponent } from "../settings/purge-vault.component";
 import { SecurityKeysComponent } from "../settings/security-keys.component";
@@ -99,7 +99,6 @@ import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-h
 import { AccessComponent } from "../tools/send/access.component";
 import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
 import { EffluxDatesComponent as SendEffluxDatesComponent } from "../tools/send/efflux-dates.component";
-import { SendComponent } from "../tools/send/send.component";
 import { ToolsComponent } from "../tools/tools.component";
 import { ReportsLayoutComponent as BaseReportsComponent} from "../reports/reports-layout.component";
 import { ReportingComponent } from "../admin-console/organizations/reporting/reporting.component";
@@ -114,6 +113,7 @@ import { ShareComponent } from "../vault/individual-vault/share.component";
 import { AddEditComponent as OrgAddEditComponent } from "../vault/org-vault/add-edit.component";
 import { AttachmentsComponent as OrgAttachmentsComponent } from "../vault/org-vault/attachments.component";
 import { CollectionsComponent as OrgCollectionsComponent } from "../vault/org-vault/collections.component";
+import { PremiumComponent } from "../vault/settings/premium.component";
 
 import { EnvironmentSelectorModule } from "./../components/environment-selector/environment-selector.module";
 import { AccountFingerprintComponent } from "./components/account-fingerprint/account-fingerprint.component";
@@ -132,6 +132,9 @@ import { SharedModule } from "./shared.module";
     DynamicAvatarComponent,
     EnvironmentSelectorModule,
     AccountFingerprintComponent,
+
+    // To be removed when OrganizationPlansComponent is moved to its own module (see AC-1453)
+    SecretsManagerBillingModule,
   ],
   declarations: [
     AcceptEmergencyComponent,
@@ -205,7 +208,6 @@ import { SharedModule } from "./shared.module";
     SecurityKeysComponent,
     SelectableAvatarComponent,
     SendAddEditComponent,
-    SendComponent,
     SendEffluxDatesComponent,
     SetPasswordComponent,
     SettingsComponent,
@@ -316,7 +318,6 @@ import { SharedModule } from "./shared.module";
     SecurityKeysComponent,
     SelectableAvatarComponent,
     SendAddEditComponent,
-    SendComponent,
     SendEffluxDatesComponent,
     SetPasswordComponent,
     SettingsComponent,
