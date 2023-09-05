@@ -76,7 +76,7 @@
               {{ "accountSettings" | i18n }}
             </a>
             <bit-menu-divider></bit-menu-divider>
-            <button bitMenuItem type="button" (click)="lock()">
+            <button *ngIf="canLock$ | async" bitMenuItem type="button" (click)="lock()">
               <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
               {{ "lockNow" | i18n }}
             </button>

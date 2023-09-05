@@ -1473,9 +1473,6 @@
   "restoreItem": {
     "message": "Restaurar elemento"
   },
-  "restoreItemConfirmation": {
-    "message": "¿Estás seguro de que quieres restaurar este elemento?"
-  },
   "restoredItem": {
     "message": "Elemento restaurado"
   },

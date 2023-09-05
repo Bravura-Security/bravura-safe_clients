@@ -22,7 +22,7 @@ import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.d
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
 
 import { RouterService } from "../core";
 
@@ -57,7 +57,7 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     logService: LogService,
     private routerService: RouterService,
     auditService: AuditService,
-    dialogService: DialogServiceAbstraction
+    dialogService: DialogService
   ) {
     super(
       formValidationErrorService,

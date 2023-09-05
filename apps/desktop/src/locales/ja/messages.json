@@ -1539,12 +1539,6 @@
   "permanentlyDeletedItem": {
     "message": "完全に削除されたアイテム"
   },
-  "restoreItem": {
-    "message": "アイテムをリストア"
-  },
-  "restoreItemConfirmation": {
-    "message": "このアイテムをリストアしますか？"
-  },
   "restoredItem": {
     "message": "リストアされたアイテム"
   },

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -33,7 +33,7 @@ export class TwoFactorHyprComponent extends TwoFactorBaseComponent {
     platformUtilsService: PlatformUtilsService,
     logService: LogService,
     userVerificationService: UserVerificationService,
-    dialogService: DialogServiceAbstraction
+    dialogService: DialogService
   ) {
     super(apiService, i18nService, platformUtilsService, logService, userVerificationService, dialogService);
   }
