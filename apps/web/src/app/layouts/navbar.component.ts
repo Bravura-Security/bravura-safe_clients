@@ -61,6 +61,9 @@ export class NavbarComponent implements OnInit {
     this.canLock$ = this.vaultTimeoutSettingsService
       .availableVaultTimeoutActions$()
       .pipe(map((actions) => actions.includes(VaultTimeoutAction.Lock)));
+    this.canLock$ = this.vaultTimeoutSettingsService
+      .availableVaultTimeoutActions$()
+      .pipe(map((actions) => actions.includes(VaultTimeoutAction.Lock)));
   }
 
   lock() {
