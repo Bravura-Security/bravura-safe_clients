@@ -36,8 +36,9 @@ export class WindowMain {
 
   init(): Promise<any> {
 
-    app.commandLine.appendSwitch('ignore-certificate-errors');
-    app.commandLine.appendSwitch('allow-insecure-localhost', 'true');
+    // uncomment for testing with self signed certs
+    // app.commandLine.appendSwitch('ignore-certificate-errors');
+    // app.commandLine.appendSwitch('allow-insecure-localhost', 'true');
 
     // Perform a hard reload of the render process by crashing it. This is suboptimal but ensures that all memory gets
     // cleared, as the process itself will be completely garbage collected.
