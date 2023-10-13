@@ -61,7 +61,7 @@ export const WithChildButtons: Story = {
   template: `
       <bit-nav-item text="Hello World" [route]="['']" icon="fa-cube">
         <button
-          slot-start
+          slot="start"
           class="tw-ml-auto"
           [bitIconButton]="'fa-clone'"
           [buttonType]="'contrast'"
@@ -69,7 +69,7 @@ export const WithChildButtons: Story = {
           aria-label="option 1"
         ></button>
         <button
-          slot-end
+          slot="end"
           class="tw-ml-auto"
           [bitIconButton]="'fa-pencil-square-o'"
           [buttonType]="'contrast'"
@@ -77,7 +77,7 @@ export const WithChildButtons: Story = {
           aria-label="option 2"
         ></button>
         <button
-          slot-end
+          slot="end"
           class="tw-ml-auto"
           [bitIconButton]="'fa-check'"
           [buttonType]="'contrast'"

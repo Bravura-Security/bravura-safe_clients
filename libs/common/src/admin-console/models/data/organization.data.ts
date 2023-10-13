@@ -23,6 +23,7 @@ export class OrganizationData {
   useCustomPermissions: boolean;
   useResetPassword: boolean;
   useSecretsManager: boolean;
+  usePasswordManager: boolean;
   useActivateAutofillPolicy: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
@@ -76,6 +77,7 @@ export class OrganizationData {
     this.useCustomPermissions = response.useCustomPermissions;
     this.useResetPassword = response.useResetPassword;
     this.useSecretsManager = response.useSecretsManager;
+    this.usePasswordManager = response.usePasswordManager;
     this.useActivateAutofillPolicy = response.useActivateAutofillPolicy;
     this.selfHost = response.selfHost;
     this.usersGetPremium = response.usersGetPremium;

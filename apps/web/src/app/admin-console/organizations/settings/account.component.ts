@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, lastValueFrom, Subject, switchMap, takeUntil, from } from "rxjs";
 
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -61,7 +61,7 @@ export class AccountComponent {
   });
 
   protected organizationId: string;
-  protected publicKeyBuffer: ArrayBuffer;
+  protected publicKeyBuffer: Uint8Array;
 
   private destroy$ = new Subject<void>();
 
@@ -75,7 +75,7 @@ export class AccountComponent {
     private router: Router,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
-    private dialogService: DialogServiceAbstraction,
+    private dialogService: DialogService,
     private formBuilder: FormBuilder
   ) {}
 
@@ -106,7 +106,7 @@ export class AccountComponent {
         this.org = orgResponse;
 
         // Public Key Buffer for Org Fingerprint Generation
-        this.publicKeyBuffer = Utils.fromB64ToArray(orgKeys?.publicKey)?.buffer;
+        this.publicKeyBuffer = Utils.fromB64ToArray(orgKeys?.publicKey);
 
         // Patch existing values
         this.formGroup.patchValue({
@@ -213,7 +213,7 @@ export class AccountComponent {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: this.org.name,
       content: { key: "leaveOrganizationConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
     if (!confirmed) {
       return false;

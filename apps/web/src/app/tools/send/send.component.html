@@ -1,20 +1,16 @@
 <div class="container page-content">
-  <app-callout type="warning" title="{{ 'sendDisabled' | i18n }}" *ngIf="disableSend">
-    <span>{{ "sendDisabledWarning" | i18n }}</span>
-  </app-callout>
+  <bit-callout type="warning" title="{{ 'sendDisabled' | i18n }}" *ngIf="disableSend">
+    {{ "sendDisabledWarning" | i18n }}
+  </bit-callout>
   <div class="row">
     <div class="col-3 groupings">
       <div class="card vault-filters">
         <div class="card-body">
           <div class="search-container">
-            <input
-              type="search"
-              placeholder="{{ searchPlaceholder || ('searchSends' | i18n) }}"
-              id="search"
-              class="form-control"
+            <bit-search
               [(ngModel)]="searchText"
+              [placeholder]="'searchSends' | i18n"
               (input)="searchTextChanged()"
-              autocomplete="off"
               appAutofocus
             />
           </div>
@@ -89,29 +85,37 @@
             </ng-container>
           </small>
         </h1>
-        <div class="ml-auto d-flex">
+        <div class="tw-ml-auto">
           <button
             type="button"
-            class="btn btn-outline-primary btn-sm"
+            bitButton
+            buttonType="primary"
             (click)="addSend()"
             [disabled]="disableSend"
           >
-            <i class="fa fa-plus fa-fw" aria-hidden="true"></i>{{ "createSend" | i18n }}
+            <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+            {{ "createSend" | i18n }}
           </button>
         </div>
       </div>
-      <!--Listing Table-->
-      <table class="table table-hover table-list" *ngIf="filteredSends && filteredSends.length">
-        <tbody>
-          <tr *ngFor="let s of filteredSends">
-            <td class="table-list-icon">
-              <div class="icon" aria-hidden="true">
+      <bit-table [dataSource]="dataSource" *ngIf="filteredSends && filteredSends.length">
+        <ng-container header>
+          <tr>
+            <th bitCell bitSortable="name" default>{{ "name" | i18n }}</th>
+            <th bitCell bitSortable="deletionDate">{{ "deletionDate" | i18n }}</th>
+            <th bitCell>{{ "options" | i18n }}</th>
+          </tr>
+        </ng-container>
+        <ng-template body let-rows$>
+          <tr bitRow *ngFor="let s of rows$ | async">
+            <td bitCell (click)="editSend(s)" class="tw-cursor-pointer">
+              <span class="tw-mr-2" aria-hidden="true">
                 <i class="fa fa-fw fa-file-o" *ngIf="s.type == sendType.File"></i>
                 <i class="fa fa-fw fa-file-text-o" *ngIf="s.type == sendType.Text"></i>
-              </div>
-            </td>
-            <td class="reduced-lh wrap">
-              <a href="#" appStopClick appStopProp (click)="editSend(s)">{{ s.name }}</a>
+              </span>
+              <button type="button" bitLink>
+                {{ s.name }}
+              </button>
               <ng-container *ngIf="s.disabled">
                 <i
                   class="fa fa-warning"
@@ -157,10 +161,13 @@
                 ></i>
                 <span class="sr-only">{{ "pendingDeletion" | i18n }}</span>
               </ng-container>
-              <br />
-              <small appStopProp>{{ s.deletionDate | date : "medium" }}</small>
             </td>
-            <td style="text-align:right">
+            <td bitCell class="tw-text-muted" (click)="editSend(s)" class="tw-cursor-pointer">
+              <small bitTypography="body2" appStopProp>{{
+                s.deletionDate | date : "medium"
+              }}</small>
+            </td>
+            <td bitCell class="tw-w-0 tw-text-right">
               <button
                 type="button"
                 [bitMenuTriggerFor]="sendOptions"
@@ -169,7 +176,6 @@
                 type="button"
                 appA11yTitle="{{ 'options' | i18n }}"
                 class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                appStopProp
               ></button>
               <bit-menu #sendOptions>
                 <ng-container>
@@ -202,8 +208,8 @@
               </bit-menu>
             </td>
           </tr>
-        </tbody>
-      </table>
+        </ng-template>
+      </bit-table>
       <div class="no-items" *ngIf="filteredSends && !filteredSends.length">
         <ng-container *ngIf="!loaded">
           <i
@@ -214,16 +220,20 @@
           <span class="sr-only">{{ "loading" | i18n }}</span>
         </ng-container>
         <ng-container *ngIf="loaded">
-          <bit-icon [icon]="noItemIcon" aria-hidden="true"></bit-icon>
-          <p>{{ "noSendsInList" | i18n }}</p>
+          <bit-no-items [icon]="noItemIcon" class="tw-text-main">
+            <ng-container slot="title">{{ "sendsNoItemsTitle" | i18n }}</ng-container>
+            <ng-container slot="description">{{ "sendsNoItemsMessage" | i18n }}</ng-container>
           <button
+              slot="button"
             type="button"
+              bitButton
+              buttonType="secondary"
             (click)="addSend()"
-            class="btn btn-outline-primary"
-            [disabled]="disableSend"
           >
-            <i class="fa fa-plus fa-fw"></i>{{ "createSend" | i18n }}
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              {{ "createSend" | i18n }}
           </button>
+          </bit-no-items>
         </ng-container>
       </div>
       <div class="vertical-spacer"></div>

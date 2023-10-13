@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "$APP_NAME$ Web Vault",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bravura Safe"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "What type of item is this?"
   },
@@ -711,8 +701,8 @@
   "loginWithDevice": {
     "message": "Log in with device"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Log in with device must be set up in the settings of the Bravura Safe mobile app. Need another option?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Log in with device must be set up in the settings of the Bravura Safe app. Need another option?"
   },
   "loginWithMasterPassword": {
     "message": "Log in with master password"
@@ -814,11 +804,17 @@
   "unexpectedError": {
     "message": "An unexpected error has occurred."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "Email address"
   },
   "yourVaultIsLocked": {
     "message": "Your vault is locked. Verify your master password to continue."
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "Unlock"
@@ -1056,6 +1052,9 @@
   },
   "copyVerificationCode": {
     "message": "Copy verification code"
+  },
+  "copyUuid": {
+    "message": "Copy UUID"
   },
   "warning": {
     "message": "Warning"
@@ -1392,6 +1391,31 @@
   },
   "importEncKeyError": {
     "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
     "message": "Select the format of the import file"
@@ -2801,6 +2825,12 @@
   "webVault": {
     "message": "Web vault"
   },
+  "bitWebVault": {
+    "message": "Bravura Safe Web vault"
+  },
+  "bitSecretsManager": {
+    "message": "Bravura Safe Secrets Manager"
+  },
   "loggedIn": {
     "message": "Logged in"
   },
@@ -3479,6 +3509,9 @@
   "limitSubscriptionDesc": {
     "message": "Set a seat limit for your subscription. Once this limit is reached, you will not be able to invite new members."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Set a seat limit for your Secrets Manger subscription. Once this limit is reached, you will not be able to invite new members."
+  },
   "maxSeatLimit": {
     "message": "Seat Limit (optional)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3747,8 +3780,8 @@
   "attachmentsNeedFix": {
     "message": "This item has old file attachments that need to be fixed."
   },
-  "attachmentFixDesc": {
-    "message": "This is an old file attachment the needs to be fixed. Click to learn more."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Fix",
@@ -3965,29 +3998,11 @@
   "restoreSelected": {
     "message": "Restore selected"
   },
-  "restoreItem": {
-    "message": "Restore item"
-  },
   "restoredItem": {
     "message": "Item restored"
   },
   "restoredItems": {
     "message": "Items restored"
-  },
-  "restoreItemConfirmation": {
-    "message": "Are you sure you want to restore this item?"
-  },
-  "restoreItems": {
-    "message": "Restore items"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "You have selected $COUNT$ item(s) to restore. Are you sure you want to restore these items?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Item $ID$ restored",
@@ -4531,8 +4546,8 @@
   "manageUsers": {
     "message": "Manage users"
   },
-  "manageResetPassword": {
-    "message": "Manage password reset"
+  "manageAccountRecovery": {
+    "message": "Manage account recovery"
   },
   "disableRequiredError": {
     "message": "You must manually turn the $POLICYNAME$ policy before this policy can be turned off.",
@@ -4754,11 +4769,14 @@
   "accountRecoveryPolicy": {
     "message": "Master password reset"
   },
-  "accountRecoveryPolicyDescription": {
+  "accountRecoveryPolicyDesc": {
     "message": "Allow admins to reset master passwords for members."
   },
-  "resetPasswordPolicyWarning": {
+  "accountRecoveryPolicyWarning": {
     "message": "Members in the team will need to self-enrol or be auto-enroled before administrators can reset their master password."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "The single team Enterprise policy must be turned on before activating this policy."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatic enrolment"
@@ -4868,8 +4886,8 @@
   "error": {
     "message": "Error"
   },
-  "resetPasswordManageUsers": {
-    "message": "Manage users must also be granted with the manage password reset permission"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Provider setup"
@@ -5080,8 +5098,8 @@
   "disablePersonalVaultExport": {
     "message": "Remove individual vault export"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Do not allow members to export their individual vault data."
+  "disablePersonalVaultExportDescription": {
+    "message": "Do not allow members to export data from their individual vault."
   },
   "vaultExportDisabled": {
     "message": "Vault export removed"
@@ -5387,8 +5405,8 @@
     "message": "Use the",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "require single-sign-on authentication policy",
+  "ssoPolicyHelpAnchor": {
+    "message": "require single sign-on authentication policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -5596,8 +5614,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Only the team vault associated with $ORGANIZATION$ will be exported. Individual vault items and items from other teams will not be included.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the team vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other teams will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -6849,11 +6867,11 @@
   "changeKdfLoggedOutWarning": {
     "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
-  },
   "secretsManager": {
     "message": "Secrets Manager"
+  },
+  "secretsManagerBeta": {
+    "message": "Secrets Manager Beta"
   },
   "secretsManagerAccessDescription": {
     "message": "Activate user access to Secrets Manager."
@@ -7086,16 +7104,11 @@
   "enforceOnLoginDesc": {
     "message": "Require existing members to change their passwords"
   },
-  "region": {
-    "message": "Region"
+  "usDomain": {
+    "message": "bravurasafe.com"
   },
-  "eu": {
-    "message": "EU",
-    "description": "European Union"
-  },
-  "us": {
-    "message": "US",
-    "description": "United States"
+  "euDomain": {
+    "message": "bravurasafe.eu"
   },
   "smProjectDeleteAccessRestricted": {
     "message": "You don't have permissions to delete this project",
@@ -7120,20 +7133,28 @@
       }
     }
   },
-  "trustedDeviceEncryption": {
-    "message": "Trusted device encryption"
+  "trustedDevices": {
+    "message": "Trusted devices"
   },
-  "memberDecryptionTdeDescriptionStart": {
+  "memberDecryptionTdeDescriptionPartOne": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLink": {
-    "message": "account recovery administration policy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionLinkOne": {
+    "message": "single team",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionEnd": {
-    "message": "with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The master password reset policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionTdeDescriptionPartTwo": {
+    "message": "policy and ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionLinkTwo": {
+    "message": "account recovery administration",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionTdeDescriptionPartThree": {
+    "message": "policy with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ not found",
@@ -7242,5 +7263,137 @@
   },
   "selectedRegionFlag": {
     "message": "Selected region flag"
+  },
+  "sendsNoItemsTitle": {
+    "message": "No active Shares",
+    "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Use Share to securely share encrypted information with anyone.",
+    "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Invite Users"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager for $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
+  },
+  "free2PersonOrganization": {
+    "message": "Free 2-person Organizations"
+  },
+  "unlimitedSecrets": {
+    "message": "Unlimited secrets"
+  },
+  "unlimitedProjects": {
+    "message": "Unlimited projects"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ projects included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ service accounts included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ per month for additional service accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "addSecretsManager": {
+    "message": "Add Secrets Manager"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Add Secrets Manager to your upgraded plan to maintain access to any secrets created with your previous plan."
+  },
+  "additionalServiceAccounts": {
+    "message": "Additional service accounts"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Password Manager plan price"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Secrets Manager plan price"
+  },
+  "passwordManager": {
+    "message": "Password Manager"
+  },
+  "freeOrganization": {
+    "message": "Free Team"
+  },
+  "limitServiceAccounts": {
+    "message": "Limit service accounts (optional)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Set a limit for your service accounts. Once this limit is reached, you will not be able to create new service accounts."
+  },
+  "serviceAccountLimit": {
+    "message": "Service account limit (optional)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Max potential service account cost"
+  },
+  "smBetaEndedDesc": {
+    "message": "The Secrets Manager Beta ended $BETA_ENDING_DATE$. You have $DAYS$ days left to add Secrets Manager to your paid subscription and maintain access to Secrets Manager data. Contact Customer Success to add Secrets Manager to your subscription.",
+    "placeholders": {
+      "beta_ending_date": {
+        "content": "$1",
+        "example": "August 1, 2023"
+      },
+      "days": {
+        "content": "$2",
+        "example": "11"
+      }
+    }
+  },
+  "betaEnding": {
+    "message": "Beta Ending"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
   }
 }

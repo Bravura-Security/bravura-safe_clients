@@ -5,7 +5,6 @@ import { Subject, takeUntil } from "rxjs";
 
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
-import { DialogServiceAbstraction } from "@bitwarden/angular/services/dialog";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -19,6 +18,7 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { DialogService } from "@bitwarden/components";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
@@ -52,8 +52,8 @@ export class RegisterFormComponent extends BaseRegisterComponent {
     environmentService: EnvironmentService,
     logService: LogService,
     auditService: AuditService,
+    dialogService: DialogService,
     private policyApiService: PolicyApiServiceAbstraction,
-    dialogService: DialogServiceAbstraction
   ) {
     super(
       formValidationErrorService,

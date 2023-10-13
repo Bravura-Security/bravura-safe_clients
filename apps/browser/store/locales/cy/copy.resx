@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bravura Safe</value>
+    <value>Bravura Safe - Rheolydd cyfineiriau am ddim</value>
   </data>
   <data name="Summary" xml:space="preserve">
-    <value>A secure password manager for all of your devices</value>
+    <value>Rheolydd diogel a rhad ac am ddim ar gyfer eich holl ddyfeisiau</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Bravura Security Inc.</value>
   </data>
   <data name="AssetTitle" xml:space="preserve">
-    <value>A secure password manager for all of your devices</value>
+    <value>Rheolydd diogel a rhad ac am ddim ar gyfer eich holl ddyfeisiau</value>
   </data>
   <data name="ScreenshotSync" xml:space="preserve">
     <value>Sync and access your vault from multiple devices</value>
@@ -145,6 +145,6 @@
     <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="ScreenshotEdit" xml:space="preserve">
-    <value>Your information is managed securely using AES-256 bit encryption</value>
+    <value>Mae eich gwybodaeth yn cael ei reoli'n ddiogel gan ddefnyddio manyleb amgryptio AES 256 did</value>
   </data>
 </root>

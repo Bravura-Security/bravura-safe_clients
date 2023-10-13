@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand navbar-dark position-sticky sticky-top" [ngClass]="{ 'nav-background-alt': selfHosted }">
   <div class="container align-items-stretch">
-    <a class="navbar-brand d-flex align-items-center cursor-pointer mt-0 mr-3 mb-0" routerLink="/" appA11yTitle="{{ 'pageTitle' | i18n : 'Bravura Safe' }}">
+    <a class="navbar-brand d-flex align-items-center cursor-pointer mt-0 mr-3 mb-0" routerLink="/" appA11yTitle="{{ 'bitWebVault' | i18n }}">
       <img class="logo logo-themed-nav-bar" alt="Bravura Security" />
     </a>
     <div class="collapse navbar-collapse">
@@ -76,7 +76,7 @@
               {{ "accountSettings" | i18n }}
             </a>
             <bit-menu-divider></bit-menu-divider>
-            <button bitMenuItem type="button" (click)="lock()">
+            <button *ngIf="canLock$ | async" bitMenuItem type="button" (click)="lock()">
               <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
               {{ "lockNow" | i18n }}
             </button>

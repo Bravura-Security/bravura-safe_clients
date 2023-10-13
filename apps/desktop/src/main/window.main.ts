@@ -35,6 +35,11 @@ export class WindowMain {
   ) {}
 
   init(): Promise<any> {
+
+    // uncomment for testing with self signed certs
+    // app.commandLine.appendSwitch('ignore-certificate-errors');
+    // app.commandLine.appendSwitch('allow-insecure-localhost', 'true');
+
     // Perform a hard reload of the render process by crashing it. This is suboptimal but ensures that all memory gets
     // cleared, as the process itself will be completely garbage collected.
     ipcMain.on("reload-process", async () => {
@@ -236,7 +241,7 @@ export class WindowMain {
       case "light":
         return "#ededed";
       case "dark":
-        return "#222222";
+        return "#15181e";
       case "nord":
         return "#3b4252";
     }

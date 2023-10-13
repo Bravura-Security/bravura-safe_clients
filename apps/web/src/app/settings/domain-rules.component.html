@@ -59,43 +59,31 @@
       <tr *ngFor="let d of global">
         <td [ngClass]="{ 'table-list-strike': d.excluded }">{{ d.domains }}</td>
         <td class="table-list-options">
-          <div appListDropdown>
+          <div class="list-options">
             <button
-              class="btn btn-outline-secondary dropdown-toggle"
+              [disabled]=false
+              [bitMenuTriggerFor]="domainOptions"
+              bitIconButton="fa fa-cog"
+              size="small"
               type="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
               appA11yTitle="{{ 'options' | i18n }}"
-            >
-              <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a
-                class="dropdown-item"
-                href="#"
-                appStopClick
-                (click)="toggleExcluded(d)"
-                *ngIf="!d.excluded"
-              >
+              class="btn btn-sm btn-outline-secondary dropdown-toggle"
+              appStopProp
+            ></button>
+            <bit-menu #domainOptions>
+              <button *ngIf="!d.excluded" type="button" bitMenuItem (click)="toggleExcluded(d)">
                 <i class="fa fa-fw fa-close" aria-hidden="true"></i>
                 {{ "exclude" | i18n }}
-              </a>
-              <a
-                class="dropdown-item"
-                href="#"
-                appStopClick
-                (click)="toggleExcluded(d)"
-                *ngIf="d.excluded"
-              >
+              </button>
+              <button *ngIf="d.excluded" type="button" bitMenuItem (click)="toggleExcluded(d)">
                 <i class="fa fa-fw fa-plus" aria-hidden="true"></i>
                 {{ "include" | i18n }}
-              </a>
-              <a class="dropdown-item" href="#" appStopClick (click)="customize(d)">
+              </button>
+              <button type="button" bitMenuItem (click)="customize(d)">
                 <i class="fa fa-fw fa-scissors" aria-hidden="true"></i>
                 {{ "customize" | i18n }}
-              </a>
-            </div>
+              </button>
+            </bit-menu>
           </div>
         </td>
       </tr>
