@@ -1,4 +1,4 @@
-﻿{
+{
   "bitwarden": {
     "message": "Bravura Safe"
   },
@@ -475,8 +475,8 @@
   "maxFileSize": {
     "message": "Maximum file size is 1.8 GB."
   },
-  "updateKey": {
-    "message": "You cannot use this feature until you update your encryption key."
+  "encryptionKeyMigrationRequired": {
+    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
   },
   "editedFolder": {
     "message": "Folder saved"
@@ -1101,8 +1101,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB encrypted storage for file attachments."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Additional two-step login options such as YubiKey, FIDO U2F, and Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpReports": {
     "message": "Password hygiene, account health, and data breach reports to keep your vault safe."
@@ -2014,8 +2014,8 @@
   "exportingPersonalVaultTitle": {
     "message": "Exporting individual vault"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Team vault items will not be included.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Team vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2325,8 +2325,8 @@
   "euDomain": {
     "message": "bravurasafe.eu"
   },
-  "selfHosted": {
-    "message": "Self-hosted"
+  "selfHostedServer": {
+    "message": "self-hosted"
   },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
@@ -2454,5 +2454,17 @@
   },
   "submenu": {
     "message": "Submenu"
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey will not be copied"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
+  },
+  "aliasDomain": {
+    "message": "Alias domain"
   }
 }

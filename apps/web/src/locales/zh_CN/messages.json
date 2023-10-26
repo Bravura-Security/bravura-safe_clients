@@ -232,7 +232,7 @@
     "message": "文件夹"
   },
   "newCustomField": {
-    "message": "新建自定义字段"
+    "message": "新增自定义字段"
   },
   "value": {
     "message": "值"
@@ -601,9 +601,6 @@
   "maxFileSize": {
     "message": "文件最大为 1.8 GB。"
   },
-  "updateKey": {
-    "message": "在您更新加密密钥前，您不能使用此功能。"
-  },
   "addedItem": {
     "message": "项目已添加"
   },
@@ -675,7 +672,7 @@
     "message": "访问权限"
   },
   "loggedOut": {
-    "message": "已登出"
+    "message": "已注销"
   },
   "loginExpired": {
     "message": "您的登录会话已过期。"
@@ -699,13 +696,79 @@
     "message": "登录或者创建一个账户来访问您的安全密码库。"
   },
   "loginWithDevice": {
-    "message": "设备登录"
+    "message": "使用设备登录"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "设备登录必须在 Bravura Safe 应用程序的设置中设启用。需要其他选项吗？"
+    "message": "设备登录必须在 Bravura Safe 应用程序的设置中启用。需要其他登录选项吗？"
   },
   "loginWithMasterPassword": {
     "message": "使用主密码登录"
+  },
+  "loginWithPasskey": {
+    "message": "使用通行密钥登录"
+  },
+  "loginWithPasskeyInfo": {
+    "message": "使用已生成的通行密钥，无需密码即可自动登录。生物识别技术（例如面部识别或指纹）或其他 FIDO2 安全方法将用于验证您的身份。"
+  },
+  "newPasskey": {
+    "message": "新增通行密钥"
+  },
+  "learnMoreAboutPasswordless": {
+    "message": "了解更多关于无密码登录的信息"
+  },
+  "passkeyEnterMasterPassword": {
+    "message": "输入您的主密码以修改通行密钥登录设置。"
+  },
+  "creatingPasskeyLoading": {
+    "message": "正在创建通行密钥..."
+  },
+  "creatingPasskeyLoadingInfo": {
+    "message": "保持此窗口打开然后按照浏览器的提示操作。"
+  },
+  "errorCreatingPasskey": {
+    "message": "创建通行密钥时出错"
+  },
+  "errorCreatingPasskeyInfo": {
+    "message": "创建通行密钥时出现问题。"
+  },
+  "passkeySuccessfullyCreated": {
+    "message": "通行密钥创建成功！"
+  },
+  "customName": {
+    "message": "自定义名称"
+  },
+  "customPasskeyNameInfo": {
+    "message": "为您的通行密钥命名以帮助您识别它。"
+  },
+  "encryptionNotSupported": {
+    "message": "不支持加密"
+  },
+  "loginWithPasskeyEnabled": {
+    "message": "已启用通行密钥登录"
+  },
+  "passkeySaved": {
+    "message": "$NAME$ 已保存",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Personal yubikey"
+      }
+    }
+  },
+  "passkeyRemoved": {
+    "message": "通行密钥已移除"
+  },
+  "removePasskey": {
+    "message": "移除通行密钥"
+  },
+  "removePasskeyInfo": {
+    "message": "如果移除了所有通行密钥，没有主密码您将无法登录新的设备。"
+  },
+  "passkeyLimitReachedInfo": {
+    "message": "通行密钥已达上限。移除一个通行密钥以添加另一个。"
+  },
+  "tryAgain": {
+    "message": "再试一次"
   },
   "createAccount": {
     "message": "创建账户"
@@ -881,10 +944,10 @@
     }
   },
   "enterVerificationCodeApp": {
-    "message": "请输入验证器应用程序中的 6 位验证码。"
+    "message": "请输入您的验证器应用中的 6 位数验证码。"
   },
   "enterVerificationCodeEmail": {
-    "message": "请输入发送给电子邮件 $EMAIL$ 的 6 位验证码。",
+    "message": "请输入发送给电子邮件 $EMAIL$ 的 6 位数验证码。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -905,7 +968,7 @@
     "message": "记住我"
   },
   "sendVerificationCodeEmailAgain": {
-    "message": "重发验证码电子邮件"
+    "message": "再次发送验证码电子邮件"
   },
   "useAnotherTwoStepMethod": {
     "message": "使用其他两步登录方式"
@@ -971,7 +1034,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "使用任何 WebAuthn 兼容的安全钥匙访问您的帐户。"
+    "message": "使用任何 WebAuthn 兼容的安全钥匙访问您的账户。"
   },
   "webAuthnMigrated": {
     "message": "（迁移自 FIDO）"
@@ -1203,7 +1266,7 @@
     "message": "继续操作将更改您的账户电子邮件地址。这不会更改用于双重身份验证的电子邮件地址。您可以在两步登录设置中更改它。"
   },
   "newEmail": {
-    "message": "新电子邮件"
+    "message": "新电子邮件地址"
   },
   "code": {
     "message": "代码"
@@ -1324,7 +1387,7 @@
     "message": "接下来的操作会删除组织密码库中的所有项目。"
   },
   "purgeVaultWarning": {
-    "message": "清空密码库是永久性的。不能被撤消。"
+    "message": "清空密码库是永久性操作，无法撤销！"
   },
   "vaultPurged": {
     "message": "密码库已清空。"
@@ -1336,7 +1399,7 @@
     "message": "接下来的操作会删除您的账户和所有密码库数据。"
   },
   "deleteAccountWarning": {
-    "message": "删除账户是永久性的。不能被撤消。"
+    "message": "删除账户是永久性操作，无法撤销！"
   },
   "accountDeleted": {
     "message": "账户已删除"
@@ -1405,7 +1468,7 @@
     "message": "选择一个集合"
   },
   "importTargetHint": {
-    "message": "如果您希望将导入的文件内容移至 $DESTINATION$，请选中此选项",
+    "message": "如果您希望将导入的文件内容移动到某个 $DESTINATION$，请选择此选项",
     "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team vault.",
     "placeholders": {
       "destination": {
@@ -1524,7 +1587,10 @@
   "twoStepLoginDesc": {
     "message": "在登录时要求使用额外的步骤来保护您的账户。"
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "为您的组织启用两步登录。"
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "要为成员实施 Bravura Safe 两步登录选项，请使用 ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bravura Safe Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1618,7 +1684,7 @@
     "message": "密钥"
   },
   "twoStepAuthenticatorEnterCode": {
-    "message": "输入应用程序中的 6 位验证码"
+    "message": "输入应用程序中的 6 位数验证码"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "如果您要把它添加到另一个设备，下面是您的验证器应用所需要的二维码（或密钥）。"
@@ -1630,7 +1696,7 @@
     "message": "此两步登录提供程序已停用。"
   },
   "twoFactorYubikeyAdd": {
-    "message": "添加一个新的 YubiKey 到您的帐户"
+    "message": "添加一个新的 YubiKey 到您的账户"
   },
   "twoFactorYubikeyPlugIn": {
     "message": "将 YubiKey 插入您电脑的 USB 端口。"
@@ -1768,7 +1834,7 @@
     "message": "输入您希望接收验证码的电子邮件"
   },
   "twoFactorEmailEnterCode": {
-    "message": "输入电子邮件中的 6 位验证码"
+    "message": "输入电子邮件中的 6 位数验证码"
   },
   "sendEmail": {
     "message": "发送电子邮件"
@@ -1813,7 +1879,7 @@
     "message": "单击下面的「保存」按钮，以启用此安全钥匙用于两步登录。"
   },
   "twoFactorU2fProblemReadingTryAgain": {
-    "message": "读取安全钥匙时出现问题，请再试一次。"
+    "message": "读取安全钥匙时出现问题，请重试。"
   },
   "twoFactorWebAuthnWarning": {
     "message": "由于平台限制，无法在所有 Bravura Safe 应用程序中使用 WebAuthn。您应该启用另一个两步登录提供程序，以便在 WebAuthn 无法使用时可以访问您的账户。支持的平台有："
@@ -2062,7 +2128,7 @@
     "message": "请确保您的账户有足够的信用额度来用于此购买。如果您的账户信用额度不足，您的默认付款方式将用于补足差额。您可以从计费页面向您的账户添加信用额度。"
   },
   "creditAppliedDesc": {
-    "message": "您帐户的信用额度可用于进行消费。任何可用的信用额度将用于自动支付此帐户的账单。"
+    "message": "您账户的信用额度可用于进行消费。任何可用的信用额度将用于自动支付此账户的账单。"
   },
   "goPremium": {
     "message": "升级高级会员",
@@ -2077,8 +2143,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB 文件附件加密存储。"
   },
-  "premiumSignUpTwoStep": {
-    "message": "额外的两步登录选项，如 YubiKey、FIDO U2F 和 Duo。"
+  "premiumSignUpTwoStepOptions": {
+    "message": "专有的两步登录选项，如 YubiKey 和 Duo。"
   },
   "premiumSignUpEmergency": {
     "message": "紧急访问"
@@ -2118,7 +2184,7 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Bravura Safe 家庭计划。"
+    "message": "Bravura Safe 家庭版计划。"
   },
   "addons": {
     "message": "附加项目"
@@ -2192,6 +2258,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "任何未付费订阅都将通过您的付款方式收取费用。"
   },
   "paymentChargedWithTrial": {
     "message": "您的计划包含了 7 天的免费试用期。在试用期结束前，不会从您的付款方式中扣款。您可以随时取消。"
@@ -2451,7 +2520,7 @@
     }
   },
   "planNameFamilies": {
-    "message": "家庭"
+    "message": "家庭版"
   },
   "planDescFamilies": {
     "message": "适用于个人使用，与家人和朋友共享。"
@@ -2604,7 +2673,7 @@
     "message": "组织已创建"
   },
   "organizationReadyToGo": {
-    "message": "你的组织准备好了！"
+    "message": "您的新组织已准备就绪！"
   },
   "organizationUpgraded": {
     "message": "组织已升级"
@@ -2649,7 +2718,7 @@
     "message": "群组"
   },
   "newGroup": {
-    "message": "新建群组"
+    "message": "新增群组"
   },
   "addGroup": {
     "message": "添加群组"
@@ -2703,7 +2772,7 @@
     "message": "只读"
   },
   "newCollection": {
-    "message": "新建集合"
+    "message": "新增集合"
   },
   "addCollection": {
     "message": "添加集合"
@@ -3405,7 +3474,7 @@
     "message": "删除后用户账户仍可用，但不再与此组织关联。"
   },
   "deletingOrganizationIsPermanentWarning": {
-    "message": "删除 $ORGANIZATION$ 是永久操作，不可撤销！",
+    "message": "删除 $ORGANIZATION$ 是永久性操作，无法撤销！",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -3507,10 +3576,10 @@
     "message": "输入您的安装 ID"
   },
   "limitSubscriptionDesc": {
-    "message": "为您的订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
+    "message": "为您的订阅设置一个席位限制。达到此限制后，您将无法邀请新的成员。"
   },
   "limitSmSubscriptionDesc": {
-    "message": "为您的机密管理器订阅设置席位限制。达到此限制后，您将无法邀请新的成员。"
+    "message": "为您的机密管理器订阅设置一个席位限制。达到此限制后，您将无法邀请新的成员。"
   },
   "maxSeatLimit": {
     "message": "席位限制（可选）",
@@ -3626,17 +3695,11 @@
   "keyUpdated": {
     "message": "密钥已更新"
   },
-  "updateKeyTitle": {
-    "message": "更新密钥"
-  },
   "updateEncryptionKey": {
     "message": "更新加密密钥"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "您目前使用的是过时的加密方案。"
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "我们已经采用更强大的加密密钥，提供了更强的安全性和更新的功能。更新您的加密密钥非常简单快捷，只需要输入主密码。此次更新最终将强制执行。"
+  "updateEncryptionSchemeDesc": {
+    "message": "为了提高安全性，我们更改了加密方案。请在下方输入您的主密码以立即更新您的加密密钥。"
   },
   "updateEncryptionKeyWarning": {
     "message": "更新加密密钥后，您需要注销所有正在使用的 Bravura Safe 应用（比如手机版应用或者浏览器扩展）后重新登录。注销或者重新登录（这将下载新的加密密钥）失败可能会导致数据损坏。我们会尝试自动为您注销，但是，可能会有所延迟。"
@@ -3691,6 +3754,9 @@
   },
   "vaultTimeoutDesc": {
     "message": "选择您的密码库何时执行密码库超时动作。"
+  },
+  "vaultTimeoutLogoutDesc": {
+    "message": "选择您的密码库何时注销。"
   },
   "oneMinute": {
     "message": "1 分钟"
@@ -3781,7 +3847,7 @@
     "message": "此项目有需要修复的旧文件附件。"
   },
   "attachmentFixDescription": {
-    "message": "此附件使用了过时的加密方式。选择「修复」以下载、重新加密，然后重新上传此附件。"
+    "message": "此附件使用了过时的加密方式。选择「修复」将下载、重新加密并重新上传此附件。"
   },
   "fix": {
     "message": "修复",
@@ -3799,7 +3865,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
-    "message": "请确保您的密码库已解锁，并且指纹短语与其他设备匹配。"
+    "message": "请确保您的密码库已解锁，并且指纹短语与其他设备上的相匹配。"
   },
   "fingerprintPhraseHeader": {
     "message": "指纹短语"
@@ -3816,7 +3882,7 @@
     "message": "API 密钥"
   },
   "apiKeyDesc": {
-    "message": "您的 API 密钥可用于认证 Bravura Safe 公共 API。"
+    "message": "您的 API 密钥可用于验证 Bravura Safe 公共 API。"
   },
   "apiKeyRotateDesc": {
     "message": "轮换 API 密钥将使前一个密钥无效。如果你认为当前密钥不再安全，你可以轮换您的 API 密钥。"
@@ -4299,7 +4365,7 @@
     "message": "紧急访问已批准"
   },
   "viewDesc": {
-    "message": "可以查看您拥有的密码库中的所有项目。"
+    "message": "可以查看您的密码库中的所有项目。"
   },
   "takeover": {
     "message": "接管"
@@ -4411,7 +4477,7 @@
     "message": "组织的所有者和管理员豁免此策略。"
   },
   "personalOwnershipSubmitError": {
-    "message": "由于企业策略，您被限制为保存项目到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。"
+    "message": "由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。"
   },
   "disableSend": {
     "message": "禁用 Share"
@@ -4428,7 +4494,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendDisabledWarning": {
-    "message": "由于企业策略，您只能删除现有的 Share。",
+    "message": "由于某个企业策略，您只能删除现有的 Share。",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendOptions": {
@@ -4686,7 +4752,7 @@
     "message": "注册账户恢复"
   },
   "enrolledAccountRecovery": {
-    "message": "注册了账户恢复"
+    "message": "已注册账户恢复"
   },
   "withdrawAccountRecovery": {
     "message": "撤销账户恢复"
@@ -4794,13 +4860,13 @@
     "message": "重置密码详细信息响应为空"
   },
   "trashCleanupWarning": {
-    "message": "回收站中超过 30 天的项目将会被自动删除。"
+    "message": "回收站中超过 30 天的条目将会被自动删除。"
   },
   "trashCleanupWarningSelfHosted": {
-    "message": "回收站中超过一定时间的项目将会被自动删除。"
+    "message": "回收站中超过一定时间的条目将会被自动删除。"
   },
   "passwordPrompt": {
-    "message": "重新询问主密码"
+    "message": "主密码重新提示"
   },
   "passwordConfirmation": {
     "message": "确认主密码"
@@ -4881,7 +4947,7 @@
     "message": "错误"
   },
   "accountRecoveryManageUsers": {
-    "message": "管理用户也必须被授予管理账户恢复的权限"
+    "message": "授予「管理账户恢复」权限时，必须同时授予「管理用户」权限"
   },
   "setupProvider": {
     "message": "提供商设置"
@@ -5141,7 +5207,7 @@
     "message": "权威机构"
   },
   "clientId": {
-    "message": "客户 ID"
+    "message": "客户端 ID"
   },
   "clientSecret": {
     "message": "客户端机密"
@@ -5210,7 +5276,7 @@
     "message": "单点登录服务 URL"
   },
   "idpSingleLogoutServiceUrl": {
-    "message": "单点登出服务 URL"
+    "message": "单点注销服务 URL"
   },
   "idpX509PublicCert": {
     "message": "X509 公共证书"
@@ -5234,7 +5300,7 @@
     "message": "免费 Bravura Safe 家庭"
   },
   "sponsoredFamiliesEligible": {
-    "message": "您和您的家人可使用免费的 Bravura Safe 家庭版计划。即使您不在公司上班，您也可以使用个人电子邮件兑换此计划，以保护您的数据安全。"
+    "message": "您和您的家人有资格享受免费的 Bravura Safe 家庭版计划。即使您不在公司上班，您也可以使用个人电子邮件兑换此计划，以保护您的数据安全。"
   },
   "sponsoredFamiliesEligibleCard": {
     "message": "立即兑换免费的 Bravura Safe 家庭版计划，即使您不在公司上班也能确保您的数据安全。"
@@ -5432,10 +5498,10 @@
     "message": "「SSO 登录和 Key Connector 解密」已启用。此策略仅适用于所有者和管理员。"
   },
   "enabledSso": {
-    "message": "SSO 已启用"
+    "message": "启用了 SSO"
   },
   "disabledSso": {
-    "message": "SSO 已停用"
+    "message": "停用了 SSO"
   },
   "enabledKeyConnector": {
     "message": "Key Connector 已启用"
@@ -5528,19 +5594,19 @@
     "message": "计费同步令牌"
   },
   "active": {
-    "message": "生效中"
+    "message": "已生效"
   },
   "inactive": {
     "message": "已失效"
   },
   "sentAwaitingSync": {
-    "message": "已发送（正在等待同步）"
+    "message": "已发送（等待同步）"
   },
   "sent": {
-    "message": "发送"
+    "message": "已发送"
   },
   "requestRemoved": {
-    "message": "已移除（正在等待同步）"
+    "message": "已移除（等待同步）"
   },
   "requested": {
     "message": "已请求"
@@ -5569,6 +5635,19 @@
   "required": {
     "message": "必填"
   },
+  "charactersCurrentAndMaximum": {
+    "message": "$CURRENT$ / 最大字符数 $MAX$",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "max": {
+        "content": "$2",
+        "example": "100"
+      }
+    }
+  },
   "characterMaximum": {
     "message": "最多 $MAX$ 个字符",
     "placeholders": {
@@ -5582,7 +5661,7 @@
     "message": "如果实体 ID 不是一个 URL，则必填。"
   },
   "openIdOptionalCustomizations": {
-    "message": "定制（可选）"
+    "message": "个性化（可选）"
   },
   "openIdAuthorityRequired": {
     "message": "如果授权无效，则必填。"
@@ -5591,7 +5670,7 @@
     "message": "使用逗号分隔。"
   },
   "sessionTimeout": {
-    "message": "您的会话已超时。请返回并尝试重新登录。"
+    "message": "您的会话已超时。请返回然后尝试重新登录。"
   },
   "exportingPersonalVaultTitle": {
     "message": "正在导出个人密码库"
@@ -5768,7 +5847,7 @@
     "message": "启用设备验证"
   },
   "deviceVerificationDesc": {
-    "message": "登录未识别的设备时，验证码会发送到您的电子邮件地址"
+    "message": "登录未识别的设备时，验证码会发送到您的电子邮箱"
   },
   "updatedDeviceVerification": {
     "message": "已更新设备验证"
@@ -5920,6 +5999,9 @@
   "on": {
     "message": "开启"
   },
+  "off": {
+    "message": "Off"
+  },
   "members": {
     "message": "成员"
   },
@@ -5984,7 +6066,7 @@
     "message": "正在获取选项..."
   },
   "multiSelectNotFound": {
-    "message": "未找到任何项目"
+    "message": "未找到任何条目"
   },
   "multiSelectClearAll": {
     "message": "清除全部"
@@ -6079,7 +6161,7 @@
     "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "serviceAccounts": {
-    "message": "服务帐户",
+    "message": "服务账户",
     "description": "The title for the section that deals with service accounts."
   },
   "secrets": {
@@ -6142,7 +6224,7 @@
     "description": "Action to view the details of a service account."
   },
   "deleteServiceAccountDialogMessage": {
-    "message": "删除服务账户 $SERVICE_ACCOUNT$ 是永久性的，无法撤销！",
+    "message": "删除服务账户 $SERVICE_ACCOUNT$ 是永久性操作，无法撤销！",
     "placeholders": {
       "service_account": {
         "content": "$1",
@@ -6151,7 +6233,7 @@
     }
   },
   "deleteServiceAccountsDialogMessage": {
-    "message": "删除服务账户是永久性的，无法撤销！"
+    "message": "删除服务账户是永久性操作，无法撤销！"
   },
   "deleteServiceAccountsConfirmMessage": {
     "message": "删除 $COUNT$ 个服务账户",
@@ -6254,7 +6336,7 @@
     "description": "Notifies that a project has been deleted"
   },
   "deleteProjectDialogMessage": {
-    "message": "删除工程 $PROJECT$ 是永久性的，无法撤销！",
+    "message": "删除工程 $PROJECT$ 是永久性操作，无法撤销！",
     "description": "Informs users that projects are hard deleted and not sent to trash",
     "placeholders": {
       "project": {
@@ -6294,7 +6376,7 @@
     }
   },
   "deleteProjectsDialogMessage": {
-    "message": "删除工程是永久性的，无法撤销！",
+    "message": "删除工程是永久性操作，无法撤销！",
     "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
   },
   "projectsNoItemsTitle": {
@@ -6380,14 +6462,14 @@
     "message": "吊销访问令牌"
   },
   "revokeAccessTokenDesc": {
-    "message": "吊销访问令牌是永久性的，无法撤销！"
+    "message": "吊销访问令牌是永久性操作，无法撤销！"
   },
   "accessTokenRevoked": {
     "message": "访问令牌已吊销",
     "description": "Toast message after deleting one or multiple access tokens."
   },
   "noAccessTokenSelected": {
-    "message": "未选中任何要撤销的访问令牌",
+    "message": "未选中任何要吊销的访问令牌",
     "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
@@ -6565,7 +6647,7 @@
     "message": "自动域验证"
   },
   "automaticDomainVerificationProcess": {
-    "message": "Bravura Safe 将尝试在 72 小时内验证此域 3 次。如果无法验证此域，请检查您的主机中的 DNS 记录并手动验证。如果此域无法验证，7 天内将从您的组织中移除。"
+    "message": "Bravura Safe 将尝试在 72 小时内验证此域 3 次。如果此域无法验证，请检查您的主机中的 DNS 记录并手动验证。如果此域未通过验证，7 天内将从您的组织中移除。"
   },
   "invalidDomainNameMessage": {
     "message": "输入格式不正确。格式：mydomain.com。子域需要单独的条目进行验证。"
@@ -6598,7 +6680,7 @@
     }
   },
   "domainNotVerified": {
-    "message": "$DOMAIN$ 无法验证。请检查您的 DNS 记录。",
+    "message": "$DOMAIN$ 未通过验证。请检查您的 DNS 记录。",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6610,7 +6692,7 @@
     "message": "已验证"
   },
   "domainStatusUnverified": {
-    "message": "无法验证"
+    "message": "未验证"
   },
   "domainNameTh": {
     "message": "域名"
@@ -6628,7 +6710,7 @@
     "message": "表单错误需要您注意"
   },
   "addedDomain": {
-    "message": "已添加域 $DOMAIN$",
+    "message": "添加了域 $DOMAIN$",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6655,7 +6737,7 @@
     }
   },
   "domainNotVerifiedEvent": {
-    "message": "$DOMAIN$ 无法验证",
+    "message": "$DOMAIN$ 未通过验证",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -7107,19 +7189,19 @@
     }
   },
   "trustedDevices": {
-    "message": "受信任的设备"
+    "message": "受信任设备"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
+  "memberDecryptionOptionTdeDescriptionPartOne": {
     "message": "验证后，成员将使用存储在他们设备上的密钥解密密码库数据。使用此选项后，",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
     "message": "单一组织",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "策略和具有自动注册的",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "策略，",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "turnedOff": {
     "message": "Turned off"
@@ -7133,13 +7215,21 @@
       }
     }
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "账户恢复管理",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "要求 SSO",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "策略以及具有自动注册的",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "账户恢复管理",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
     "message": "策略将被开启。",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ 未找到",
@@ -7184,7 +7274,7 @@
     "message": "设备信息"
   },
   "time": {
-    "message": "Time"
+    "message": "时间"
   },
   "denyAllRequests": {
     "message": "拒绝所有请求"
@@ -7228,6 +7318,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "移除没有为其设置主密码的成员可能会限制对他们的完整账户的访问权限。"
   },
+  "approvedAuthRequest": {
+    "message": "批准了 $ID$ 的设备。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "拒绝了 $ID$ 的设备。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "请求了设备批准。"
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "为 $ORG$ 开始您的 Bravura Safe 7 天免费试用",
     "placeholders": {
@@ -7238,16 +7349,34 @@
     }
   },
   "next": {
-    "message": "Next"
-  },
-  "usFlag": {
-    "message": "US 标志"
-  },
-  "euFlag": {
-    "message": "EU 标志"
+    "message": "下一步"
   },
   "selectedRegionFlag": {
-    "message": "选定的区域标志"
+    "message": "选择的区域旗帜"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "账户已成功创建！"
+  },
+  "adminApprovalRequested": {
+    "message": "已请求管理员批准"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "您的请求已发送给您的管理员。"
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "批准后，您将收到通知。"
+  },
+  "troubleLoggingIn": {
+    "message": "登录遇到问题？"
+  },
+  "loginApproved": {
+    "message": "登录已批准"
+  },
+  "userEmailMissing": {
+    "message": "缺少用户电子邮件"
+  },
+  "deviceTrusted": {
+    "message": "设备已信任"
   },
   "sendsNoItemsTitle": {
     "message": "没有活跃的 Share",
@@ -7276,13 +7405,13 @@
     "message": "免费的 2 人组织"
   },
   "unlimitedSecrets": {
-    "message": "无限制的机密"
+    "message": "不限数量的机密"
   },
   "unlimitedProjects": {
-    "message": "无限制的工程"
+    "message": "不限数量的工程"
   },
   "projectsIncluded": {
-    "message": "包含了 $COUNT$ 个工程",
+    "message": "包含 $COUNT$ 个工程",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7291,7 +7420,7 @@
     }
   },
   "serviceAccountsIncluded": {
-    "message": "包含了 $COUNT$ 个服务账户",
+    "message": "包含 $COUNT$ 个服务账户",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7308,8 +7437,8 @@
       }
     }
   },
-  "addSecretsManager": {
-    "message": "添加机密管理器"
+  "subscribeToSecretsManager": {
+    "message": "订阅机密管理器"
   },
   "addSecretsManagerUpgradeDesc": {
     "message": "将机密管理器添加到升级后的计划中，以保留对使用之前的计划创建的所有机密的访问权限。"
@@ -7327,7 +7456,7 @@
     }
   },
   "addAdditionalServiceAccounts": {
-    "message": "您可以以 $COST$ 每月购买附加服务账户。",
+    "message": "您也可以以 $COST$ 每月购买附加服务账户。",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -7359,6 +7488,9 @@
   "maxServiceAccountCost": {
     "message": "最大潜在服务账户费用"
   },
+  "loggedInExclamation": {
+    "message": "已登录！"
+  },
   "smBetaEndedDesc": {
     "message": "机密管理器 Beta 版将于 $BETA_ENDING_DATE$ 结束。您还剩余 $DAYS$ 天时间将机密管理器添加到您的付费订阅中，以保持对其数据的访问权限。联系客户成功团队将机密管理器添加到您的订阅中。",
     "placeholders": {
@@ -7378,7 +7510,19 @@
   "beta": {
     "message": "Beta"
   },
+  "baseUrl": {
+    "message": "服务器 URL"
+  },
+  "aliasDomain": {
+    "message": "别名域"
+  },
   "alreadyHaveAccount": {
     "message": "已经有一个账户？"
+  },
+  "customBillingStart": {
+    "message": "未返回自定义费用记录。请访问 "
+  },
+  "customBillingEnd": {
+    "message": " 页面获取最新的账单。"
   }
 }
