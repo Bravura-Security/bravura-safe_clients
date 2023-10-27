@@ -51,6 +51,7 @@ export class OrganizationData {
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
   accessSecretsManager: boolean;
+  skip2faForSso: boolean;
 
   constructor(
     response: ProfileOrganizationResponse,
@@ -103,6 +104,7 @@ export class OrganizationData {
     this.familySponsorshipToDelete = response.familySponsorshipToDelete;
     this.planType = response.planType;
     this.accessSecretsManager = response.accessSecretsManager;
+    this.skip2faForSso = response.skip2faForSso;
 
     this.isMember = options.isMember;
     this.isProviderUser = options.isProviderUser;

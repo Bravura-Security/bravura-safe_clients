@@ -13,6 +13,7 @@ import { ResetPasswordPolicyComponent } from "./reset-password.component";
 import { SendOptionsPolicyComponent } from "./send-options.component";
 import { SingleOrgPolicyComponent } from "./single-org.component";
 import { TwoFactorAuthenticationPolicyComponent } from "./two-factor-authentication.component";
+import { Skip2faForSsoPolicyComponent } from "./skip-2fa-for-sso.component";
 
 @NgModule({
   imports: [SharedModule, LooseComponentsModule],
@@ -26,6 +27,7 @@ import { TwoFactorAuthenticationPolicyComponent } from "./two-factor-authenticat
     SendOptionsPolicyComponent,
     SingleOrgPolicyComponent,
     TwoFactorAuthenticationPolicyComponent,
+    Skip2faForSsoPolicyComponent,
     PoliciesComponent,
     PolicyEditComponent,
   ],
@@ -39,6 +41,7 @@ import { TwoFactorAuthenticationPolicyComponent } from "./two-factor-authenticat
     SendOptionsPolicyComponent,
     SingleOrgPolicyComponent,
     TwoFactorAuthenticationPolicyComponent,
+    Skip2faForSsoPolicyComponent,
     PoliciesComponent,
     PolicyEditComponent,
   ],

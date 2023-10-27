@@ -50,6 +50,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
   accessSecretsManager: boolean;
+  skip2faForSso: boolean;
 
   constructor(response: any) {
     super(response);
@@ -108,5 +109,6 @@ export class ProfileOrganizationResponse extends BaseResponse {
     this.familySponsorshipToDelete = this.getResponseProperty("FamilySponsorshipToDelete");
     this.planType = this.getResponseProperty("PlanType");
     this.accessSecretsManager = this.getResponseProperty("AccessSecretsManager");
+    this.skip2faForSso = this.getResponseProperty("Skip2faForSso");
   }
 }
