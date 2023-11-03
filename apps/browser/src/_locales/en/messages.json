@@ -537,11 +537,11 @@
     "message": "Password copied"
   },
   "uri": {
-    "message": "URL"
+    "message": "URI"
   },
   "uriPosition": {
-    "message": "URL $POSITION$",
-    "description": "A listing of URLs. Ex: URL 1, URL 2, URL 3, etc.",
+    "message": "URI $POSITION$",
+    "description": "A listing of URIs. Ex: URI 1, URI 2, URI 3, etc.",
     "placeholders": {
       "position": {
         "content": "$1",
@@ -550,7 +550,7 @@
     }
   },
   "newUri": {
-    "message": "New URL"
+    "message": "New URI"
   },
   "addedItem": {
     "message": "Item added"
