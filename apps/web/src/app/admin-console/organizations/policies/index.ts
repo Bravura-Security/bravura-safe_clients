@@ -9,4 +9,5 @@ export { ResetPasswordPolicy } from "./reset-password.component";
 export { SendOptionsPolicy } from "./send-options.component";
 export { SingleOrgPolicy } from "./single-org.component";
 export { TwoFactorAuthenticationPolicy } from "./two-factor-authentication.component";
+export { Skip2faForSsoPolicy } from "./skip-2fa-for-sso.component";
 export { PoliciesComponent } from "./policies.component";

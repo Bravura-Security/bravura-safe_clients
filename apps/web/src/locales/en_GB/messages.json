@@ -7395,5 +7395,14 @@
   },
   "alreadyHaveAccount": {
     "message": "Already have an account?"
+  },
+  "skip2faForSsoPolicyTitle": {
+    "message": "Skip 2nd Factor for SSO Login"
+  },
+  "skip2faForSsoPolicyDesc": {
+    "message": "Skip the internal 2nd factor if a user is logging in via SSO. Very useful if the SSO provider already enforces a 2nd factor."
+  },
+  "skip2faForSsoPolicyWarning": {
+    "message": "Skipping the internal 2nd factor is less secure. Ensure the SSO provider enforces adequate security."
   }
 }

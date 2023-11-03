@@ -39,6 +39,7 @@ import {
   SendOptionsPolicy,
   SingleOrgPolicy,
   TwoFactorAuthenticationPolicy,
+  Skip2faForSsoPolicy,
 } from "./admin-console/organizations/policies";
 import { RouterService } from "./core";
 
@@ -221,6 +222,7 @@ export class AppComponent implements OnDestroy, OnInit {
       new PersonalOwnershipPolicy(),
       new DisableSendPolicy(),
       new SendOptionsPolicy(),
+      new Skip2faForSsoPolicy(),
     ]);
 
     this.setFullWidth();
