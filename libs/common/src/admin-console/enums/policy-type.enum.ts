@@ -11,4 +11,5 @@ export enum PolicyType {
   MaximumVaultTimeout = 9, // Sets the maximum allowed vault timeout
   DisablePersonalVaultExport = 10, // Disable personal vault export
   ActivateAutofill = 11, // Activates autofill with page load on the browser extension
+  Skip2faForSso = 101, // Skip internal 2nd factor when logging in via SSO
 }

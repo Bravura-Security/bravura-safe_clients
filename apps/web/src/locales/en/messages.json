@@ -6,11 +6,11 @@
     "message": "Name"
   },
   "uri": {
-    "message": "URL"
+    "message": "URI"
   },
   "uriPosition": {
-    "message": "URL $POSITION$",
-    "description": "A listing of URLs. Ex: URL 1, URL 2, URL 3, etc.",
+    "message": "URI $POSITION$",
+    "description": "A listing of URIs. Ex: URI 1, URI 2, URI 3, etc.",
     "placeholders": {
       "position": {
         "content": "$1",
@@ -19,7 +19,7 @@
     }
   },
   "newUri": {
-    "message": "New URL"
+    "message": "New URI"
   },
   "username": {
     "message": "Username"
@@ -1601,7 +1601,7 @@
     "message": "To enforce Two-step Login, use the options below."
   },
   "twoStepLoginOrganizationSsoDesc": {
-    "message": "If you have setup SSO or plan to, Two-step Login may already be enforced through your Identity Provider."
+    "message": "If you have setup SSO or plan to, Two-step Login may already enforced through your Identity Provider."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Setting up two-step login can permanently lock you out of your Bravura Safe account. A recovery code allows you to access your account in the event that you can no longer use your normal two-step login provider (example: you lose your device). Bravura Safe support will not be able to assist you if you lose access to your account. We recommend you write down or print the recovery code and keep it in a safe place."
@@ -7572,5 +7572,14 @@
   },
   "passkeyNotCopiedAlert": {
     "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
+  },
+  "skip2faForSsoPolicyTitle": {
+    "message": "Bypass personal two-step login when using SSO"
+  },
+  "skip2faForSsoPolicyDesc": {
+    "message": "Skip the personal two-step provider if a user is logging in via SSO. Only use if Two-step Login is already enforced through your Identity Provider."
+  },
+  "skip2faForSsoPolicyWarning": {
+    "message": "Skipping the Bravura Safe provided personal Two-step Login provider (ex OTP or email code ) is less secure. Ensure the SSO provider enforces multi-factor authentication."
   }
 }

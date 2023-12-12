@@ -66,6 +66,7 @@ export class Organization {
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
   accessSecretsManager: boolean;
+  skip2faForSso: boolean;
 
   constructor(obj?: OrganizationData) {
     if (obj == null) {
@@ -118,6 +119,7 @@ export class Organization {
     this.familySponsorshipToDelete = obj.familySponsorshipToDelete;
     this.planType = obj.planType;
     this.accessSecretsManager = obj.accessSecretsManager;
+    this.skip2faForSso = obj.skip2faForSso;
   }
 
   get canAccess() {

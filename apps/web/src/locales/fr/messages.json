@@ -7548,5 +7548,14 @@
   },
   "customBillingEnd": {
     "message": " pour la dernière facturation."
+  },
+  "skip2faForSsoPolicyTitle": {
+    "message": "Ignorer la connexion personnelle à deux étapes lors de l'utilisation du SSO"
+  },
+  "skip2faForSsoPolicyDesc": {
+    "message": "Ignorer le fournisseur personnel à deux étapes si un utilisateur se connecte via SSO. Utilisez uniquement si la connexion à deux étapes est déjà appliquée par votre fournisseur d'identité."
+  },
+  "skip2faForSsoPolicyWarning": {
+    "message": "Ignorer le fournisseur personnel de connexion à deux étapes sécurisé par Bravura Safe (ex. OTP ou code par courriel) est moins sécurisé. Assurez-vous que le fournisseur SSO impose l'authentification multi-facteurs."
   }
 }
