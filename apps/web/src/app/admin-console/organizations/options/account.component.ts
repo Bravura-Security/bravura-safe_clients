@@ -20,10 +20,12 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { SsoComponent } from "@bitwarden/angular/auth/components/sso.component";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { DialogServiceAbstraction, SimpleDialogType } from "@bitwarden/angular/services/dialog";
+import { DialogService } from "@bitwarden/components";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 
 @Component({
   selector: "app-org-account-options",
@@ -55,7 +57,8 @@ export class AccountComponent {
     private cryptoFunctionService: CryptoFunctionService,
     private environmentService: EnvironmentService,
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
-    private dialogService: DialogServiceAbstraction
+    private dialogService: DialogService,
+    private configService: ConfigServiceAbstraction,
   ) {}
 
   async ngOnInit() {
@@ -140,7 +143,7 @@ export class AccountComponent {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: this.organization.name,
       content: { key: "unlinkSsoConfirmation" },
-      type: SimpleDialogType.WARNING,
+      type: "warning",
     });
     if (!confirmed) {
       return false;
@@ -162,7 +165,19 @@ export class AccountComponent {
     let ssoComponent: SsoComponent;
     let returnUri = "/settings/organizations";
 
-    ssoComponent = new SsoComponent(this.authService, this.router, this.i18nService, this.route, this.stateService, this.platformUtilsService, this.apiService, this.cryptoFunctionService, this.environmentService, this.passwordGenerationService, this.logService);
+    ssoComponent = new SsoComponent(
+      this.authService,
+      this.router,
+      this.i18nService,
+      this.route,
+      this.stateService,
+      this.platformUtilsService,
+      this.apiService,
+      this.cryptoFunctionService,
+      this.environmentService,
+      this.passwordGenerationService,
+      this.logService,
+      this.configService);
     ssoComponent.setRedirectUri(window.location.origin + "/sso-connector.html");
     ssoComponent.setClientId("web");
     ssoComponent.identifier = this.organization.identifier;

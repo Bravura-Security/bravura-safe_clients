@@ -23,6 +23,7 @@ export class OrganizationData {
   useCustomPermissions: boolean;
   useResetPassword: boolean;
   useSecretsManager: boolean;
+  usePasswordManager: boolean;
   useActivateAutofillPolicy: boolean;
   selfHost: boolean;
   usersGetPremium: boolean;
@@ -50,6 +51,7 @@ export class OrganizationData {
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
   accessSecretsManager: boolean;
+  skip2faForSso: boolean;
 
   constructor(
     response: ProfileOrganizationResponse,
@@ -76,6 +78,7 @@ export class OrganizationData {
     this.useCustomPermissions = response.useCustomPermissions;
     this.useResetPassword = response.useResetPassword;
     this.useSecretsManager = response.useSecretsManager;
+    this.usePasswordManager = response.usePasswordManager;
     this.useActivateAutofillPolicy = response.useActivateAutofillPolicy;
     this.selfHost = response.selfHost;
     this.usersGetPremium = response.usersGetPremium;
@@ -101,6 +104,7 @@ export class OrganizationData {
     this.familySponsorshipToDelete = response.familySponsorshipToDelete;
     this.planType = response.planType;
     this.accessSecretsManager = response.accessSecretsManager;
+    this.skip2faForSso = response.skip2faForSso;
 
     this.isMember = options.isMember;
     this.isProviderUser = options.isProviderUser;
