@@ -109,7 +109,7 @@ export class Program {
       .option("--passwordenv <passwordenv>", "Environment variable storing your password")
       .option(
         "--passwordfile <passwordfile>",
-        "Path to a file containing your password as its first line"
+        "Path to a file containing your password as its first line",
       )
       .option("--check", "Check login status.", async () => {
         const authed = await this.main.stateService.getIsAuthenticated();
@@ -152,7 +152,7 @@ export class Program {
             this.main.keyConnectorService,
             this.main.policyApiService,
             this.main.organizationService,
-            async () => await this.main.logout()
+            async () => await this.main.logout(),
           );
           const response = await command.run(email, password, options);
           this.processResponse(response, true);
@@ -173,7 +173,7 @@ export class Program {
         const command = new LogoutCommand(
           this.main.authService,
           this.main.i18nService,
-          async () => await this.main.logout()
+          async () => await this.main.logout(),
         );
         const response = await command.run();
         this.processResponse(response);
@@ -195,15 +195,15 @@ export class Program {
           const logoutCommand = new LogoutCommand(
             this.main.authService,
             this.main.i18nService,
-            async () => await this.main.logout()
+            async () => await this.main.logout(),
           );
           await logoutCommand.run();
           this.processResponse(
             Response.error(
               "You cannot lock your vault because you are using Key Connector. " +
-                "To protect your vault, you have been logged out."
+                "To protect your vault, you have been logged out.",
             ),
-            true
+            true,
           );
           return;
         }
@@ -244,7 +244,7 @@ export class Program {
       .option("--passwordenv <passwordenv>", "Environment variable storing your password")
       .option(
         "--passwordfile <passwordfile>",
-        "Path to a file containing your password as its first line"
+        "Path to a file containing your password as its first line",
       )
       .action(async (password, cmd) => {
         if (!cmd.check) {
@@ -259,7 +259,7 @@ export class Program {
             this.main.environmentService,
             this.main.syncService,
             this.main.organizationApiService,
-            async () => await this.main.logout()
+            async () => await this.main.logout(),
           );
           const response = await command.run(password, cmd);
           this.processResponse(response);
@@ -324,7 +324,7 @@ export class Program {
       .action(async (options) => {
         const command = new GenerateCommand(
           this.main.passwordGenerationService,
-          this.main.stateService
+          this.main.stateService,
         );
         const response = await command.run(options);
         this.processResponse(response);
@@ -354,17 +354,17 @@ export class Program {
       .description("Configure CLI settings.")
       .option(
         "--web-vault <url>",
-        "Provides a custom web vault URL that differs from the base URL."
+        "Provides a custom web vault URL that differs from the base URL.",
       )
       .option("--api <url>", "Provides a custom API URL that differs from the base URL.")
       .option("--identity <url>", "Provides a custom identity URL that differs from the base URL.")
       .option(
         "--icons <url>",
-        "Provides a custom icons service URL that differs from the base URL."
+        "Provides a custom icons service URL that differs from the base URL.",
       )
       .option(
         "--notifications <url>",
-        "Provides a custom notifications URL that differs from the base URL."
+        "Provides a custom notifications URL that differs from the base URL.",
       )
       .option("--events <url>", "Provides a custom events URL that differs from the base URL.")
       .on("--help", () => {
@@ -437,7 +437,7 @@ export class Program {
           this.main.environmentService,
           this.main.syncService,
           this.main.stateService,
-          this.main.authService
+          this.main.authService,
         );
         const response = await command.run();
         this.processResponse(response);
@@ -450,7 +450,7 @@ export class Program {
         .option("--port <port>", "The port to run your API webserver on.")
       .option(
         "--disable-origin-protection",
-        "If set, allows requests with origin header. Warning, this option exists for backwards compatibility reasons and exposes your environment to known CSRF attacks."
+        "If set, allows requests with origin header. Warning, this option exists for backwards compatibility reasons and exposes your environment to known CSRF attacks.",
       )
         .on("--help", () => {
           writeLn("\n  Notes:");
@@ -581,7 +581,7 @@ export class Program {
       if (await this.main.keyConnectorService.getUsesKeyConnector()) {
         const response = Response.error(
           "Your vault is locked. You must unlock your vault using your session key.\n" +
-            "If you do not have your session key, you can get a new one by logging out and logging in again."
+            "If you do not have your session key, you can get a new one by logging out and logging in again.",
         );
         this.processResponse(response, true);
       } else {
@@ -595,7 +595,7 @@ export class Program {
           this.main.environmentService,
           this.main.syncService,
           this.main.organizationApiService,
-          this.main.logout
+          this.main.logout,
         );
         const response = await command.run(null, null);
         if (!response.success) {

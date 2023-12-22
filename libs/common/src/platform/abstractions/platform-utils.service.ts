@@ -34,7 +34,7 @@ export abstract class PlatformUtilsService {
     type: "error" | "success" | "warning" | "info",
     title: string,
     text: string | string[],
-    options?: ToastOptions
+    options?: ToastOptions,
   ) => void;
   isDev: () => boolean;
   isSelfHost: () => boolean;

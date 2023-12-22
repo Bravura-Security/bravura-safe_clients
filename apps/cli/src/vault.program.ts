@@ -46,8 +46,8 @@ export class VaultProgram extends Program {
             requestedObject +
             '". Allowed objects are ' +
             validObjects.join(", ") +
-            "."
-        )
+            ".",
+        ),
       );
     }
     return success;
@@ -74,7 +74,7 @@ export class VaultProgram extends Program {
       .option("--collectionid <collectionid>", "Filter items by collection id.")
       .option(
         "--organizationid <organizationid>",
-        "Filter items or collections by team id."
+        "Filter items or collections by team id.",
       )
       .option("--trash", "Filter items that are deleted and in the trash.")
       .on("--help", () => {
@@ -89,13 +89,13 @@ export class VaultProgram extends Program {
         writeLn("    bsafe list items");
         writeLn("    bsafe list items --folderid 60556c31-e649-4b5d-8daf-fc1c391a1bf2");
         writeLn(
-          "    bsafe list items --search google --folderid 60556c31-e649-4b5d-8daf-fc1c391a1bf2"
+          "    bsafe list items --search google --folderid 60556c31-e649-4b5d-8daf-fc1c391a1bf2",
         );
         writeLn("    bsafe list items --url https://google.com");
         writeLn("    bsafe list items --folderid null");
         writeLn("    bsafe list items --organizationid notnull");
         writeLn(
-          "    bsafe list items --folderid 60556c31-e649-4b5d-8daf-fc1c391a1bf2 --organizationid notnull"
+          "    bsafe list items --folderid 60556c31-e649-4b5d-8daf-fc1c391a1bf2 --organizationid notnull",
         );
         writeLn("    bsafe list items --trash");
         writeLn("    bsafe list folders --search email");
@@ -115,7 +115,8 @@ export class VaultProgram extends Program {
           this.main.organizationService,
           this.main.searchService,
           this.main.organizationUserService,
-          this.main.apiService
+          this.main.apiService,
+          this.main.eventCollectionService,
         );
         const response = await command.run(object, cmd);
 
@@ -163,10 +164,10 @@ export class VaultProgram extends Program {
         writeLn("    bsafe get exposed yahoo.com");
         writeLn(
           "    bsafe get attachment b857igwl1dzrs2 --itemid 99ee88d2-6046-4ea7-92c2-acac464b1412 " +
-            "--output ./photo.jpg"
+            "--output ./photo.jpg",
         );
         writeLn(
-          "    bsafe get attachment photo.jpg --itemid 99ee88d2-6046-4ea7-92c2-acac464b1412 --raw"
+          "    bsafe get attachment photo.jpg --itemid 99ee88d2-6046-4ea7-92c2-acac464b1412 --raw",
         );
         writeLn("    bsafe get folder email");
         writeLn("    bsafe get template folder");
@@ -188,7 +189,8 @@ export class VaultProgram extends Program {
           this.main.stateService,
           this.main.searchService,
           this.main.apiService,
-          this.main.organizationService
+          this.main.organizationService,
+          this.main.eventCollectionService,
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
@@ -213,7 +215,7 @@ export class VaultProgram extends Program {
         writeLn("    echo 'eyJuYW1lIjoiTXkgRm9sZGVyIn0K' | bsafe create folder");
         writeLn(
           "    bsafe create attachment --file ./myfile.csv " +
-            "--itemid 16b15b89-65b3-4639-ad2a-95052a6d8f66"
+            "--itemid 16b15b89-65b3-4639-ad2a-95052a6d8f66",
         );
         writeLn("", true);
       })
@@ -229,7 +231,7 @@ export class VaultProgram extends Program {
           this.main.stateService,
           this.main.cryptoService,
           this.main.apiService,
-          this.main.folderApiService
+          this.main.folderApiService,
         );
         const response = await command.run(object, encodedJson, cmd);
         this.processResponse(response);
@@ -250,15 +252,15 @@ export class VaultProgram extends Program {
         writeLn("\n  Examples:");
         writeLn("");
         writeLn(
-          "    bsafe edit folder 5cdfbd80-d99f-409b-915b-f4c5d0241b02 eyJuYW1lIjoiTXkgRm9sZGVyMiJ9Cg=="
+          "    bsafe edit folder 5cdfbd80-d99f-409b-915b-f4c5d0241b02 eyJuYW1lIjoiTXkgRm9sZGVyMiJ9Cg==",
         );
         writeLn(
           "    echo 'eyJuYW1lIjoiTXkgRm9sZGVyMiJ9Cg==' | " +
-            "bsafe edit folder 5cdfbd80-d99f-409b-915b-f4c5d0241b02"
+            "bsafe edit folder 5cdfbd80-d99f-409b-915b-f4c5d0241b02",
         );
         writeLn(
           "    bsafe edit item-collections 78307355-fd25-416b-88b8-b33fd0e88c82 " +
-            "WyI5NzQwNTNkMC0zYjMzLTRiOTgtODg2ZS1mZWNmNWM4ZGJhOTYiXQ=="
+            "WyI5NzQwNTNkMC0zYjMzLTRiOTgtODg2ZS1mZWNmNWM4ZGJhOTYiXQ==",
         );
         writeLn("", true);
       })
@@ -273,7 +275,7 @@ export class VaultProgram extends Program {
           this.main.folderService,
           this.main.cryptoService,
           this.main.apiService,
-          this.main.folderApiService
+          this.main.folderApiService,
         );
         const response = await command.run(object, id, encodedJson, cmd);
         this.processResponse(response);
@@ -292,7 +294,7 @@ export class VaultProgram extends Program {
       .option("--organizationid <organizationid>", "Team id for a team object.")
       .option(
         "-p, --permanent",
-        "Permanently deletes the item instead of soft-deleting it (item only)."
+        "Permanently deletes the item instead of soft-deleting it (item only).",
       )
       .on("--help", () => {
         writeLn("\n  Examples:");
@@ -301,7 +303,7 @@ export class VaultProgram extends Program {
         writeLn("    bsafe delete item 89c21cd2-fab0-4f69-8c6e-ab8a0168f69a --permanent");
         writeLn("    bsafe delete folder 5cdfbd80-d99f-409b-915b-f4c5d0241b02");
         writeLn(
-          "    bsafe delete attachment b857igwl1dzrs2 --itemid 310d5ffd-e9a2-4451-af87-ea054dce0f78"
+          "    bsafe delete attachment b857igwl1dzrs2 --itemid 310d5ffd-e9a2-4451-af87-ea054dce0f78",
         );
         writeLn("", true);
       })
@@ -316,7 +318,7 @@ export class VaultProgram extends Program {
           this.main.folderService,
           this.main.stateService,
           this.main.apiService,
-          this.main.folderApiService
+          this.main.folderApiService,
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
@@ -364,13 +366,13 @@ export class VaultProgram extends Program {
           "    bsafe " +
             commandName +
             " 4af958ce-96a7-45d9-beed-1e70fabaa27a " +
-            "6d82949b-b44d-468a-adae-3f3bacb0ea32 WyI5NzQwNTNkMC0zYjMzLTRiOTgtODg2ZS1mZWNmNWM4ZGJhOTYiXQ=="
+            "6d82949b-b44d-468a-adae-3f3bacb0ea32 WyI5NzQwNTNkMC0zYjMzLTRiOTgtODg2ZS1mZWNmNWM4ZGJhOTYiXQ==",
         );
         writeLn(
           "    echo '[\"974053d0-3b33-4b98-886e-fecf5c8dba96\"]' | bsafe encode | " +
             "bsafe " +
             commandName +
-            " 4af958ce-96a7-45d9-beed-1e70fabaa27a 6d82949b-b44d-468a-adae-3f3bacb0ea32"
+            " 4af958ce-96a7-45d9-beed-1e70fabaa27a 6d82949b-b44d-468a-adae-3f3bacb0ea32",
         );
         if (deprecated) {
           writeLn("");
@@ -400,7 +402,7 @@ export class VaultProgram extends Program {
         writeLn("");
         writeLn(
           "    bsafe confirm org-member 7063feab-4b10-472e-b64c-785e2b870b92 " +
-            "--organizationid 310d5ffd-e9a2-4451-af87-ea054dce0f78"
+            "--organizationid 310d5ffd-e9a2-4451-af87-ea054dce0f78",
         );
         writeLn("", true);
       })
@@ -413,7 +415,7 @@ export class VaultProgram extends Program {
         const command = new ConfirmCommand(
           this.main.apiService,
           this.main.cryptoService,
-          this.main.organizationUserService
+          this.main.organizationUserService,
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
@@ -436,7 +438,7 @@ export class VaultProgram extends Program {
         writeLn("    bsafe import bitwardencsv ./from/source.csv");
         writeLn("    bsafe import keepass2xml keepass_backup.xml");
         writeLn(
-          "    bsafe import --organizationid cf14adc3-aca5-4573-890a-f6fa231436d9 keepass2xml keepass_backup.xml"
+          "    bsafe import --organizationid cf14adc3-aca5-4573-890a-f6fa231436d9 keepass2xml keepass_backup.xml",
         );
       })
       .action(async (format, filepath, options) => {
@@ -444,7 +446,7 @@ export class VaultProgram extends Program {
         const command = new ImportCommand(
           this.main.importService,
           this.main.organizationService,
-          this.main.syncService
+          this.main.syncService,
         );
         const response = await command.run(format, filepath, options);
         this.processResponse(response);
@@ -458,18 +460,18 @@ export class VaultProgram extends Program {
       .option("--format <format>", "Export file format.")
       .option(
         "--password [password]",
-        "Use password to encrypt instead of your Bravura Safe account encryption key. Only applies to the encrypted_json format."
+        "Use password to encrypt instead of your Bravura Safe account encryption key. Only applies to the encrypted_json format.",
       )
       .option("--organizationid <organizationid>", "Team id for a team.")
       .on("--help", () => {
         writeLn("\n  Notes:");
         writeLn("");
         writeLn(
-          "    Valid formats are `csv`, `json`, and `encrypted_json`. Default format is `csv`."
+          "    Valid formats are `csv`, `json`, and `encrypted_json`. Default format is `csv`.",
         );
         writeLn("");
         writeLn(
-          "    If --raw option is specified and no output filename or directory is given, the"
+          "    If --raw option is specified and no output filename or directory is given, the",
         );
         writeLn("    result is written to stdout.");
         writeLn("");
@@ -482,13 +484,17 @@ export class VaultProgram extends Program {
         writeLn("    bsafe export --output ./exp/bsafe.csv");
         writeLn("    bsafe export myPassword321 --output bsafe.json --format json");
         writeLn(
-          "    bsafe export myPassword321 --organizationid 7063feab-4b10-472e-b64c-785e2b870b92"
+          "    bsafe export myPassword321 --organizationid 7063feab-4b10-472e-b64c-785e2b870b92",
         );
         writeLn("", true);
       })
       .action(async (options) => {
         await this.exitIfLocked();
-        const command = new ExportCommand(this.main.exportService, this.main.policyService);
+        const command = new ExportCommand(
+          this.main.exportService,
+          this.main.policyService,
+          this.main.eventCollectionService,
+        );
         const response = await command.run(options);
         this.processResponse(response);
       });

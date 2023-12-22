@@ -59,7 +59,9 @@
         [showBulkTrashOptions]="filter.type === 'trash'"
         [useEvents]="false"
         [cloneableOrganizationCiphers]="false"
+        [showAdminActions]="false"
         (onEvent)="onVaultItemsEvent($event)"
+        [showBulkEditCollectionAccess]="showBulkCollectionAccess$ | async"
         [showHeaderCheckboxMenu]="filter.collectionId !== 'all'"
       >
       </app-vault-items>

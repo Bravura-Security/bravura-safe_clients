@@ -90,17 +90,6 @@
             </td>
             <td>{{ i.quantity * i.amount | currency: "$" }} /{{ i.interval | i18n }}</td>
           </tr>
-          <tr *ngIf="discount != null && discount.active">
-            <td colspan="2">
-              <small>
-                {{ "customBillingStart" | i18n }}
-                <a routerLink="/settings/subscription/billing-history">
-                  {{ "billingHistory" | i18n }}
-                </a>
-                {{ "customBillingEnd" | i18n }}
-              </small>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -133,7 +122,7 @@
       </button>
     </div>
     <h2 class="spaced-header">{{ "storage" | i18n }}</h2>
-    <p>{{ "subscriptionStorage" | i18n : sub.maxStorageGb || 0:sub.storageName || "0 MB" }}</p>
+    <p>{{ "subscriptionStorage" | i18n: sub.maxStorageGb || 0 : sub.storageName || "0 MB" }}</p>
     <div class="progress">
       <div
         class="progress-bar bg-success"

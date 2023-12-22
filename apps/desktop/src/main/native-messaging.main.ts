@@ -23,7 +23,7 @@ export class NativeMessagingMain {
     private logService: LogService,
     private windowMain: WindowMain,
     private userPath: string,
-    private exePath: string
+    private exePath: string,
   ) {}
 
   async listen() {
@@ -115,7 +115,7 @@ export class NativeMessagingMain {
         this.createWindowsRegistry(
           "HKLM\\SOFTWARE\\Mozilla\\Firefox",
           "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.firefoxJsonFilename)
+          path.join(destination, this.firefoxJsonFilename),
         );
         this.createWindowsRegistry(
           "HKCU\\SOFTWARE\\Mozilla\\Firefox",
@@ -131,7 +131,7 @@ export class NativeMessagingMain {
         this.createWindowsRegistry(
           "HKCU\\SOFTWARE\\Google\\Chrome",
           "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.chromeJsonFilename)
+          path.join(destination, this.chromeJsonFilename),
         );
         // check if Edge is installed for Local Machine and Current User, but only create in Current User (Edge) re-uses the chrome registry location
         this.createWindowsRegistry(
@@ -158,7 +158,7 @@ export class NativeMessagingMain {
             }
 
             this.writeManifest(p, manifest).catch((e) =>
-              this.logService.error(`Error writing manifest for ${key}. ${e}`)
+              this.logService.error(`Error writing manifest for ${key}. ${e}`),
             );
           } else {
             this.logService.warning(`${key} not found skipping.`);
@@ -170,21 +170,21 @@ export class NativeMessagingMain {
         if (existsSync(`${this.homedir()}/.mozilla/`)) {
           this.writeManifest(
             `${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`,
-            firefoxJson
+            firefoxJson,
           );
         }
 
         if (existsSync(`${this.homedir()}/.config/google-chrome/`)) {
           this.writeManifest(
             `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
-            chromeJson
+            chromeJson,
           );
         }
 
         if (existsSync(`${this.homedir()}/.config/microsoft-edge/`)) {
           this.writeManifest(
             `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
-            chromeJson
+            chromeJson,
           );
         }
         break;
@@ -205,7 +205,7 @@ export class NativeMessagingMain {
         /* eslint-disable-next-line no-useless-escape */
         const path = `${this.homedir()}/Library/Containers/com.duckduckgo.macos.browser/Data/Library/Application\ Support/NativeMessagingHosts/com.hitachiid.safe.json`;
         this.writeManifest(path, manifest).catch((e) =>
-          this.logService.error(`Error writing manifest for DuckDuckGo. ${e}`)
+          this.logService.error(`Error writing manifest for DuckDuckGo. ${e}`),
         );
         break;
       }
@@ -223,7 +223,7 @@ export class NativeMessagingMain {
           "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe"
         );
         this.deleteWindowsRegistry(
-          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe"
+          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
         );
         break;
       case "darwin": {
@@ -245,21 +245,21 @@ export class NativeMessagingMain {
 
         if (
           existsSync(
-            `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`
+            `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
           )
         ) {
           fs.unlink(
-            `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`
+            `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
           );
         }
 
         if (
           existsSync(
-            `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`
+            `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
           )
         ) {
           fs.unlink(
-            `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`
+            `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
           );
         }
         break;

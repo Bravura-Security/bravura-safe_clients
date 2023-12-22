@@ -1,7 +1,7 @@
 {
   "name": "@bitwarden/cli",
   "description": "A secure password manager for all of your devices.",
-  "version": "2023.9.2",
+  "version": "2023.12.0",
   "internalVersion": "2023-13",
   "keywords": [
     "Bravura Safe",
@@ -72,7 +72,7 @@
     "papaparse": "5.4.1",
     "proper-lockfile": "4.1.2",
     "rxjs": "7.8.1",
-    "tldts": "6.0.14",
+    "tldts": "6.1.0",
     "zxcvbn": "4.4.2"
   }
 }

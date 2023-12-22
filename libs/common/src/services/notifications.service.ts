@@ -29,15 +29,15 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   private logHeartbeat = true;
 
   constructor(
+    private logService: LogService,
     private syncService: SyncService,
     private appIdService: AppIdService,
     private apiService: ApiService,
     private environmentService: EnvironmentService,
     private logoutCallback: (expired: boolean) => Promise<void>,
-    private logService: LogService,
     private stateService: StateService,
     private authService: AuthService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
   ) {
     this.environmentService.urls.subscribe(() => {
       if (!this.inited) {
@@ -77,7 +77,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
       .build();
 
     this.signalrConnection.on("ReceiveMessage", (data: any) =>
-      this.processNotification(new NotificationResponse(data))
+      this.processNotification(new NotificationResponse(data)),
     );
     // eslint-disable-next-line
     this.signalrConnection.on("Heartbeat", (data: any) => {
@@ -146,7 +146,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
       case NotificationType.SyncCipherUpdate:
         await this.syncService.syncUpsertCipher(
           notification.payload as SyncCipherNotification,
-          notification.type === NotificationType.SyncCipherUpdate
+          notification.type === NotificationType.SyncCipherUpdate,
         );
         break;
       case NotificationType.SyncCipherDelete:
@@ -157,7 +157,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
       case NotificationType.SyncFolderUpdate:
         await this.syncService.syncUpsertFolder(
           notification.payload as SyncFolderNotification,
-          notification.type === NotificationType.SyncFolderUpdate
+          notification.type === NotificationType.SyncFolderUpdate,
         );
         break;
       case NotificationType.SyncFolderDelete:
@@ -186,7 +186,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
       case NotificationType.SyncSendUpdate:
         await this.syncService.syncUpsertSend(
           notification.payload as SyncSendNotification,
-          notification.type === NotificationType.SyncSendUpdate
+          notification.type === NotificationType.SyncSendUpdate,
         );
         break;
       case NotificationType.SyncSendDelete:

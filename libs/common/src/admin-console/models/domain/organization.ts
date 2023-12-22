@@ -1,7 +1,7 @@
 import { Jsonify } from "type-fest";
 
-import { ProductType, ProviderType } from "../../../enums";
-import { OrganizationUserStatusType, OrganizationUserType } from "../../enums";
+import { ProductType } from "../../../enums";
+import { OrganizationUserStatusType, OrganizationUserType, ProviderType } from "../../enums";
 import { PermissionsApi } from "../api/permissions.api";
 import { OrganizationData } from "../data/organization.data";
 import { PlanType } from "../../../billing/enums";
@@ -66,6 +66,10 @@ export class Organization {
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
   accessSecretsManager: boolean;
+  /**
+   * Refers to the ability for an organization to limit collection creation and deletion to owners and admins only
+   */
+  limitCollectionCreationDeletion: boolean;
   skip2faForSso: boolean;
 
   constructor(obj?: OrganizationData) {
@@ -119,6 +123,7 @@ export class Organization {
     this.familySponsorshipToDelete = obj.familySponsorshipToDelete;
     this.planType = obj.planType;
     this.accessSecretsManager = obj.accessSecretsManager;
+    this.limitCollectionCreationDeletion = obj.limitCollectionCreationDeletion;
     this.skip2faForSso = obj.skip2faForSso;
   }
 
@@ -163,7 +168,11 @@ export class Organization {
   }
 
   get canCreateNewCollections() {
-    return this.isManager || this.permissions.createNewCollections;
+    return (
+      !this.limitCollectionCreationDeletion ||
+      this.isManager ||
+      this.permissions.createNewCollections
+    );
   }
 
   get canEditAnyCollection() {
@@ -254,6 +263,10 @@ export class Organization {
 
   get hasProvider() {
     return this.providerId != null || this.providerName != null;
+  }
+
+  get hasReseller() {
+    return this.hasProvider && this.providerType === ProviderType.Reseller;
   }
 
   get canAccessSecretsManager() {

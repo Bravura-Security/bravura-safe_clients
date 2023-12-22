@@ -63,7 +63,6 @@
         class="environment-selector-dialog-item"
         (click)="toggle(ServerEnvironmentType.EU)"
         [attr.aria-pressed]="selectedEnvironment === ServerEnvironmentType.EU ? 'true' : 'false'"
-        *ngIf="euServerFlagEnabled"
       >
         <i
           class="fa fa-fw fa-sm fa-check"
@@ -75,7 +74,7 @@
         ></i>
         <span>{{ "euDomain" | i18n }}</span>
       </button>
-      <br *ngIf="euServerFlagEnabled" />
+      <br />
       <button
         type="button"
         class="environment-selector-dialog-item"

@@ -3,7 +3,7 @@ import { UntypedFormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
-import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
+import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/auth/components/register.component";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
@@ -69,7 +69,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       environmentService,
       logService,
       auditService,
-      dialogService
+      dialogService,
     );
   }
 
@@ -125,13 +125,13 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       !this.policyService.evaluateMasterPassword(
         this.passwordStrengthResult.score,
         this.formGroup.value.masterPassword,
-        this.enforcedPolicyOptions
+        this.enforcedPolicyOptions,
       )
     ) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPasswordPolicyRequirementsNotMet")
+        this.i18nService.t("masterPasswordPolicyRequirementsNotMet"),
       );
       return;
     }

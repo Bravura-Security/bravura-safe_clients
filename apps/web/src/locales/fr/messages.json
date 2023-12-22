@@ -704,8 +704,23 @@
   "loginWithMasterPassword": {
     "message": "Se connecter avec le mot de passe principal"
   },
+  "readingPasskeyLoading": {
+    "message": "Lecture de la Passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Gardez cette fenêtre ouverte et suivez les instructions de votre navigateur."
+  },
+  "useADifferentLogInMethod": {
+    "message": "Utiliser une méthode de connexion différente"
+  },
   "loginWithPasskey": {
     "message": "Se connecter avec la clé d'accès"
+  },
+  "invalidPasskeyPleaseTryAgain": {
+    "message": "Passkey invalide. Veuillez réessayer de nouveau."
+  },
+  "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
+    "message": "La 2FA pour les Passkey n'est pas pris en charge. Mettez à jour l'application pour vous connecter."
   },
   "loginWithPasskeyInfo": {
     "message": "Utilisez une clé d'accès générée qui vous connectera automatiquement sans mot de passe. Les fonctions biométriques, comme la reconnaissance faciale, l'empreinte digitale, ou une autre méthode de sécurité FIDO2 vérifiera votre identité."
@@ -740,8 +755,23 @@
   "customPasskeyNameInfo": {
     "message": "Nommez votre clé d'accès pour vous aider à l'identifier."
   },
+  "useForVaultEncryption": {
+    "message": "Utiliser pour le cryptage du coffre"
+  },
+  "useForVaultEncryptionInfo": {
+    "message": "Connectez-vous et déverrouillez sur les appareils pris en charge sans votre mot de passe principal. Suivez les instructions de votre navigateur pour finaliser l'installation."
+  },
+  "useForVaultEncryptionErrorReadingPasskey": {
+    "message": "Erreur lors de la lecture du mot de passe. Réessayez ou décochez cette option."
+  },
   "encryptionNotSupported": {
     "message": "Chiffrement non pris en charge"
+  },
+  "encryptionNotEnabled": {
+    "message": "Chiffrement non activé"
+  },
+  "usedForEncryption": {
+    "message": "Utilisé pour le chiffrement"
   },
   "loginWithPasskeyEnabled": {
     "message": "Se connecter avec la clé d'accès activée"
@@ -1487,7 +1517,7 @@
     "message": "Sélectionnez le fichier à importer"
   },
   "chooseFile": {
-    "message": "Choisir le Fichier"
+    "message": "Choisir le fichier"
   },
   "noFileChosen": {
     "message": "Aucun fichier choisi"
@@ -1524,7 +1554,7 @@
     "message": "Changez la langue utilisée par le coffre web."
   },
   "enableFavicon": {
-    "message": "Afficher les icônes du site web"
+    "message": "Afficher les icônes des sites web"
   },
   "faviconDesc": {
     "message": "Affichez une image reconnaissable à côté de chaque identifiant."
@@ -1643,6 +1673,9 @@
   },
   "manage": {
     "message": "Gérer"
+  },
+  "canManage": {
+    "message": "Peut gérer"
   },
   "disable": {
     "message": "Désactiver"
@@ -2430,6 +2463,9 @@
   "contactSupport": {
     "message": "Contacter le support client"
   },
+  "contactSupportShort": {
+    "message": "Contacter le Support"
+  },
   "updatedPaymentMethod": {
     "message": "Moyen de paiement mise à jour."
   },
@@ -2530,6 +2566,9 @@
   },
   "planDescTeams": {
     "message": "Pour les entreprises et autres équipes."
+  },
+  "planNameTeamsStarter": {
+    "message": "Teams Starter"
   },
   "planNameEnterprise": {
     "message": "Entreprise"
@@ -2893,6 +2932,9 @@
   },
   "webVault": {
     "message": "Coffre web"
+  },
+  "cli": {
+    "message": "CLI"
   },
   "bitWebVault": {
     "message": "Coffre web de Bravura Safe"
@@ -3617,6 +3659,9 @@
   "subscriptionUpdated": {
     "message": "Abonnement mis à jour"
   },
+  "subscribedToSecretsManager": {
+    "message": "Abonnement mis à jour. Vous avez maintenant accès au Secrets Manager."
+  },
   "additionalOptions": {
     "message": "Options supplémentaires"
   },
@@ -3632,6 +3677,15 @@
       "max": {
         "content": "$1",
         "example": "50"
+      }
+    }
+  },
+  "subscriptionUserSeatsWithoutAdditionalSeatsOption": {
+    "message": "Vous pouvez inviter jusqu'à $COUNT$ membres sans coût additionnel. Contacter le Support Client pour améliorer votre abonnement à et inviter plus de membres.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
       }
     }
   },
@@ -3793,6 +3847,18 @@
   },
   "organizationIsDisabled": {
     "message": "L'organisation est désactivée."
+  },
+  "secretsAccessSuspended": {
+    "message": "Impossible d'accéder aux organisations suspendues. Veuillez contacter le propriétaire de votre organisation pour obtenir de l'aide."
+  },
+  "secretsCannotCreate": {
+    "message": "Les secrets ne peuvent pas être créés dans les organisations suspendues. Veuillez contacter le propriétaire de votre organisation pour obtenir de l'aide."
+  },
+  "projectsCannotCreate": {
+    "message": "Les projets ne peuvent pas être créés dans les organisations suspendues. Veuillez contacter le propriétaire de votre organisation pour obtenir de l'aide."
+  },
+  "serviceAccountsCannotCreate": {
+    "message": "Les comptes de service ne peuvent pas être créés dans les organisations suspendues. Veuillez contacter le propriétaire de votre organisation pour obtenir de l'aide."
   },
   "disabledOrganizationFilterError": {
     "message": "Les éléments des Organisations désactivées ne sont pas accessibles. Contactez le propriétaire de votre Organisation pour obtenir de l'aide."
@@ -4103,9 +4169,6 @@
   "setMasterPassword": {
     "message": "Définir le mot de passe principal"
   },
-  "ssoCompleteRegistration": {
-    "message": "Afin de finaliser la connexion avec SSO, veuillez définir un mot de passe principal pour accéder et protéger votre coffre."
-  },
   "identifier": {
     "message": "Identifiant"
   },
@@ -4124,6 +4187,21 @@
   "includeAllTeamsFeatures": {
     "message": "Toutes les fonctionnalités pour les équipes, plus :"
   },
+  "includeAllTeamsStarterFeatures": {
+    "message": "Toutes les fonctionnalités de Teams Starter, plus :"
+  },
+  "chooseMonthlyOrAnnualBilling": {
+    "message": "Choisissez la facturation mensuelle ou annuelle"
+  },
+  "abilityToAddMoreThanNMembers": {
+    "message": "Possibilité d'ajouter plus de $COUNT$ membres",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "includeSsoAuthentication": {
     "message": "Authentification SSO via SAML2.0 et OpenID Connect"
   },
@@ -4139,8 +4217,9 @@
   "ssoIdentifier": {
     "message": "Identifiant SSO"
   },
-  "ssoIdentifierHint": {
-    "message": "Fournissez cet ID à vos membres pour se connecter avec le SSO."
+  "ssoIdentifierHintPartOne": {
+    "message": "Fournir cet ID à vos membres pour se connecter avec SSO. Pour contourner cette étape, configurer ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Provide this ID to your members to login with SSO. To bypass this step, set up Domain verification'"
   },
   "unlinkSso": {
     "message": "Délier SSO"
@@ -4188,7 +4267,7 @@
     "message": "Texte"
   },
   "createSend": {
-    "message": "Créer un nouveau Share",
+    "message": "Nouveau Share",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "editSend": {
@@ -4310,8 +4389,8 @@
     "message": "Ce Share est masqué par défaut. Vous pouvez changer sa visibilité en utilisant le bouton ci-dessous.",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
-  "downloadFile": {
-    "message": "Télécharger le fichier"
+  "downloadAttachments": {
+    "message": "Télécharger les pièces jointes"
   },
   "sendAccessUnavailable": {
     "message": "Le Share que vous essayez d'accéder n'existe pas ou n'est plus disponible.",
@@ -4701,8 +4780,8 @@
     "message": "pour l'essayer dès aujourd'hui.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bravura Safe Share or sign up to **try it today.**'"
   },
-  "sendCreatorIdentifier": {
-    "message": "L'utilisateur Bravura Safe $USER_IDENTIFIER$ a partagé ce qui suit avec vous",
+  "sendAccessCreatorIdentifier": {
+    "message": "Le membre Bravura Safe $USER_IDENTIFIER$ a partagé ce qui suit avec vous",
     "placeholders": {
       "user_identifier": {
         "content": "$1",
@@ -6802,6 +6881,24 @@
       }
     }
   },
+  "teamsStarterPlanInvLimitReachedManageBilling": {
+    "message": "Les abonnements Teams Starter peuvent compter jusqu'à $SEATCOUNT$ membres. Contacter le Support Client pour améliorer votre abonnements et inviter plus de membres.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "teamsStarterPlanInvLimitReachedNoManageBilling": {
+    "message": "Les abonnements Teams Starter peuvent compter jusqu'à $SEATCOUNT$ membres. Contacter le propriétaire de votre organisation pour améliorer votre abonnements et inviter plus de membres.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "freeOrgMaxCollectionReachedManageBilling": {
     "message": "Les organisations gratuites peuvent avoir jusqu'à $COLLECTIONCOUNT$ collections. Passez à une offre payante pour inviter plus de collections.",
     "placeholders": {
@@ -7255,6 +7352,14 @@
     "message": "avec inscription automatique sera activée quand cette option est utilisée.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Les autorisations de votre organisation ont été mises à jour, vous obligeant à définir un mot de passe principal.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Votre organisation exige que vous définissiez un mot de passe principal.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
   "notFound": {
     "message": "$RESOURCE$ introuvable",
     "placeholders": {
@@ -7375,6 +7480,9 @@
   "next": {
     "message": "Suivant"
   },
+  "ssoLoginIsRequired": {
+    "message": "La connexion SSO est requise"
+  },
   "selectedRegionFlag": {
     "message": "Drapeau de la région sélectionnée"
   },
@@ -7407,7 +7515,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendsNoItemsMessage": {
-    "message": "Utiliser Share pour partager des informations chiffrées de façon sécuritaire.",
+    "message": "Utilisez Share pour partager en toute sécurité des informations chiffrées avec tout le monde.",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "inviteUsers": {
@@ -7488,6 +7596,21 @@
       }
     }
   },
+  "collectionManagement": {
+    "message": "Gestion de la collection"
+  },
+  "collectionManagementDesc": {
+    "message": "Gérer le comportement de la collection pour l'organisation"
+  },
+  "limitCollectionCreationDeletionDesc": {
+    "message": "Limiter la création et la suppression de la collection aux propriétaires et administrateurs"
+  },
+  "allowAdminAccessToAllCollectionItemsDesc": {
+    "message": "Les propriétaires et les administrateurs peuvent gérer toutes les collections et tous les éléments"
+  },
+  "collectionManagementUpdated": {
+    "message": "Comportement de gestion de la collection enregistré"
+  },
   "passwordManagerPlanPrice": {
     "message": "Prix du plan du Gestionnaire de Mots de Passe"
   },
@@ -7534,6 +7657,12 @@
   "beta": {
     "message": "Beta"
   },
+  "assignCollectionAccess": {
+    "message": "Assigner l'accès à la collection"
+  },
+  "editedCollections": {
+    "message": "Collections modifiées"
+  },
   "baseUrl": {
     "message": "URL du serveur"
   },
@@ -7544,10 +7673,29 @@
     "message": "Vous avez déjà un compte ?"
   },
   "customBillingStart": {
-    "message": "La facturation personnalisée n'apparaît pas. Visitez la page "
+    "message": "La facturation personnalisée n'est pas reflétée. Visitez la "
   },
   "customBillingEnd": {
-    "message": " pour la dernière facturation."
+    "message": " page pour la dernière facturation."
+  },
+  "managePermissionRequired": {
+    "message": "Au moins un membre ou un groupe doit avoir la permission peut gérer."
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "La Passkey ne sera pas copiée"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "La passkey ne sera pas copiée à l'item cloné. Voulez-vous continuez à cloner cet élément?"
+  },
+  "modifiedCollectionManagement": {
+    "message": "Paramètre de gestion de la collection modifiée $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
   },
   "skip2faForSsoPolicyTitle": {
     "message": "Ignorer la connexion personnelle à deux étapes lors de l'utilisation du SSO"
@@ -7557,5 +7705,26 @@
   },
   "skip2faForSsoPolicyWarning": {
     "message": "Ignorer le fournisseur personnel de connexion à deux étapes sécurisé par Bravura Safe (ex. OTP ou code par courriel) est moins sécurisé. Assurez-vous que le fournisseur SSO impose l'authentification multi-facteurs."
+  }
+}
+  },
+  "seeDetailedInstructions": {
+    "message": "Consultez les instructions détaillées sur notre site d'aide à",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "projectAccessUpdated": {
+    "message": "Accès au projet mis à jour"
+  },
+  "unexpectedErrorSend": {
+    "message": "Une erreur inattendue est survenue lors du chargement de ce Send. Réessayez plus tard."
+  },
+  "seatLimitReached": {
+    "message": "La limite de places a été atteinte"
+  },
+  "contactYourProvider": {
+    "message": "Contactez votre fournisseur pour acheter des places supplémentaires."
+  },
+  "seatLimitReachedContactYourProvider": {
+    "message": "La limite de places a été atteinte. Contactez votre fournisseur pour acheter des places supplémentaires."
   }
 }

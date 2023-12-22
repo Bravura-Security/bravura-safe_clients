@@ -29,7 +29,7 @@ export class TwoFactorSetupComponent extends BaseTwoFactorSetupComponent {
     policyService: PolicyService,
     private route: ActivatedRoute,
     stateService: StateService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
   ) {
     super(apiService, modalService, messagingService, policyService, stateService);
   }
@@ -42,7 +42,7 @@ export class TwoFactorSetupComponent extends BaseTwoFactorSetupComponent {
           this.organization = this.organizationService.get(this.organizationId);
         }),
         concatMap(async () => await super.ngOnInit()),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }

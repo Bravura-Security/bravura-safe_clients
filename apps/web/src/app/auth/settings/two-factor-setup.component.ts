@@ -58,7 +58,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
     protected modalService: ModalService,
     protected messagingService: MessagingService,
     protected policyService: PolicyService,
-    private stateService: StateService
+    private stateService: StateService,
   ) {}
 
   async ngOnInit() {
@@ -131,7 +131,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
       case TwoFactorProviderType.Authenticator: {
         const authComp = await this.openModal(
           this.authenticatorModalRef,
-          TwoFactorAuthenticatorComponent
+          TwoFactorAuthenticatorComponent,
         );
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         authComp.onUpdated.subscribe((enabled: boolean) => {
@@ -173,7 +173,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
       case TwoFactorProviderType.WebAuthn: {
         const webAuthnComp = await this.openModal(
           this.webAuthnModalRef,
-          TwoFactorWebAuthnComponent
+          TwoFactorWebAuthnComponent,
         );
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         webAuthnComp.onUpdated.subscribe((enabled: boolean) => {

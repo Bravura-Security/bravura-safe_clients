@@ -21,7 +21,7 @@
           <bit-form-field>
             <bit-label>{{ "name" | i18n }}</bit-label>
             <input bitInput appAutofocus type="text" formControlName="name" />
-            <bit-hint>{{ "characterMaximum" | i18n : 100 }}</bit-hint>
+            <bit-hint>{{ "characterMaximum" | i18n: 100 }}</bit-hint>
           </bit-form-field>
         </bit-tab>
 
@@ -35,6 +35,7 @@
             [columnHeader]="'member' | i18n"
             [selectorLabelText]="'selectMembers' | i18n"
             [emptySelectionText]="'noMembersAdded' | i18n"
+            [flexibleCollectionsEnabled]="flexibleCollectionsEnabled$ | async"
           ></bit-access-selector>
         </bit-tab>
 
@@ -57,6 +58,7 @@
               [columnHeader]="'collection' | i18n"
               [selectorLabelText]="'selectCollections' | i18n"
               [emptySelectionText]="'noCollectionsAdded' | i18n"
+              [flexibleCollectionsEnabled]="flexibleCollectionsEnabled$ | async"
             ></bit-access-selector>
           </ng-container>
         </bit-tab>
