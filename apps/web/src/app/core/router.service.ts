@@ -53,11 +53,11 @@ export class RouterService {
       });
   }
 
-  async getPreviousUrl(): string | undefined {
+  async getPreviousUrl(): Promise<string> | undefined {
     return await this.stateService.getPreviousUrl();
   }
 
-  async setPreviousUrl(url: string): void {
+  async setPreviousUrl(url: string): Promise<void> {
     await this.stateService.setPreviousUrl(url);
   }
 

@@ -15,6 +15,7 @@ import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
@@ -88,6 +89,7 @@ export class AccountComponent {
     private route: ActivatedRoute,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
+    private logService: LogService,
     private router: Router,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
@@ -176,10 +178,9 @@ export class AccountComponent {
       request.keys = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);
     }
 
-    this.formPromise = this.organizationApiService.save(this.organizationId, request);
-    const response = await this.formPromise;
+    await this.organizationApiService.save(this.organizationId, request);
+
     this.platformUtilsService.showToast("success", null, this.i18nService.t("organizationUpdated"));
-    this.formGroup.get("orgName").setValue(response.name);
   };
 
   submitCollectionManagement = async () => {

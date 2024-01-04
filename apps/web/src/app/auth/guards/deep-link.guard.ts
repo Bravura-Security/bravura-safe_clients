@@ -21,7 +21,7 @@ export function deepLinkGuard(): CanActivateFn {
 
     // Fetch State
     const currentUrl = routerState.url;
-    const transientPreviousUrl = routerService.getPreviousUrl();
+    const transientPreviousUrl = await routerService.getPreviousUrl();
     const authStatus = await authService.getAuthStatus();
 
     // Evaluate State
