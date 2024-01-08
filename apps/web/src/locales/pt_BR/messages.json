@@ -4689,7 +4689,7 @@
     "message": "Inscrito na recuperação de conta"
   },
   "withdrawAccountRecovery": {
-    "message": "Withdraw from account recovery"
+    "message": "Withdraw from master password reset"
   },
   "enrollPasswordResetSuccess": {
     "message": "Inscrição com sucesso!"
@@ -4698,7 +4698,7 @@
     "message": "Retirada com sucesso!"
   },
   "eventEnrollAccountRecovery": {
-    "message": "User $ID$ enrolled in account recovery.",
+    "message": "User $ID$ enrolled in master password reset.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4707,7 +4707,7 @@
     }
   },
   "eventWithdrawAccountRecovery": {
-    "message": "User $ID$ withdrew from account recovery.",
+    "message": "User $ID$ withdrew from master password reset.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4881,7 +4881,7 @@
     "message": "Erro"
   },
   "accountRecoveryManageUsers": {
-    "message": "Manage users must also be granted with the manage account recovery permission"
+    "message": "Manage users must also be granted with the manage master password reset permission"
   },
   "setupProvider": {
     "message": "Configuração do Provedor"
@@ -7123,23 +7123,23 @@
   },
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Uma vez autenticados, os membros descriptografarão os dados do cofre usando uma chave armazenada no seu dispositivo.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLinkOne": {
     "message": "Organização única",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionPartTwo": {
     "message": "política e ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLinkTwo": {
     "message": "Gerenciar recuperação de conta",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionPartThree": {
     "message": "política com inscrição automática será ativada quando esta opção for utilizada.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ não encontrado",
@@ -7154,7 +7154,7 @@
     "message": "Recover account"
   },
   "updatedTempPassword": {
-    "message": "User updated a password issued through account recovery."
+    "message": "User updated a password issued through master password reset."
   },
   "activatedAccessToSecretsManager": {
     "message": "Acesso ativado ao Gerenciador de Segredos",
@@ -7389,5 +7389,11 @@
   },
   "skip2faForSsoPolicyWarning": {
     "message": "Skipping the Bravura Safe provided personal Two-step Login provider (ex OTP or email code ) is less secure. Ensure the SSO provider enforces multi-factor authentication."
+  },
+  "forcePasswordReset": {
+    "message": "Force password reset"
+  },
+  "forcePasswordResetHelp": {
+    "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
   }
 }

@@ -43,6 +43,7 @@ export class UserAdminService {
     request.collections = user.collections;
     request.groups = user.groups;
     request.accessSecretsManager = user.accessSecretsManager;
+    request.forcePasswordReset = user.forcePasswordReset;
 
     await this.organizationUserService.putOrganizationUser(user.organizationId, user.id, request);
   }
@@ -56,6 +57,7 @@ export class UserAdminService {
     request.collections = user.collections;
     request.groups = user.groups;
     request.accessSecretsManager = user.accessSecretsManager;
+    request.forcePasswordReset = user.forcePasswordReset;
 
     await this.organizationUserService.postOrganizationUserInvite(user.organizationId, request);
   }
@@ -84,6 +86,7 @@ export class UserAdminService {
       view.groups = u.groups;
       view.accessSecretsManager = u.accessSecretsManager;
       view.hasMasterPassword = u.hasMasterPassword;
+      view.forcePasswordReset = u.forcePasswordReset;
 
       return view;
     });

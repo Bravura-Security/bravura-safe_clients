@@ -4881,7 +4881,7 @@
     "message": "Error"
   },
   "accountRecoveryManageUsers": {
-    "message": "Manage users must also be granted with the manage account recovery permission"
+    "message": "Manage users must also be granted with the manage master password reset permission"
   },
   "setupProvider": {
     "message": "Configurador del proveedor"
@@ -7124,23 +7124,23 @@
   "memberDecryptionTdeDescriptionStart": {
   "memberDecryptionTdeDescriptionPartOne": {
     "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "single organization",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "message": "single team",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionPartTwo": {
     "message": "policy and ",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "account recovery administration",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "message": "master password reset administration",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionTdeDescriptionPartThree": {
     "message": "policy with automatic enrollment will turn on when this option is used.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "notFound": {
     "message": "$RESOURCE$ no encontrado",
@@ -7390,5 +7390,11 @@
   },
   "skip2faForSsoPolicyWarning": {
     "message": "Skipping the Bravura Safe provided personal Two-step Login provider (ex OTP or email code ) is less secure. Ensure the SSO provider enforces multi-factor authentication."
+  },
+  "forcePasswordReset": {
+    "message": "Force password reset"
+  },
+  "forcePasswordResetHelp": {
+    "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
   }
 }

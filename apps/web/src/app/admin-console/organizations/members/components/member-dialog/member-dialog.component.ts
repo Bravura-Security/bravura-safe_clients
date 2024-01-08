@@ -36,6 +36,7 @@ import {
 
 import { commaSeparatedEmails } from "./validators/comma-separated-emails.validator";
 import { freeOrgSeatLimitReachedValidator } from "./validators/free-org-inv-limit-reached.validator";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 export enum MemberDialogTab {
   Role = 0,
@@ -75,6 +76,8 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   PermissionMode = PermissionMode;
   canUseSecretsManager: boolean;
   showNoMasterPasswordWarning = false;
+  canViewPasswordResetTab = false;
+  canSetForcePasswordReset = false;
 
   protected organization: Organization;
   protected collectionAccessItems: AccessItemView[] = [];
@@ -88,6 +91,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     accessSecretsManager: false,
     access: [[] as AccessItemValue[]],
     groups: [[] as AccessItemValue[]],
+    forcePasswordReset: true,
   });
 
   protected permissionsGroup = this.formBuilder.group({
@@ -134,7 +138,8 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     private groupService: GroupService,
     private userService: UserAdminService,
     private organizationUserService: OrganizationUserService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private stateService: StateService
   ) {}
 
   async ngOnInit() {
@@ -155,6 +160,8 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       })
     );
 
+    var loggedUserId = await this.stateService.getUserId();
+
     combineLatest({
       organization: organization$,
       collections: this.collectionAdminService.getAll(this.params.organizationId),
@@ -168,6 +175,17 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
         this.organization = organization;
         this.canUseCustomPermissions = organization.useCustomPermissions;
         this.canUseSecretsManager = organization.useSecretsManager && flagEnabled("secretsManager");
+        this.canViewPasswordResetTab = false;
+        this.canSetForcePasswordReset = true;
+        if( userDetails ){
+          this.canViewPasswordResetTab = 
+            ( userDetails.type === OrganizationUserType.Owner || 
+              userDetails.type === OrganizationUserType.Admin ||
+              ( userDetails.type === OrganizationUserType.Custom && userDetails.permissions.manageResetPassword ) 
+            ) &&
+            organization.useResetPassword;
+          this.canSetForcePasswordReset = ( userDetails.userId !== loggedUserId );
+        }
 
         const emailsControlValidators = [
           Validators.required,
@@ -256,6 +274,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
             access: accessSelections,
             accessSecretsManager: userDetails.accessSecretsManager,
             groups: groupAccessSelections,
+            forcePasswordReset: userDetails.forcePasswordReset,
           });
         }
 
@@ -315,6 +334,17 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
         this.i18nService.t("accountRecoveryManageUsers")
       );
     }
+
+    this.canViewPasswordResetTab = this.permissionsGroup.value.manageResetPassword;
+  }
+
+  handleMasterPasswordResetTab(){
+    this.canViewPasswordResetTab = 
+      ( this.formGroup.value.type === OrganizationUserType.Owner ||
+        this.formGroup.value.type == OrganizationUserType.Admin ||
+        ( this.formGroup.value.type === OrganizationUserType.Custom && this.permissionsGroup.value.manageResetPassword )
+      ) &&
+      this.organization.useResetPassword;
   }
 
   submit = async () => {
@@ -354,6 +384,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       .map(convertToSelectionView);
     userView.groups = this.formGroup.value.groups.map((m) => m.id);
     userView.accessSecretsManager = this.formGroup.value.accessSecretsManager;
+    userView.forcePasswordReset = this.formGroup.value.forcePasswordReset;
 
     if (this.editMode) {
       await this.userService.save(userView);

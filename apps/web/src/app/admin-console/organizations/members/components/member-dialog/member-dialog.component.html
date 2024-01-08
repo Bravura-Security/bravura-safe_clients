@@ -49,6 +49,7 @@
                 class="tw-relative tw-bottom-[-1px] tw-mr-2"
                 formControlName="type"
                 name="type"
+                (change)="handleMasterPasswordResetTab()"
               />
               <label class="tw-m-0" for="userTypeUser">
                 {{ "user" | i18n }}
@@ -65,6 +66,7 @@
                 class="tw-relative tw-bottom-[-1px] tw-mr-2"
                 formControlName="type"
                 name="type"
+                (change)="handleMasterPasswordResetTab()"
               />
               <label class="tw-m-0" for="userTypeManager">
                 {{ "manager" | i18n }}
@@ -81,6 +83,7 @@
                 class="tw-relative tw-bottom-[-1px] tw-mr-2"
                 formControlName="type"
                 name="type"
+                (change)="handleMasterPasswordResetTab()"
               />
               <label class="tw-m-0" for="userTypeAdmin">
                 {{ "admin" | i18n }}
@@ -97,6 +100,7 @@
                 class="tw-relative tw-bottom-[-1px] tw-mr-2"
                 formControlName="type"
                 name="type"
+                (change)="handleMasterPasswordResetTab()"
               />
               <label class="tw-m-0" for="userTypeOwner">
                 {{ "owner" | i18n }}
@@ -114,6 +118,7 @@
                 name="type"
                 class="tw-relative tw-bottom-[-1px] tw-mr-2"
                 [attr.disabled]="!canUseCustomPermissions || null"
+                (change)="handleMasterPasswordResetTab()"
               />
               <label class="tw-m-0" for="userTypeCustom">
                 {{ "custom" | i18n }}
@@ -203,6 +208,7 @@
                       {{ "manageGroups" | i18n }}
                     </label>
                   </div>
+                  <ng-container *ngIf="organization.useSso">
                   <div>
                     <input
                       type="checkbox"
@@ -214,6 +220,7 @@
                       {{ "manageSso" | i18n }}
                     </label>
                   </div>
+                  </ng-container>
                   <div>
                     <input
                       type="checkbox"
@@ -237,6 +244,7 @@
                       {{ "manageUsers" | i18n }}
                     </label>
                   </div>
+                  <ng-container *ngIf="organization.useResetPassword">
                   <div>
                     <input
                       type="checkbox"
@@ -249,6 +257,7 @@
                       {{ "manageAccountRecovery" | i18n }}
                     </label>
                   </div>
+                  </ng-container>
                 </div>
               </div>
             </div>
@@ -310,6 +319,25 @@
             [emptySelectionText]="'noCollectionsAdded' | i18n"
           ></bit-access-selector
         ></bit-tab>
+        <bit-tab *ngIf="canViewPasswordResetTab" [label]="'accountRecoveryPolicy' | i18n">
+          <div class="tw-mb-6">
+            <bit-form-control>
+              <input
+                type="checkbox" bitCheckbox
+                name="forcePasswordReset"
+                id="forcePasswordReset"
+                formControlName="forcePasswordReset"
+                [disabled]="!canSetForcePasswordReset"
+              />
+              <bit-label for="forcePasswordReset">
+                {{ "forcePasswordReset" | i18n }}
+              </bit-label>
+              <bit-hint>
+                {{ "forcePasswordResetHelp" | i18n }}
+              </bit-hint>
+            </bit-form-control>
+          </div>
+        </bit-tab>
       </bit-tab-group>
     </div>
     <ng-container bitDialogFooter>

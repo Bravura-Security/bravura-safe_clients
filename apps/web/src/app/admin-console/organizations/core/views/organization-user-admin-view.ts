@@ -22,4 +22,5 @@ export class OrganizationUserAdminView {
   groups: string[] = [];
 
   accessSecretsManager: boolean;
+  forcePasswordReset: boolean;
 }
