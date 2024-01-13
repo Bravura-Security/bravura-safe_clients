@@ -970,6 +970,18 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async isLowKdfIteration() {
+    /* Pre BW2023.2.1 installs have kdfIterations set to 100K, the new default and minimum is 600K
+    *  Comparing the low kdfIterations of 100K to 600K will set the `this.showLowKdf` to true
+    *  and trigger the isShowingCards to set the column to individual vault column to be smaller (class col-6)
+    */
+    const showLowKdfEnabled = await this.configService.getFeatureFlag(
+      FeatureFlag.DisplayLowKdfIterationWarningFlag,
+      false
+    );
+    if (!showLowKdfEnabled) {
+      return false;
+    }
+
     const kdfType = await this.stateService.getKdfType();
     const kdfOptions = await this.stateService.getKdfConfig();
     return (
