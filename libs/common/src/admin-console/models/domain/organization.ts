@@ -70,6 +70,10 @@ export class Organization {
    * Refers to the ability for an organization to limit collection creation and deletion to owners and admins only
    */
   limitCollectionCreationDeletion: boolean;
+  /**
+   * Refers to the ability for an owner/admin to access all collection items, regardless of assigned collections
+   */
+  allowAdminAccessToAllCollectionItems: boolean;
   skip2faForSso: boolean;
 
   constructor(obj?: OrganizationData) {
@@ -124,6 +128,7 @@ export class Organization {
     this.planType = obj.planType;
     this.accessSecretsManager = obj.accessSecretsManager;
     this.limitCollectionCreationDeletion = obj.limitCollectionCreationDeletion;
+    this.allowAdminAccessToAllCollectionItems = obj.allowAdminAccessToAllCollectionItems;
     this.skip2faForSso = obj.skip2faForSso;
   }
 
@@ -136,6 +141,9 @@ export class Organization {
 
   /**
    * Whether a user has Manager permissions or greater
+   *
+   * @deprecated
+   * This is deprecated with the introduction of Flexible Collections.
    */
   get isManager() {
     return this.type === OrganizationUserType.Manager || this.isAdmin;
@@ -191,14 +199,29 @@ export class Organization {
     return this.canEditAnyCollection || this.canDeleteAnyCollection;
   }
 
+  /**
+   * @deprecated
+   * This is deprecated with the introduction of Flexible Collections.
+   * This will always return false if FlexibleCollections flag is on.
+   */
   get canEditAssignedCollections() {
     return this.isManager || this.permissions.editAssignedCollections;
   }
 
+  /**
+   * @deprecated
+   * This is deprecated with the introduction of Flexible Collections.
+   * This will always return false if FlexibleCollections flag is on.
+   */
   get canDeleteAssignedCollections() {
     return this.isManager || this.permissions.deleteAssignedCollections;
   }
 
+  /**
+   * @deprecated
+   * This is deprecated with the introduction of Flexible Collections.
+   * This will always return false if FlexibleCollections flag is on.
+   */
   get canViewAssignedCollections() {
     return this.canDeleteAssignedCollections || this.canEditAssignedCollections;
   }

@@ -31,6 +31,7 @@ import { SetPasswordComponent } from "../auth/set-password.component";
 import { AccountComponent } from "../auth/settings/account/account.component";
 import { ChangeAvatarComponent } from "../auth/settings/account/change-avatar.component";
 import { ChangeEmailComponent } from "../auth/settings/account/change-email.component";
+import { DangerZoneComponent } from "../auth/settings/account/danger-zone.component";
 import { DeauthorizeSessionsComponent } from "../auth/settings/account/deauthorize-sessions.component";
 import { DeleteAccountComponent } from "../auth/settings/account/delete-account.component";
 import { ProfileComponent } from "../auth/settings/account/profile.component";
@@ -114,6 +115,7 @@ import { SharedModule } from "./shared.module";
     OrganizationBadgeModule,
     PipesModule,
     PasswordCalloutComponent,
+    DangerZoneComponent,
   ],
   declarations: [
     AcceptFamilySponsorshipComponent,
@@ -290,6 +292,7 @@ import { SharedModule } from "./shared.module";
     BaseReportsComponent,
     ReportingComponent,
     LowKdfComponent,
+    DangerZoneComponent,
   ],
 })
 export class LooseComponentsModule {}

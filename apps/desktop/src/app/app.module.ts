@@ -3,11 +3,11 @@ import "zone.js";
 import { registerLocaleData } from "@angular/common";
 import localeEnGb from "@angular/common/locales/en-GB";
 import localeFr from "@angular/common/locales/fr";
-import { DialogModule } from "@angular/cdk/dialog";
 import { NgModule } from "@angular/core";
 
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
+import { DialogModule } from "@bitwarden/components";
 
 import { AccessibilityCookieComponent } from "../auth/accessibility-cookie.component";
 import { SetPinComponent } from "../auth/components/set-pin.component";
@@ -58,7 +58,15 @@ registerLocaleData(localeEnGb, "en-GB");
 registerLocaleData(localeFr, "fr");
 
 @NgModule({
-  imports: [SharedModule, DialogModule, AppRoutingModule, VaultFilterModule, LoginModule],
+  imports: [
+    SharedModule,
+    AppRoutingModule,
+    VaultFilterModule,
+    LoginModule,
+    DialogModule,
+    DeleteAccountComponent,
+    UserVerificationComponent,
+  ],
   declarations: [
     AccessibilityCookieComponent,
     AccountSwitcherComponent,
@@ -70,7 +78,6 @@ registerLocaleData(localeFr, "fr");
     CollectionsComponent,
     ColorPasswordPipe,
     ColorPasswordCountPipe,
-    DeleteAccountComponent,
     EnvironmentComponent,
     ExportComponent,
     FolderAddEditComponent,
@@ -95,7 +102,6 @@ registerLocaleData(localeFr, "fr");
     TwoFactorComponent,
     TwoFactorOptionsComponent,
     UpdateTempPasswordComponent,
-    UserVerificationComponent,
     VaultComponent,
     VaultTimeoutInputComponent,
     ViewComponent,

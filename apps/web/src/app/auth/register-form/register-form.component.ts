@@ -29,6 +29,7 @@ import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.d
 })
 export class RegisterFormComponent extends BaseRegisterComponent {
   @Input() queryParamEmail: string;
+  @Input() queryParamFromOrgInvite: boolean;
   @Input() enforcedPolicyOptions: MasterPasswordPolicyOptions;
   @Input() referenceDataValue: ReferenceEventRequest;
 

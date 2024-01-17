@@ -52,6 +52,7 @@ export class OrganizationData {
   planType: PlanType;
   accessSecretsManager: boolean;
   limitCollectionCreationDeletion: boolean;
+  allowAdminAccessToAllCollectionItems: boolean;
   skip2faForSso: boolean;
 
   constructor(
@@ -106,6 +107,7 @@ export class OrganizationData {
     this.planType = response.planType;
     this.accessSecretsManager = response.accessSecretsManager;
     this.limitCollectionCreationDeletion = response.limitCollectionCreationDeletion;
+    this.allowAdminAccessToAllCollectionItems = response.allowAdminAccessToAllCollectionItems;
     this.skip2faForSso = response.skip2faForSso;
 
     this.isMember = options.isMember;

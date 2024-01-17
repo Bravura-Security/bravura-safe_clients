@@ -15,6 +15,7 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@storybook/addon-a11y",
     "@storybook/addon-designs",
+    "@storybook/addon-interactions",
     {
       name: "@storybook/addon-docs",
       options: {

@@ -51,6 +51,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
   planType: PlanType;
   accessSecretsManager: boolean;
   limitCollectionCreationDeletion: boolean;
+  allowAdminAccessToAllCollectionItems: boolean;
   skip2faForSso: boolean;
 
   constructor(response: any) {
@@ -110,6 +111,12 @@ export class ProfileOrganizationResponse extends BaseResponse {
     this.familySponsorshipToDelete = this.getResponseProperty("FamilySponsorshipToDelete");
     this.planType = this.getResponseProperty("PlanType");
     this.accessSecretsManager = this.getResponseProperty("AccessSecretsManager");
+    this.limitCollectionCreationDeletion = this.getResponseProperty(
+      "LimitCollectionCreationDeletion"
+    );
+    this.allowAdminAccessToAllCollectionItems = this.getResponseProperty(
+      "AllowAdminAccessToAllCollectionItems"
+    );
     this.skip2faForSso = this.getResponseProperty("Skip2faForSso");
   }
 }
