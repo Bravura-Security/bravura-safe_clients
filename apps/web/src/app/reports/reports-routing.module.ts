@@ -26,7 +26,7 @@ const routes: Routes = [
         path: "security-assessment-report",
         component: SecurityAssessmentReportComponent,
         data: { titleId: "securityAssessmentReport" },
-        canActivate: [HasPremiumGuard],
+        canActivate: [hasPremiumGuard()],
       },
       {
         path: "reused-passwords-report",
@@ -62,7 +62,7 @@ const routes: Routes = [
         path: "configured-two-factor-report",
         component: ConfiguredTwoFactorReportComponent,
         data: { titleId: "configured2faReport" },
-        canActivate: [HasPremiumGuard],
+        canActivate: [hasPremiumGuard()],
       },
     ],
   },
