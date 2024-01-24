@@ -82,7 +82,7 @@ export const Default: Story = {
           [bitPopoverTriggerFor]="myPopover"
           #triggerRef="popoverTrigger"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -124,7 +124,7 @@ export const InitiallyOpen: Story = {
           [popoverOpen]="true"
           #triggerRef="popoverTrigger"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -147,7 +147,7 @@ export const RightStart: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -170,7 +170,7 @@ export const RightCenter: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -193,7 +193,7 @@ export const RightEnd: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -216,7 +216,7 @@ export const LeftStart: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -239,7 +239,7 @@ export const LeftCenter: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -261,7 +261,7 @@ export const LeftEnd: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -284,7 +284,7 @@ export const BelowStart: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -307,7 +307,7 @@ export const BelowCenter: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -330,7 +330,7 @@ export const BelowEnd: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -353,7 +353,7 @@ export const AboveStart: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -376,7 +376,7 @@ export const AboveCenter: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}
@@ -399,7 +399,7 @@ export const AboveEnd: Story = {
           #triggerRef="popoverTrigger"
           [position]="'${args.position}'"
         >
-          <i class="bwi bwi-question-circle"></i>
+          <i class="fa fa-question-circle"></i>
         </button>
       </div>
       ${popoverContent}

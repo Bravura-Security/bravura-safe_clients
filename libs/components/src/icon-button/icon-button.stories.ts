@@ -6,7 +6,7 @@ export default {
   title: "Component Library/Icon Button",
   component: BitIconButtonComponent,
   args: {
-    bitIconButton: "bwi-plus",
+    bitIconButton: "fa-plus",
     size: "default",
     disabled: false,
   },
@@ -25,16 +25,16 @@ export const Default: Story = {
     props: args,
     template: `
     <div class="tw-space-x-4">
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="main" [size]="size">Button</button>
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="muted" [size]="size">Button</button>
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="primary" [size]="size">Button</button>
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="secondary"[size]="size">Button</button>
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="danger" [size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="main" [size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="muted" [size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="primary" [size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="secondary"[size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="danger" [size]="size">Button</button>
       <div class="tw-bg-primary-500 tw-p-2 tw-inline-block">
-        <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="contrast" [size]="size">Button</button>
+        <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="contrast" [size]="size">Button</button>
       </div>
       <div class="tw-bg-background-alt2 tw-p-2 tw-inline-block">
-        <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" buttonType="light" [size]="size">Button</button>
+        <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" buttonType="light" [size]="size">Button</button>
       </div>
     </div>
     `,
@@ -57,7 +57,7 @@ export const Primary: Story = {
   render: (args) => ({
     props: args,
     template: `
-    <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [size]="size">Button</button>
+    <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [size]="size">Button</button>
     `,
   }),
   args: {
@@ -98,7 +98,7 @@ export const Light: Story = {
     props: args,
     template: `
     <div class="tw-bg-background-alt2 tw-p-6 tw-w-full tw-inline-block">
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [size]="size">Button</button>
     </div>
     `,
   }),
@@ -112,7 +112,7 @@ export const Contrast: Story = {
     props: args,
     template: `
     <div class="tw-bg-primary-500 tw-p-6 tw-w-full tw-inline-block">
-      <button bitIconButton="bwi-plus" [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [size]="size">Button</button>
+      <button bitIconButton="fa-plus" [disabled]="disabled" [loading]="loading" [buttonType]="buttonType" [size]="size">Button</button>
     </div>
       `,
   }),

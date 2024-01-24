@@ -95,7 +95,7 @@ exports[`AutofillOverlayList initAutofillOverlayList the list of ciphers for an 
         >
           <span
             aria-hidden="true"
-            class="cipher-icon bwi bw-icon"
+            class="cipher-icon fa bw-icon"
           />
           <span
             class="cipher-details"
@@ -164,7 +164,7 @@ exports[`AutofillOverlayList initAutofillOverlayList the list of ciphers for an 
         >
           <span
             aria-hidden="true"
-            class="cipher-icon bwi bw-icon"
+            class="cipher-icon fa bw-icon"
           />
           <span
             class="cipher-details"

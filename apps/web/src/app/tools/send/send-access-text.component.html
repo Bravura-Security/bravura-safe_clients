@@ -12,15 +12,15 @@
     *ngIf="send.text.hidden"
   >
     <i
-      class="bwi bwi-lg"
+      class="fa fa-lg"
       aria-hidden="true"
-      [ngClass]="{ 'bwi-eye': !showText, 'bwi-eye-slash': showText }"
+      [ngClass]="{ 'fa-eye': !showText, 'fa-eye-slash': showText }"
     ></i>
     {{ "toggleVisibility" | i18n }}
   </button>
 </div>
 <div class="tw-mb-3">
   <button bitButton type="button" buttonType="primary" [block]="true" (click)="copyText()">
-    <i class="bwi bwi-clone" aria-hidden="true"></i> {{ "copyValue" | i18n }}
+    <i class="fa fa-clone" aria-hidden="true"></i> {{ "copyValue" | i18n }}
   </button>
 </div>

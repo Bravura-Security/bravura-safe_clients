@@ -25,17 +25,17 @@ export function buildCipherIcon(
 
   switch (cipher.type) {
     case CipherType.Login:
-      icon = "bwi-globe";
+      icon = "fa-globe";
 
       if (cipher.login.uri) {
         let hostnameUri = cipher.login.uri;
         let isWebsite = false;
 
         if (hostnameUri.indexOf("androidapp://") === 0) {
-          icon = "bwi-android";
+          icon = "fa-android";
           image = null;
         } else if (hostnameUri.indexOf("iosapp://") === 0) {
-          icon = "bwi-apple";
+          icon = "fa-apple";
           image = null;
         } else if (
           imageEnabled &&
@@ -51,7 +51,7 @@ export function buildCipherIcon(
         if (imageEnabled && isWebsite) {
           try {
             image = `${iconsServerUrl}/${Utils.getHostname(hostnameUri)}/icon.png`;
-            fallbackImage = "images/bwi-globe.png";
+            fallbackImage = "images/fa-globe.png";
           } catch (e) {
             // Ignore error since the fallback icon will be shown if image is null.
           }
@@ -61,16 +61,16 @@ export function buildCipherIcon(
       }
       break;
     case CipherType.SecureNote:
-      icon = "bwi-sticky-note";
+      icon = "fa-sticky-note";
       break;
     case CipherType.Card:
-      icon = "bwi-credit-card";
+      icon = "fa-credit-card";
       if (imageEnabled && cipher.card.brand in cardIcons) {
         icon = `credit-card-icon ${cardIcons[cipher.card.brand]}`;
       }
       break;
     case CipherType.Identity:
-      icon = "bwi-id-card";
+      icon = "fa-id-card";
       break;
     default:
       break;

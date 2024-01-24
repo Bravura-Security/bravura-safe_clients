@@ -43,13 +43,13 @@ export class AccountComponent {
 
   get status() {
     if (this.account.isActive && this.account.status !== AuthenticationStatus.Locked) {
-      return { text: this.i18nService.t("active"), icon: "bwi-check-circle" };
+      return { text: this.i18nService.t("active"), icon: "fa-check-circle" };
     }
 
     if (this.account.status === AuthenticationStatus.Unlocked) {
-      return { text: this.i18nService.t("unlocked"), icon: "bwi-unlock" };
+      return { text: this.i18nService.t("unlocked"), icon: "fa-unlock" };
     }
 
-    return { text: this.i18nService.t("locked"), icon: "bwi-lock" };
+    return { text: this.i18nService.t("locked"), icon: "fa-lock" };
   }
 }

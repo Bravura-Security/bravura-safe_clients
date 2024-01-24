@@ -22,7 +22,7 @@ const icon = svgIcon`<svg xmlns="http://www.w3.org/2000/svg" width="140" height=
       buttonType="secondary"
       type="button"
     >
-      <i aria-hidden="true" class="bwi bwi-pencil-square"></i> {{ "editInfo" | i18n }}
+      <i aria-hidden="true" class="fa fa-pencil-square"></i> {{ "editInfo" | i18n }}
     </button>
   </bit-no-items>`,
 })

@@ -1,6 +1,6 @@
 <ng-container *ngIf="!hideMenu">
   <button type="button" [bitMenuTriggerFor]="optionsMenu" class="filter-options-icon">
-    <i class="bwi bwi-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </button>
   <bit-menu class="filter-organization-options" #optionsMenu>
 <ng-container *ngIf="!loaded">
@@ -46,7 +46,7 @@
     </button>
     <ng-template #linkSso>
           <a href="#" bitMenuItem app-link-sso [organization]="organization">
-            <i class="bwi bwi-fw bwi-link" aria-hidden="true"></i>
+            <i class="fa fa-fw fa-link" aria-hidden="true"></i>
             {{ "linkSso" | i18n }}
           </a>
     </ng-template>

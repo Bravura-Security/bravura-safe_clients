@@ -498,11 +498,11 @@ export class EventService {
       case DeviceType.Server:
         return ["fa-server", this.i18nService.t("server")];
       case DeviceType.WindowsCLI:
-        return ["bwi-cli", this.i18nService.t("cli") + " - Windows"];
+        return ["fa-terminal", this.i18nService.t("cli") + " - Windows"];
       case DeviceType.MacOsCLI:
-        return ["bwi-cli", this.i18nService.t("cli") + " - macOS"];
+        return ["fa-terminal", this.i18nService.t("cli") + " - macOS"];
       case DeviceType.LinuxCLI:
-        return ["bwi-cli", this.i18nService.t("cli") + " - Linux"];
+        return ["fa-terminal", this.i18nService.t("cli") + " - Linux"];
       case DeviceType.UnknownBrowser:
         return ["fa-globe", this.i18nService.t("webVault") + " - " + this.i18nService.t("unknown")];
       default:

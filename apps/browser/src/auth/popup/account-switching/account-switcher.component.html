@@ -9,7 +9,7 @@
   *ngIf="loading"
   class="tw-absolute tw-z-50 tw-box-border tw-flex tw-cursor-not-allowed tw-items-center tw-justify-center tw-bg-background tw-opacity-60"
 >
-  <i class="bwi bwi-spinner bwi-2x bwi-spin" aria-hidden="true"></i>
+  <i class="fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>
 </main>
 <main>
   <div class="tw-p-2">
@@ -45,7 +45,7 @@
           [disabled]="currentAccount.status === lockedStatus || !activeUserCanLock"
           [title]="!activeUserCanLock ? ('unlockMethodNeeded' | i18n) : ''"
         >
-          <i class="bwi bwi-lock tw-text-2xl" aria-hidden="true"></i>
+          <i class="fa fa-lock tw-text-2xl" aria-hidden="true"></i>
           {{ "lockNow" | i18n }}
         </button>
         <button
@@ -53,7 +53,7 @@
           class="account-switcher-row tw-flex tw-w-full tw-items-center tw-gap-3 tw-rounded-md tw-p-3"
           (click)="logOut()"
         >
-          <i class="bwi bwi-sign-out tw-text-2xl" aria-hidden="true"></i>
+          <i class="fa fa-sign-out tw-text-2xl" aria-hidden="true"></i>
           {{ "logOut" | i18n }}
         </button>
         <button
@@ -61,7 +61,7 @@
           class="account-switcher-row tw-mt-2 tw-flex tw-w-full tw-items-center tw-gap-3 tw-rounded-md tw-p-3"
           (click)="lockAll()"
         >
-          <i class="bwi bwi-lock tw-text-2xl" aria-hidden="true"></i>
+          <i class="fa fa-lock tw-text-2xl" aria-hidden="true"></i>
           {{ "lockAll" | i18n }}
         </button>
       </div>

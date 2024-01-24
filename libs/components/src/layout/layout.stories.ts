@@ -57,35 +57,35 @@ export const WithContent: Story = {
     template: /* HTML */ `
       <bit-layout>
         <nav slot="sidebar">
-          <bit-nav-item text="Item A" icon="bwi-collection"></bit-nav-item>
-          <bit-nav-item text="Item B" icon="bwi-collection"></bit-nav-item>
+          <bit-nav-item text="Item A" icon="fa-collection"></bit-nav-item>
+          <bit-nav-item text="Item B" icon="fa-collection"></bit-nav-item>
           <bit-nav-divider></bit-nav-divider>
-          <bit-nav-item text="Item C" icon="bwi-collection"></bit-nav-item>
-          <bit-nav-item text="Item D" icon="bwi-collection"></bit-nav-item>
-          <bit-nav-group text="Tree example" icon="bwi-collection" [open]="true">
+          <bit-nav-item text="Item C" icon="fa-collection"></bit-nav-item>
+          <bit-nav-item text="Item D" icon="fa-collection"></bit-nav-item>
+          <bit-nav-group text="Tree example" icon="fa-collection" [open]="true">
             <bit-nav-group
               text="Level 1 - with children (empty)"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
             ></bit-nav-group>
             <bit-nav-item
               text="Level 1 - no children"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
             ></bit-nav-item>
             <bit-nav-group
               text="Level 1 - with children"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
               [open]="true"
             >
               <bit-nav-group
                 text="Level 2 - with children"
                 route="#"
-                icon="bwi-collection"
+                icon="fa-collection"
                 variant="tree"
                 [open]="true"
               >
@@ -97,7 +97,7 @@ export const WithContent: Story = {
                 <bit-nav-group
                   text="Level 3 - with children"
                   route="#"
-                  icon="bwi-collection"
+                  icon="fa-collection"
                   variant="tree"
                   [open]="true"
                 >
@@ -111,21 +111,21 @@ export const WithContent: Story = {
               <bit-nav-group
                 text="Level 2 - with children (empty)"
                 route="#"
-                icon="bwi-collection"
+                icon="fa-collection"
                 variant="tree"
                 [open]="true"
               ></bit-nav-group>
               <bit-nav-item
                 text="Level 2 - no children"
                 route="#"
-                icon="bwi-collection"
+                icon="fa-collection"
                 variant="tree"
               ></bit-nav-item>
             </bit-nav-group>
             <bit-nav-item
               text="Level 1 - no children"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
             ></bit-nav-item>
           </bit-nav-group>
@@ -149,35 +149,35 @@ export const Secondary: Story = {
     template: /* HTML */ `
       <bit-layout variant="secondary">
         <nav slot="sidebar">
-          <bit-nav-item text="Item A" icon="bwi-collection"></bit-nav-item>
-          <bit-nav-item text="Item B" icon="bwi-collection"></bit-nav-item>
+          <bit-nav-item text="Item A" icon="fa-collection"></bit-nav-item>
+          <bit-nav-item text="Item B" icon="fa-collection"></bit-nav-item>
           <bit-nav-divider></bit-nav-divider>
-          <bit-nav-item text="Item C" icon="bwi-collection"></bit-nav-item>
-          <bit-nav-item text="Item D" icon="bwi-collection"></bit-nav-item>
-          <bit-nav-group text="Tree example" icon="bwi-collection" [open]="true">
+          <bit-nav-item text="Item C" icon="fa-collection"></bit-nav-item>
+          <bit-nav-item text="Item D" icon="fa-collection"></bit-nav-item>
+          <bit-nav-group text="Tree example" icon="fa-collection" [open]="true">
             <bit-nav-group
               text="Level 1 - with children (empty)"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
             ></bit-nav-group>
             <bit-nav-item
               text="Level 1 - no children"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
             ></bit-nav-item>
             <bit-nav-group
               text="Level 1 - with children"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
               [open]="true"
             >
               <bit-nav-group
                 text="Level 2 - with children"
                 route="#"
-                icon="bwi-collection"
+                icon="fa-collection"
                 variant="tree"
                 [open]="true"
               >
@@ -189,7 +189,7 @@ export const Secondary: Story = {
                 <bit-nav-group
                   text="Level 3 - with children"
                   route="#"
-                  icon="bwi-collection"
+                  icon="fa-collection"
                   variant="tree"
                   [open]="true"
                 >
@@ -203,21 +203,21 @@ export const Secondary: Story = {
               <bit-nav-group
                 text="Level 2 - with children (empty)"
                 route="#"
-                icon="bwi-collection"
+                icon="fa-collection"
                 variant="tree"
                 [open]="true"
               ></bit-nav-group>
               <bit-nav-item
                 text="Level 2 - no children"
                 route="#"
-                icon="bwi-collection"
+                icon="fa-collection"
                 variant="tree"
               ></bit-nav-item>
             </bit-nav-group>
             <bit-nav-item
               text="Level 1 - no children"
               route="#"
-              icon="bwi-collection"
+              icon="fa-collection"
               variant="tree"
             ></bit-nav-item>
           </bit-nav-group>
