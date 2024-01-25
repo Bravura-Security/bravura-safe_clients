@@ -7,7 +7,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { SimpleDialogOptions, SimpleDialogType, Translation } from "../..";
 
 const DEFAULT_ICON: Record<SimpleDialogType, string> = {
-  primary: "fa-business",
+  primary: "fa-briefcase",
   success: "fa-star",
   info: "fa-info-circle",
   warning: "fa-exclamation-triangle",

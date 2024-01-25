@@ -73,7 +73,7 @@ export class ProductSwitcherContentComponent {
         },
         orgs: {
           name: "Organizations",
-          icon: "fa-business",
+          icon: "fa-briefcase",
           marketingRoute: "https://bitwarden.com/products/business/",
         },
       };

@@ -50,7 +50,9 @@
       }
     }
 
-    .fa-globe {
+    .fa-globe,
+    .fa-sticky-note,
+    .fa-briefcase {
       @include themify($themes) {
         color: themed("iconColor");
       }

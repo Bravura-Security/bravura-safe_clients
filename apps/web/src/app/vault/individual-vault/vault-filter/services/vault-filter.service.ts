@@ -138,7 +138,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
       const orgNodes: TreeNode<OrganizationFilter>[] = [];
       orgs.forEach((org) => {
         const orgCopy = org as OrganizationFilter;
-        orgCopy.icon = "fa-business";
+        orgCopy.icon = "fa-briefcase";
         const node = new TreeNode<OrganizationFilter>(orgCopy, headNode, orgCopy.name);
         orgNodes.push(node);
       });
@@ -268,7 +268,7 @@ export class VaultFilterService implements VaultFilterServiceAbstraction {
         id: "favorites",
         name: this.i18nService.t("favorites"),
         type: "favorites",
-        icon: "fa-business-star",
+        icon: "fa-star",
       },
       {
         id: "login",
