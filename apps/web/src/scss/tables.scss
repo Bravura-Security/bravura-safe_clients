@@ -49,14 +49,6 @@
         outline-style: auto;
       }
     }
-
-    .fa-globe,
-    .fa-sticky-note,
-    .fa-briefcase {
-      @include themify($themes) {
-        color: themed("iconColor");
-      }
-    }
   }
 
   td.wrap {
