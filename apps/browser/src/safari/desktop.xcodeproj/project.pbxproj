@@ -450,7 +450,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2023.13.0;
+				MARKETING_VERSION = 2023.13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitachiid.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -476,7 +476,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2023.13.0;
+				MARKETING_VERSION = 2023.13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitachiid.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -504,7 +504,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2023.13.0;
+				MARKETING_VERSION = 2023.13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitachiid.desktop;
 				PRODUCT_MODULE_NAME = desktop;
 				PRODUCT_NAME = "Bravura Safe";
@@ -533,7 +533,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2023.13.0;
+				MARKETING_VERSION = 2023.13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hitachiid.desktop;
 				PRODUCT_MODULE_NAME = desktop;
 				PRODUCT_NAME = "Bravura Safe";
