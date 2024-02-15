@@ -9,4 +9,5 @@ export class OrganizationUserUpdateRequest {
   collections: SelectionReadOnlyRequest[] = [];
   groups: string[] = [];
   permissions: PermissionsApi;
+  forcePasswordReset: boolean
 }

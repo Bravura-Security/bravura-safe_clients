@@ -10,4 +10,6 @@ export class OrganizationUserInviteRequest {
   collections: SelectionReadOnlyRequest[] = [];
   groups: string[];
   permissions: PermissionsApi;
+  forcePasswordReset: boolean;
+  
 }
