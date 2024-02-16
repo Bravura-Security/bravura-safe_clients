@@ -7708,6 +7708,8 @@
       "id": {
         "content": "$1",
         "example": "Unique ID"
+      }
+    }
   },
   "skip2faForSsoPolicyTitle": {
     "message": "Bypass personal two-step login when using SSO"
@@ -7723,8 +7725,6 @@
   },
   "forcePasswordResetHelp": {
     "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
-  }
-}
   },
   "seeDetailedInstructions": {
     "message": "Detaillierte Anleitungen auf unserer Hilfeseite unter",

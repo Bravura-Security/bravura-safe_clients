@@ -64,11 +64,10 @@
       </div>
       <div id="masterPasswordHelp" class="box-footer">
           <p>
-            {{
               <!--fido2Data.isFido2Session
                 ? ("yourPasskeyIsLocked" | i18n)
-                :--> ("yourVaultIsLocked" | i18n)
-            }}
+                ("yourVaultIsLocked" | i18n):-->
+            {{ "yourVaultIsLocked" | i18n }}
           </p>
           {{ "loggedInAsOn" | i18n: email : webVaultHostname }}
       </div>
