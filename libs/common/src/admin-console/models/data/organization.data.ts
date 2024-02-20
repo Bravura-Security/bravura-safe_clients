@@ -53,6 +53,7 @@ export class OrganizationData {
   accessSecretsManager: boolean;
   limitCollectionCreationDeletion: boolean;
   allowAdminAccessToAllCollectionItems: boolean;
+  flexibleCollections: boolean;
   skip2faForSso: boolean;
 
   constructor(
@@ -108,6 +109,7 @@ export class OrganizationData {
     this.accessSecretsManager = response.accessSecretsManager;
     this.limitCollectionCreationDeletion = response.limitCollectionCreationDeletion;
     this.allowAdminAccessToAllCollectionItems = response.allowAdminAccessToAllCollectionItems;
+    this.flexibleCollections = response.flexibleCollections;
     this.skip2faForSso = response.skip2faForSso;
 
     this.isMember = options.isMember;

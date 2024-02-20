@@ -134,6 +134,11 @@ const plugins = [
     filename: "captcha-mobile-connector.html",
     chunks: ["connectors/captcha"],
   }),
+  new HtmlWebpackPlugin({
+    template: "./src/connectors/duo-redirect.html",
+    filename: "duo-redirect-connector.html",
+    chunks: ["connectors/duo-redirect"],
+  }),
   new CopyWebpackPlugin({
     patterns: [
       { from: "./src/.nojekyll" },
@@ -284,6 +289,7 @@ const devServer =
                   https://*.hypr
                 ;connect-src
                   'self'
+                  ${envConfig.dev.wsConnectSrc ?? ""}
                   wss://notifications.bitwarden.com
                   wss://*.devlab.hids.ca
                   wss://*.hitachi-id.net
@@ -353,6 +359,7 @@ const webpackConfig = {
     "connectors/hypr": "./src/connectors/hypr.ts",
     "connectors/sso": "./src/connectors/sso.ts",
     "connectors/captcha": "./src/connectors/captcha.ts",
+    "connectors/duo-redirect": "./src/connectors/duo-redirect.ts",
     theme_head: "./src/theme.js",
   },
   optimization: {

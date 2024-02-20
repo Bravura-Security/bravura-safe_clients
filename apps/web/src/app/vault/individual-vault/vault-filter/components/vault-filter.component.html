@@ -8,12 +8,10 @@
   <div *ngIf="isLoaded">
     <div class="card-body">
       <div class="search-container">
-      <input
-        type="search"
+        <bit-search
+          id="search"
         placeholder="{{ searchPlaceholder | i18n }}"
-        id="search"
-        class="form-control"
-        [ngModel]="searchText"
+          [(ngModel)]="searchText"
         (ngModelChange)="onSearchTextChanged($event)"
         autocomplete="off"
         appAutofocus

@@ -106,17 +106,6 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   addCredit() {
-    if (this.paymentSourceInApp) {
-      this.dialogService.openSimpleDialog({
-        title: { key: "addCredit" },
-        content: { key: "cannotPerformInAppPurchase" },
-        acceptButtonText: { key: "ok" },
-        cancelButtonText: null,
-        type: "warning",
-      });
-
-      return;
-    }
     this.showAddCredit = true;
   }
 
@@ -128,18 +117,6 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   changePayment() {
-    if (this.paymentSourceInApp) {
-      this.dialogService.openSimpleDialog({
-        title: { key: "changePaymentMethod" },
-        content: { key: "cannotPerformInAppPurchase" },
-        acceptButtonText: { key: "ok" },
-        cancelButtonText: null,
-        type: "warning",
-      });
-
-      return;
-    }
-
     this.showAdjustPayment = true;
   }
 
@@ -209,23 +186,11 @@ export class PaymentMethodComponent implements OnInit {
         return ["fa-bank"];
       case PaymentMethodType.Check:
         return ["fa-money"];
-      case PaymentMethodType.AppleInApp:
-        return ["fa-apple text-muted"];
-      case PaymentMethodType.GoogleInApp:
-        return ["fa-google text-muted"];
       case PaymentMethodType.PayPal:
         return ["fa-paypal text-primary"];
       default:
         return [];
     }
-  }
-
-  get paymentSourceInApp() {
-    return (
-      this.paymentSource != null &&
-      (this.paymentSource.type === PaymentMethodType.AppleInApp ||
-        this.paymentSource.type === PaymentMethodType.GoogleInApp)
-    );
   }
 
   get subscription() {

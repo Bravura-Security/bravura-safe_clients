@@ -66,6 +66,8 @@
   ></app-collection-badge>
 </td>
 <td bitCell [ngClass]="RowHeightClass" *ngIf="showGroups"></td>
+<td bitCell [ngClass]="RowHeightClass" *ngIf="viewingOrgVault"></td>
+<td bitCell [ngClass]="RowHeightClass" class="tw-text-right">
 <td bitCell [ngClass]="RowHeightClass" class="table-list-options reduced-lh">
   <div class="list-options">
     <ng-container *ngIf="cipher.type === CipherType.Login && !cipher.isDeleted">

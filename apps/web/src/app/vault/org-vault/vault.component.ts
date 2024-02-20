@@ -47,6 +47,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -166,6 +167,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private eventCollectionService: EventCollectionService,
     private totpService: TotpService,
     private apiService: ApiService,
+    private collectionService: CollectionService,
     protected configService: ConfigServiceAbstraction,
     protected collectionService: CollectionService,
   ) {}
@@ -235,31 +237,26 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     this.currentSearchText$ = this.route.queryParams.pipe(map((queryParams) => queryParams.search));
 
-    const allCollectionsWithoutUnassigned$ = organizationId$.pipe(
-      switchMap(async (orgId) => {
-        let tempCollections: CollectionAdminView[] = [];
-        if (this.organization.canUseAdminCollections) {
-          tempCollections = await this.collectionAdminService.getAll(orgId);
-        }
-        else {
-          let collections = await this.collectionService.getAllDecrypted();
-          collections.forEach((collection) => {
-            let cloned = new CollectionAdminView();
-            cloned.groups = [];
-            cloned.users = [];
-            cloned.assigned = true;
-            cloned.id = collection.id;
-            cloned.externalId = collection.externalId;
-            cloned.hidePasswords = collection.hidePasswords;
-            cloned.name = collection.name;
-            cloned.organizationId = collection.organizationId;
-            cloned.readOnly = collection.readOnly;
-            tempCollections.push(cloned);
-          });
-        }
-        return tempCollections;
-      }),
+    const allCollectionsWithoutUnassigned$ = combineLatest([
+      organizationId$.pipe(switchMap((orgId) => this.collectionAdminService.getAll(orgId))),
+      this.collectionService.getAllDecrypted(),
+    ]).pipe(
+      map(([adminCollections, syncCollections]) => {
+        const syncCollectionDict = Object.fromEntries(syncCollections.map((c) => [c.id, c]));
 
+        return adminCollections.map((collection) => {
+          const currentId: any = collection.id;
+
+          const match = syncCollectionDict[currentId];
+
+          if (match) {
+            collection.manage = match.manage;
+            collection.readOnly = match.readOnly;
+            collection.hidePasswords = match.hidePasswords;
+          }
+          return collection;
+        });
+      }),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
@@ -488,7 +485,6 @@ export class VaultComponent implements OnInit, OnDestroy {
           this.collections = collections;
           this.selectedCollection = selectedCollection;
           this.showMissingCollectionPermissionMessage = showMissingCollectionPermissionMessage;
-
           this.isEmpty = collections?.length === 0 && ciphers?.length === 0;
 
           // This is a temporary fix to avoid double fetching collections.
@@ -787,11 +783,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async deleteCollection(collection: CollectionView): Promise<void> {
-    const flexibleCollectionsEnabled = await this.configService.getFeatureFlag(
-      FeatureFlag.FlexibleCollections,
-      false,
-    );
-    if (!collection.canDelete(this.organization, flexibleCollectionsEnabled)) {
+    if (!collection.canDelete(this.organization)) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -852,7 +844,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       data: {
         permanent: this.filter.type === "trash",
         cipherIds: ciphers.map((c) => c.id),
-        collectionIds: collections.map((c) => c.id),
+        collections: collections,
         organization,
       },
     });

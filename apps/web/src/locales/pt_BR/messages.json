@@ -749,9 +749,6 @@
   "passkeySuccessfullyCreated": {
     "message": "Chave de acesso criada com sucesso!"
   },
-  "customName": {
-    "message": "Nome personalizado"
-  },
   "customPasskeyNameInfo": {
     "message": "Nomeie sua chave de acesso para ajudá-lo a identificá-la."
   },
@@ -3704,12 +3701,12 @@
       }
     }
   },
-  "subscriptionFamiliesPlan": {
-    "message": "Você não pode convidar mais de $COUNT$ usuários sem atualizar seu plano. Entre em contato com o Suporte ao Cliente para atualizar.",
+  "subscriptionUpgrade": {
+    "message": "Você não pode convidar mais de $COUNT$ membros sem atualizar seu plano.",
     "placeholders": {
       "count": {
         "content": "$1",
-        "example": "6"
+        "example": "2"
       }
     }
   },
@@ -3983,15 +3980,6 @@
   },
   "couldNotChargeCardPayInvoice": {
     "message": "Não foi possível cobrar no seu cartão. Por favor, veja e pague a fatura pendente listada abaixo."
-  },
-  "inAppPurchase": {
-    "message": "Compra no Aplicativo"
-  },
-  "cannotPerformInAppPurchase": {
-    "message": "Você não pode executar esta ação enquanto usa um método de pagamento de compra dentro do aplicativo."
-  },
-  "manageSubscriptionFromStore": {
-    "message": "Você deve gerenciar sua assinatura na loja onde sua compra pelo aplicativo foi feita."
   },
   "minLength": {
     "message": "Comprimento Mínimo"
@@ -5350,6 +5338,12 @@
   },
   "spValidateCertificates": {
     "message": "Validar Certificados"
+  },
+  "spUniqueEntityId": {
+    "message": "Defina um ID único de entidade SP"
+  },
+  "spUniqueEntityIdDesc": {
+    "message": "Gerar um identificador que seja exclusivo para sua organização"
   },
   "idpEntityId": {
     "message": "ID da Entidade"
@@ -6888,7 +6882,7 @@
     }
   },
   "teamsStarterPlanInvLimitReachedManageBilling": {
-    "message": "Planos para Equipes Iniciantes podem ter até $SEATCOUNT$ membros. Entre em contato com o Suporte ao Cliente para melhorar o seu plano e convidar mais membros.",
+    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Upgrade to your plan to invite more members.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -7678,6 +7672,9 @@
   "alreadyHaveAccount": {
     "message": "Já tem uma conta?"
   },
+  "skipToContent": {
+    "message": "Skip to content"
+  },
   "customBillingStart": {
     "message": "O faturamento personalizado não é refletido. Visite o "
   },
@@ -7742,7 +7739,17 @@
   "collectionAccessRestricted": {
     "message": "O acesso à coleção está restrito"
   },
+  "grantCollectionAccess": {
+    "message": "Grant groups or members access to this collection."
+  },
+  "adminCollectionAccess": {
+    "message": "Administrators can access and manage collections."
+  },
   "serviceAccountAccessUpdated": {
     "message": "Acesso à conta de serviço atualizado"
+  },
+  "commonImportFormats": {
+    "message": "Common formats",
+    "description": "Label indicating the most common import formats"
   }
 }

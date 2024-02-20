@@ -12,7 +12,6 @@ import {
 import { PermissionsApi } from "@bitwarden/common/admin-console/models/api/permissions.api";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { ProductType } from "@bitwarden/common/enums";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -39,7 +38,6 @@ import {
 
 import { commaSeparatedEmails } from "./validators/comma-separated-emails.validator";
 import { orgWithoutAdditionalSeatLimitReachedWithUpgradePathValidator } from "./validators/org-without-additional-seat-limit-reached-with-upgrade-path.validator";
-import { orgWithoutAdditionalSeatLimitReachedWithoutUpgradePathValidator } from "./validators/org-without-additional-seat-limit-reached-without-upgrade-path.validator";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 export enum MemberDialogTab {
@@ -70,11 +68,6 @@ export enum MemberDialogResult {
   templateUrl: "member-dialog.component.html",
 })
 export class MemberDialogComponent implements OnInit, OnDestroy {
-  protected flexibleCollectionsEnabled$ = this.configService.getFeatureFlag$(
-    FeatureFlag.FlexibleCollections,
-    false,
-  );
-
   loading = true;
   editMode = false;
   isRevoked = false;
@@ -204,12 +197,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
           orgWithoutAdditionalSeatLimitReachedWithUpgradePathValidator(
             this.organization,
             this.params.allOrganizationUserEmails,
-            this.i18nService.t("subscriptionFreePlan", organization.seats),
-          ),
-          orgWithoutAdditionalSeatLimitReachedWithoutUpgradePathValidator(
-            this.organization,
-            this.params.allOrganizationUserEmails,
-            this.i18nService.t("subscriptionFamiliesPlan", organization.seats),
+            this.i18nService.t("subscriptionUpgrade", organization.seats),
           ),
         ];
 
@@ -556,6 +544,10 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       },
       type: "warning",
     });
+  }
+
+  protected get flexibleCollectionsEnabled() {
+    return this.organization?.flexibleCollections;
   }
 
   protected readonly ProductType = ProductType;
