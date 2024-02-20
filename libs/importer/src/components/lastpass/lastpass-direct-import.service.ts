@@ -101,7 +101,7 @@ export class LastPassDirectImportService {
       title: this.i18nService.t("awaitingSSO"),
       content: this.i18nService.t("awaitingSSODesc"),
       type: "warning",
-      icon: "bwi-key",
+      icon: "fa-key",
       acceptButtonText: this.i18nService.t("cancel"),
       cancelButtonText: null,
     });

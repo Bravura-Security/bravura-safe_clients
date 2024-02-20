@@ -185,7 +185,7 @@ export class Organization {
     if (this.flexibleCollections) {
     return (
       !this.limitCollectionCreationDeletion ||
-        this.isAdmin ||
+      this.isAdmin ||
       this.permissions.createNewCollections
     );
   }
