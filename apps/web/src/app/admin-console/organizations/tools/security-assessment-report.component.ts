@@ -16,7 +16,7 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { SecurityAssessmentReportComponent as BaseSecurityAssessmentReportComponent } from "../../../reports/pages/security-assessment-report.component";
+import { SecurityAssessmentReportComponent as BaseSecurityAssessmentReportComponent } from "../../../tools/reports/pages/security-assessment-report.component";
 import { ExposedPasswordsReportComponent } from "./exposed-passwords-report.component";
 import { ReusedPasswordsReportComponent } from "./reused-passwords-report.component";
 import { WeakPasswordsReportComponent } from "./weak-passwords-report.component";

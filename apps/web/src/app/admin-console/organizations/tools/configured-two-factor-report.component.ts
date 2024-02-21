@@ -11,7 +11,7 @@ import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enum
 import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/admin-console/abstractions/organization-user/responses";
 
 // eslint-disable-next-line no-restricted-imports
-import { ConfiguredTwoFactorReportComponent as BaseConfiguredTwoFactorReportComponent } from "../../../reports/pages/configured-two-factor-report.component";
+import { ConfiguredTwoFactorReportComponent as BaseConfiguredTwoFactorReportComponent } from "../../../tools/reports/pages/configured-two-factor-report.component";
 
 @Component({
   selector: "app-configured-two-factor-report",
