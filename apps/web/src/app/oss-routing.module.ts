@@ -51,16 +51,16 @@ import { SendComponent } from "./tools/send/send.component";
 import { ToolsComponent } from "./tools/tools.component";
 import { VaultModule } from "./vault/individual-vault/vault.module";
 
-import { BreachReportComponent } from "./reports/pages/breach-report.component";
-import { ExposedPasswordsReportComponent } from "./reports/pages/exposed-passwords-report.component";
-import { InactiveTwoFactorReportComponent } from "./reports/pages/inactive-two-factor-report.component";
-import { ReportListComponent } from "./reports/shared/report-list/report-list.component";
-import { ReportsLayoutComponent } from "./reports/reports-layout.component";
-import { ReusedPasswordsReportComponent } from "./reports/pages/reused-passwords-report.component";
-import { UnsecuredWebsitesReportComponent } from "./reports/pages/unsecured-websites-report.component";
-import { WeakPasswordsReportComponent } from "./reports/pages/weak-passwords-report.component";
-import { SecurityAssessmentReportComponent } from "./reports/pages/security-assessment-report.component";
-import { ConfiguredTwoFactorReportComponent } from "./reports/pages/configured-two-factor-report.component";
+import { BreachReportComponent } from "./tools/reports/pages/breach-report.component";
+import { ExposedPasswordsReportComponent } from "./tools/reports/pages/exposed-passwords-report.component";
+import { InactiveTwoFactorReportComponent } from "./tools/reports/pages/inactive-two-factor-report.component";
+import { ReportListComponent } from "./tools/reports/shared/report-list/report-list.component";
+import { ReportsLayoutComponent } from "./tools/reports/reports-layout.component";
+import { ReusedPasswordsReportComponent } from "./tools/reports/pages/reused-passwords-report.component";
+import { UnsecuredWebsitesReportComponent } from "./tools/reports/pages/unsecured-websites-report.component";
+import { WeakPasswordsReportComponent } from "./tools/reports/pages/weak-passwords-report.component";
+import { SecurityAssessmentReportComponent } from "./tools/reports/pages/security-assessment-report.component";
+import { ConfiguredTwoFactorReportComponent } from "./tools/reports/pages/configured-two-factor-report.component";
 
 const routes: Routes = [
   {

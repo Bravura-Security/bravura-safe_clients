@@ -5,7 +5,6 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PasswordRepromptService } from "@bitwarden/vault";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
@@ -37,7 +36,6 @@ export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentRep
     cipherService: CipherService,
     auditService: AuditService,
     modalService: ModalService,
-    messagingService: MessagingService,
     stateService: StateService,
     organizationService: OrganizationService,
     private organizationUserService: OrganizationUserService,
@@ -54,9 +52,8 @@ export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentRep
       cipherService,
       auditService,
       modalService,
-      messagingService,
-      stateService,
       organizationService,
+      stateService,
       passwordRepromptService,
       passwordStrengthService,
       logService,

@@ -5,8 +5,8 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
-import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { PasswordRepromptService } from "@bitwarden/vault/src/services/password-reprompt.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
@@ -61,7 +61,7 @@ export class SecurityAssessmentReportComponent implements OnInit {
     protected cipherService: CipherService,
     protected auditService: AuditService,
     protected modalService: ModalService,
-    protected messagingService: MessagingService,
+    protected organizationService: OrganizationService,
     protected stateService: StateService,
     protected passwordRepromptService: PasswordRepromptService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
@@ -70,11 +70,11 @@ export class SecurityAssessmentReportComponent implements OnInit {
     protected captureService: NgxCaptureService,
     protected syncService: SyncService
   ) {
-    this.exposedPasswords = new ExposedPasswordsReportComponent(cipherService, auditService, modalService, messagingService, passwordRepromptService);
-    this.reusedPasswords = new ReusedPasswordsReportComponent(cipherService, modalService, messagingService, stateService, passwordRepromptService);
-    this.weakPasswords = new WeakPasswordsReportComponent(cipherService, passwordStrengthService, modalService, messagingService, passwordRepromptService);
-    this.unsecuredWebsites = new UnsecuredWebsitesReportComponent(cipherService, modalService, messagingService, passwordRepromptService);
-    this.inactiveTwoFactor = new InactiveTwoFactorReportComponent(cipherService, modalService, messagingService, logService, passwordRepromptService);
+    this.exposedPasswords = new ExposedPasswordsReportComponent(cipherService, auditService, organizationService, modalService, passwordRepromptService);
+    this.reusedPasswords = new ReusedPasswordsReportComponent(cipherService, organizationService, modalService, passwordRepromptService);
+    this.weakPasswords = new WeakPasswordsReportComponent(cipherService, passwordStrengthService, organizationService, modalService, passwordRepromptService);
+    this.unsecuredWebsites = new UnsecuredWebsitesReportComponent(cipherService, organizationService, modalService, passwordRepromptService);
+    this.inactiveTwoFactor = new InactiveTwoFactorReportComponent(cipherService, organizationService, modalService, logService, passwordRepromptService);
     this.configuredTwoFactor = new ConfiguredTwoFactorReportComponent(auditService, stateService, apiService);
   }
 
