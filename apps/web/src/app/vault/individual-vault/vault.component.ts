@@ -973,6 +973,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     *  Comparing the low kdfIterations of 100K to 600K will set the `this.showLowKdf` to true
     *  and trigger the isShowingCards to set the column to individual vault column to be smaller (class col-6)
     */
+    /*
     const showLowKdfEnabled = await this.configService.getFeatureFlag(
       FeatureFlag.DisplayLowKdfIterationWarningFlag,
       false
@@ -986,6 +987,9 @@ export class VaultComponent implements OnInit, OnDestroy {
     return (
       kdfType === KdfType.PBKDF2_SHA256 && kdfOptions.iterations < PBKDF2_ITERATIONS.defaultValue
     );
+    */
+    // Don't show isLowKdfIteration warnings 
+    return false;
   }
 
   protected async repromptCipher(ciphers: CipherView[]) {

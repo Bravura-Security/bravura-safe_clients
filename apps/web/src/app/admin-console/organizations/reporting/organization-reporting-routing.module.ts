@@ -13,8 +13,8 @@ import { IsPaidOrgGuard } from "../guards/is-paid-org.guard";
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 import { OrganizationRedirectGuard } from "../guards/org-redirect.guard";
 import { EventsComponent } from "../manage/events.component";
-import { SecurityAssessmentReportComponent } from "../tools/security-assessment-report.component";
-import { ConfiguredTwoFactorReportComponent } from "../tools/configured-two-factor-report.component";
+import { SecurityAssessmentReportComponent } from "../../../admin-console/organizations/tools/security-assessment-report.component";
+import { ConfiguredTwoFactorReportComponent } from "../../../admin-console/organizations/tools/configured-two-factor-report.component";
 
 import { ReportingComponent } from "./reporting.component";
 

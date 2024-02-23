@@ -25,7 +25,7 @@ import { ConfiguredTwoFactorReportComponent } from "./configured-two-factor-repo
 
 @Component({
   selector: "app-org-security-assessment-report",
-  templateUrl: "../../../reports/pages/security-assessment-report.component.html",
+  templateUrl: "../../../tools/reports/pages/security-assessment-report.component.html",
 })
 
 export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentReportComponent {

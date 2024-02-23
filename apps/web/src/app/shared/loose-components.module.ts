@@ -81,7 +81,7 @@ import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
 import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
 import { ToolsComponent } from "../tools/tools.component";
-import { ReportsLayoutComponent as BaseReportsComponent} from "../reports/reports-layout.component";
+import { ReportsLayoutComponent as BaseReportsComponent} from "../tools/reports/reports-layout.component";
 import { ReportingComponent } from "../admin-console/organizations/reporting/reporting.component";
 import { PremiumBadgeComponent } from "../vault/components/premium-badge.component";
 import { AddEditCustomFieldsComponent } from "../vault/individual-vault/add-edit-custom-fields.component";
