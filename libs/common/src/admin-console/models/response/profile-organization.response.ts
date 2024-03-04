@@ -1,6 +1,6 @@
-import { ProductType, ProviderType } from "../../../enums";
+import { ProductType } from "../../../enums";
 import { BaseResponse } from "../../../models/response/base.response";
-import { OrganizationUserStatusType, OrganizationUserType } from "../../enums";
+import { OrganizationUserStatusType, OrganizationUserType, ProviderType } from "../../enums";
 import { PermissionsApi } from "../api/permissions.api";
 import { PlanType } from "../../../billing/enums";
 
@@ -50,6 +50,9 @@ export class ProfileOrganizationResponse extends BaseResponse {
   familySponsorshipToDelete?: boolean;
   planType: PlanType;
   accessSecretsManager: boolean;
+  limitCollectionCreationDeletion: boolean;
+  allowAdminAccessToAllCollectionItems: boolean;
+  flexibleCollections: boolean;
   skip2faForSso: boolean;
 
   constructor(response: any) {
@@ -95,13 +98,13 @@ export class ProfileOrganizationResponse extends BaseResponse {
     this.keyConnectorEnabled = this.getResponseProperty("KeyConnectorEnabled") ?? false;
     this.keyConnectorUrl = this.getResponseProperty("KeyConnectorUrl");
     const familySponsorshipLastSyncDateString = this.getResponseProperty(
-      "FamilySponsorshipLastSyncDate"
+      "FamilySponsorshipLastSyncDate",
     );
     if (familySponsorshipLastSyncDateString) {
       this.familySponsorshipLastSyncDate = new Date(familySponsorshipLastSyncDateString);
     }
     const familySponsorshipValidUntilString = this.getResponseProperty(
-      "FamilySponsorshipValidUntil"
+      "FamilySponsorshipValidUntil",
     );
     if (familySponsorshipValidUntilString) {
       this.familySponsorshipValidUntil = new Date(familySponsorshipValidUntilString);
@@ -109,6 +112,13 @@ export class ProfileOrganizationResponse extends BaseResponse {
     this.familySponsorshipToDelete = this.getResponseProperty("FamilySponsorshipToDelete");
     this.planType = this.getResponseProperty("PlanType");
     this.accessSecretsManager = this.getResponseProperty("AccessSecretsManager");
+    this.limitCollectionCreationDeletion = this.getResponseProperty(
+      "LimitCollectionCreationDeletion"
+    );
+    this.allowAdminAccessToAllCollectionItems = this.getResponseProperty(
+      "AllowAdminAccessToAllCollectionItems"
+    );
+    this.flexibleCollections = this.getResponseProperty("FlexibleCollections");
     this.skip2faForSso = this.getResponseProperty("Skip2faForSso");
   }
 }

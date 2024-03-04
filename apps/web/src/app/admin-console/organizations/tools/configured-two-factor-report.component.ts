@@ -6,12 +6,12 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
-import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
-import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/abstractions/organization-user/responses";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/admin-console/abstractions/organization-user/responses";
 
 // eslint-disable-next-line no-restricted-imports
-import { ConfiguredTwoFactorReportComponent as BaseConfiguredTwoFactorReportComponent } from "../../../reports/pages/configured-two-factor-report.component";
+import { ConfiguredTwoFactorReportComponent as BaseConfiguredTwoFactorReportComponent } from "../../../tools/reports/pages/configured-two-factor-report.component";
 
 @Component({
   selector: "app-configured-two-factor-report",

@@ -7,7 +7,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { SimpleDialogOptions, SimpleDialogType, Translation } from "../..";
 
 const DEFAULT_ICON: Record<SimpleDialogType, string> = {
-  primary: "fa-business",
+  primary: "fa-briefcase",
   success: "fa-star",
   info: "fa-info-circle",
   warning: "fa-exclamation-triangle",
@@ -44,7 +44,7 @@ export class SimpleConfigurableDialogComponent {
   constructor(
     public dialogRef: DialogRef,
     private i18nService: I18nService,
-    @Inject(DIALOG_DATA) public simpleDialogOpts?: SimpleDialogOptions
+    @Inject(DIALOG_DATA) public simpleDialogOpts?: SimpleDialogOptions,
   ) {
     this.localizeText();
   }
@@ -66,7 +66,7 @@ export class SimpleConfigurableDialogComponent {
       // If accept text is overridden, use cancel, otherwise no
       this.cancelButtonText = this.translate(
         this.simpleDialogOpts.cancelButtonText,
-        this.simpleDialogOpts.acceptButtonText !== undefined ? "cancel" : "no"
+        this.simpleDialogOpts.acceptButtonText !== undefined ? "cancel" : "no",
       );
     }
   }

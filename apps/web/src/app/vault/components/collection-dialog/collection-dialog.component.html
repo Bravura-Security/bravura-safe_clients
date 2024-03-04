@@ -26,7 +26,7 @@
             <bit-select bitInput formControlName="selectedOrg">
               <bit-option
                 *ngFor="let org of organizations$ | async"
-                icon="fa-business"
+                icon="fa-briefcase"
                 [value]="org.id"
                 [label]="org.name"
               >
@@ -57,6 +57,18 @@
           </bit-form-field>
         </bit-tab>
         <bit-tab label="{{ 'access' | i18n }}">
+          <div class="tw-mb-3" *ngIf="flexibleCollectionsV1Enabled$ | async">
+            {{ "grantCollectionAccess" | i18n }}
+            <span *ngIf="organization.allowAdminAccessToAllCollectionItems">{{
+              " " + ("adminCollectionAccess" | i18n)
+            }}</span>
+          </div>
+          <div
+            class="tw-mb-3 tw-text-danger"
+            *ngIf="formGroup.controls.access.hasError('managePermissionRequired')"
+          >
+            <i class="fa fa-exclamation-circle"></i> {{ "managePermissionRequired" | i18n }}
+          </div>
           <bit-access-selector
             *ngIf="organization.useGroups"
             [permissionMode]="PermissionMode.Edit"
@@ -66,6 +78,7 @@
             [selectorLabelText]="'selectGroupsAndMembers' | i18n"
             [selectorHelpText]="'userPermissionOverrideHelper' | i18n"
             [emptySelectionText]="'noMembersOrGroupsAdded' | i18n"
+            [flexibleCollectionsEnabled]="flexibleCollectionsEnabled$ | async"
           ></bit-access-selector>
           <bit-access-selector
             *ngIf="!organization.useGroups"
@@ -75,6 +88,7 @@
             [columnHeader]="'memberColumnHeader' | i18n"
             [selectorLabelText]="'selectMembers' | i18n"
             [emptySelectionText]="'noMembersAdded' | i18n"
+            [flexibleCollectionsEnabled]="flexibleCollectionsEnabled$ | async"
           ></bit-access-selector>
         </bit-tab>
       </bit-tab-group>
@@ -94,7 +108,7 @@
         {{ "cancel" | i18n }}
       </button>
       <button
-        *ngIf="editMode && organization?.canDeleteAssignedCollections"
+        *ngIf="showDeleteButton"
         type="button"
         bitIconButton="fa-trash-o"
         buttonType="danger"

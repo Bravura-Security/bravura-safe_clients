@@ -49,12 +49,6 @@
         outline-style: auto;
       }
     }
-
-    .fa-globe {
-      @include themify($themes) {
-        color: themed("iconColor");
-      }
-    }
   }
 
   td.wrap {

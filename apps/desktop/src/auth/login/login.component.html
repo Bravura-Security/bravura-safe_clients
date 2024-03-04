@@ -102,7 +102,11 @@
         </div>
         <div class="box last" [hidden]="!showCaptcha()">
           <div class="box-content">
-            <iframe id="hcaptcha_iframe" style="margin-top: 20px"></iframe>
+            <iframe
+              id="hcaptcha_iframe"
+              style="margin-top: 20px"
+              sandbox="allow-scripts allow-same-origin"
+            ></iframe>
             <div class="box-content-row">
               <button
                 class="btn block"
@@ -127,7 +131,7 @@
             </button>
           </div>
           <div class="buttons-row" *ngIf="showLoginWithDevice">
-            <button type="button" class="btn block" (click)="startPasswordlessLogin()">
+            <button type="button" class="btn block" (click)="startAuthRequestLogin()">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               {{ "logInWithAnotherDevice" | i18n }}
             </button>

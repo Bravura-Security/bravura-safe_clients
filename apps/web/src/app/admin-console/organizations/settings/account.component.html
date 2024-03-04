@@ -9,7 +9,7 @@
   ></i>
   <span class="tw-sr-only">{{ "loading" | i18n }}</span>
 </div>
-<form *ngIf="org && !loading" #form [bitSubmit]="submit" [formGroup]="formGroup">
+<form *ngIf="org && !loading" [bitSubmit]="submit" [formGroup]="formGroup">
   <div class="tw-grid tw-grid-cols-2 tw-gap-5">
     <div>
       <bit-form-field>
@@ -39,6 +39,32 @@
     {{ "rotateApiKey" | i18n }}
   </button>
 </ng-container>
+<form
+  *ngIf="org && !loading && org.flexibleCollections"
+  [bitSubmit]="submitCollectionManagement"
+  [formGroup]="collectionManagementFormGroup"
+>
+  <h1 bitTypography="h1" class="tw-mt-16 tw-pb-2.5">{{ "collectionManagement" | i18n }}</h1>
+  <p>{{ "collectionManagementDesc" | i18n }}</p>
+  <bit-form-control *ngIf="flexibleCollectionsV1Enabled$ | async">
+    <bit-label>{{ "allowAdminAccessToAllCollectionItemsDesc" | i18n }}</bit-label>
+    <input type="checkbox" bitCheckbox formControlName="allowAdminAccessToAllCollectionItems" />
+  </bit-form-control>
+  <bit-form-control>
+    <bit-label>{{ "limitCollectionCreationDeletionDesc" | i18n }}</bit-label>
+    <input type="checkbox" bitCheckbox formControlName="limitCollectionCreationDeletion" />
+  </bit-form-control>
+  <button
+    *ngIf="!selfHosted"
+    type="submit"
+    bitButton
+    bitFormButton
+    buttonType="primary"
+    id="collectionManagementSubmitButton"
+  >
+    {{ "save" | i18n }}
+  </button>
+</form>
 <p>
   <div class="secondary-header border-0 mb-0">
     <h1>{{ "leave" | i18n }}</h1>
@@ -54,6 +80,7 @@
   ></i>
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </div>
+
 
 <ng-template #purgeOrganizationTemplate></ng-template>
 <ng-template #apiKeyTemplate></ng-template>

@@ -16,7 +16,7 @@
       {{ "enterVerificationCodeApp" | i18n }}
     </p>
     <p *ngIf="selectedProviderType === providerType.Email">
-      {{ "enterVerificationCodeEmail" | i18n : twoFactorEmail }}
+      {{ "enterVerificationCodeEmail" | i18n: twoFactorEmail }}
     </p>
     <div
       class="box last"
@@ -70,7 +70,7 @@
     </ng-container>
     <ng-container *ngIf="selectedProviderType === providerType.WebAuthn">
       <div id="web-authn-frame">
-        <iframe id="webauthn_iframe"></iframe>
+        <iframe id="webauthn_iframe" sandbox="allow-scripts allow-same-origin"></iframe>
       </div>
       <div class="box first">
         <div class="box-content">
@@ -87,7 +87,12 @@
         selectedProviderType === providerType.OrganizationDuo
       "
     >
-      <div id="duo-frame"><iframe id="duo_iframe"></iframe></div>
+      <div id="duo-frame">
+        <iframe
+          id="duo_iframe"
+          sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+        ></iframe>
+      </div>
       <div class="box last">
         <div class="box-content">
           <div class="box-content-row box-content-row-checkbox" appBoxRow>
@@ -125,7 +130,11 @@
     <div class="box last" [hidden]="!showCaptcha()">
       <div class="box-content">
         <div class="box-content-row">
-          <iframe id="hcaptcha_iframe" height="80"></iframe>
+          <iframe
+            id="hcaptcha_iframe"
+            height="80"
+            sandbox="allow-scripts allow-same-origin"
+          ></iframe>
           <button class="btn block" type="button" routerLink="/accessibility-cookie">
             <i class="fa fa-universal-access" aria-hidden="true"></i>
             {{ "loadAccessibilityCookie" | i18n }}

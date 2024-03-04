@@ -20,8 +20,9 @@
       [routerLink]="[]"
       [queryParams]="{ itemId: cipher.id }"
       queryParamsHandling="merge"
-      title="{{ 'editItemWithName' | i18n : cipher.name }}"
+      title="{{ 'editItemWithName' | i18n: cipher.name }}"
       type="button"
+      appStopProp
     >
       {{ cipher.name }}
     </button>
@@ -52,7 +53,7 @@
     *ngIf="cipher.organizationId"
     [disabled]="true"
     [organizationId]="cipher.organizationId"
-    [organizationName]="cipher.organizationId | orgNameFromId : organizations"
+    [organizationName]="cipher.organizationId | orgNameFromId: organizations"
     appStopProp
   >
   </app-org-badge>
@@ -65,6 +66,7 @@
   ></app-collection-badge>
 </td>
 <td bitCell [ngClass]="RowHeightClass" *ngIf="showGroups"></td>
+<td bitCell [ngClass]="RowHeightClass" *ngIf="viewingOrgVault"></td>
 <td bitCell [ngClass]="RowHeightClass" class="table-list-options reduced-lh">
   <div class="list-options">
     <ng-container *ngIf="cipher.type === CipherType.Login && !cipher.isDeleted">

@@ -5,6 +5,7 @@ import { filter } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Injectable()
 export class RouterService {
@@ -15,7 +16,7 @@ export class RouterService {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private stateService: StateService,
-    i18nService: I18nService
+    i18nService: I18nService,
   ) {
     this.currentUrl = this.router.url;
 
@@ -52,11 +53,33 @@ export class RouterService {
       });
   }
 
-  async getPreviousUrl() {
+  async getPreviousUrl(): Promise<string> | undefined {
     return await this.stateService.getPreviousUrl();
   }
 
-  async setPreviousUrl(url: string) {
+  async setPreviousUrl(url: string): Promise<void> {
     await this.stateService.setPreviousUrl(url);
+  }
+
+  /**
+   * Save URL to Global State. This service is used during the login process
+   * @param url URL being saved to the Global State
+   */
+  async persistLoginRedirectUrl(url: string): Promise<void> {
+    await this.stateService.setDeepLinkRedirectUrl(url);
+  }
+
+  /**
+   * Fetch and clear persisted LoginRedirectUrl if present in state
+   */
+  async getAndClearLoginRedirectUrl(): Promise<string> | undefined {
+    const persistedPreLoginUrl = await this.stateService.getDeepLinkRedirectUrl();
+
+    if (!Utils.isNullOrEmpty(persistedPreLoginUrl)) {
+      await this.persistLoginRedirectUrl(null);
+      return persistedPreLoginUrl;
+    }
+
+    return;
   }
 }

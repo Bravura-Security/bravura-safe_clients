@@ -25,6 +25,7 @@ import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/c
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
+import { firstValueFrom } from "rxjs";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 
 @Component({
@@ -106,14 +107,11 @@ export class AccountComponent {
 
   async enrollPasswordReset() {
     if( !this.organizationUser.resetPasswordEnrolled ){
-      const ref = this.modalService.open( EnrollMasterPasswordReset, {
-        allowMultipleModals: true,
-        data: {
-          organization: { id: this.organizationId, userId: this.organizationUser.userId },
-        },
+      const ref = EnrollMasterPasswordReset.open(this.dialogService, {
+        organization: this.organization
       });
 
-      await ref.onClosedPromise();
+      await firstValueFrom(ref.closed);
       await this.load();
     }
   }
@@ -127,13 +125,11 @@ export class AccountComponent {
 
   async openOneAuthDeviceManager() {
     if (this.organizationOneAuthEnabled) {
-      const ref = this.modalService.open( OpenHyprDeviceManager, {
-        allowMultipleModals: true,
-        data: {
-          organization: { id: this.organizationId, userId: this.organizationUser.userId },
-        },
+      const ref = OpenHyprDeviceManager.open(this.dialogService, {
+        organization: this.organization,
+        userId: this.organizationUser.userId
       });
-      await ref.onClosedPromise();
+      await firstValueFrom(ref.closed);
       await this.load();
     }
   }

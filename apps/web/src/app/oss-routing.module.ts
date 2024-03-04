@@ -8,30 +8,30 @@ import {
   tdeDecryptionRequiredGuard,
   UnauthGuard,
 } from "@bitwarden/angular/auth/guards";
-import { canAccessFeature } from "@bitwarden/angular/guard/feature-flag.guard";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
-import { SubscriptionRoutingModule } from "../app/billing/settings/subscription-routing.module";
 import { flagEnabled, Flags } from "../utils/flags";
 
 import { AcceptFamilySponsorshipComponent } from "./admin-console/organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "./admin-console/organizations/sponsorships/families-for-enterprise-setup.component";
 import { CreateOrganizationComponent } from "./admin-console/settings/create-organization.component";
 import { SponsoredFamiliesComponent } from "./admin-console/settings/sponsored-families.component";
-import { AcceptEmergencyComponent } from "./auth/accept-emergency.component";
 import { AcceptOrganizationComponent } from "./auth/accept-organization.component";
+import { deepLinkGuard } from "./auth/guards/deep-link.guard";
 import { HintComponent } from "./auth/hint.component";
 import { LockComponent } from "./auth/lock.component";
 import { LoginDecryptionOptionsComponent } from "./auth/login/login-decryption-options/login-decryption-options.component";
-import { LoginWithDeviceComponent } from "./auth/login/login-with-device.component";
+import { LoginViaAuthRequestComponent } from "./auth/login/login-via-auth-request.component";
+import { LoginViaWebAuthnComponent } from "./auth/login/login-via-webauthn/login-via-webauthn.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { RecoverDeleteComponent } from "./auth/recover-delete.component";
 import { RecoverTwoFactorComponent } from "./auth/recover-two-factor.component";
 import { RegisterComponent } from "./auth/register.component";
 import { RemovePasswordComponent } from "./auth/remove-password.component";
 import { SetPasswordComponent } from "./auth/set-password.component";
-import { EmergencyAccessViewComponent } from "./auth/settings/emergency-access/emergency-access-view.component";
+import { AccountComponent } from "./auth/settings/account/account.component";
 import { EmergencyAccessComponent } from "./auth/settings/emergency-access/emergency-access.component";
+import { EmergencyAccessViewComponent } from "./auth/settings/emergency-access/view/emergency-access-view.component";
+import { SecurityRoutingModule } from "./auth/settings/security/security-routing.module";
 import { SsoComponent } from "./auth/sso.component";
 import { TrialInitiationComponent } from "./auth/trial-initiation/trial-initiation.component";
 import { TwoFactorComponent } from "./auth/two-factor.component";
@@ -41,28 +41,26 @@ import { VerifyEmailTokenComponent } from "./auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "./auth/verify-recover-delete.component";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
-import { ReportsModule } from "./reports";
-import { AccountComponent } from "./settings/account.component";
 import { DomainRulesComponent } from "./settings/domain-rules.component";
 import { PreferencesComponent } from "./settings/preferences.component";
-import { SecurityRoutingModule } from "./settings/security-routing.module";
 import { SettingsComponent } from "./settings/settings.component";
 import { GeneratorComponent } from "./tools/generator.component";
+import { ReportsModule } from "./tools/reports";
 import { AccessComponent } from "./tools/send/access.component";
 import { SendComponent } from "./tools/send/send.component";
 import { ToolsComponent } from "./tools/tools.component";
 import { VaultModule } from "./vault/individual-vault/vault.module";
 
-import { BreachReportComponent } from "./reports/pages/breach-report.component";
-import { ExposedPasswordsReportComponent } from "./reports/pages/exposed-passwords-report.component";
-import { InactiveTwoFactorReportComponent } from "./reports/pages/inactive-two-factor-report.component";
-import { ReportListComponent } from "./reports/shared/report-list/report-list.component";
-import { ReportsLayoutComponent } from "./reports/reports-layout.component";
-import { ReusedPasswordsReportComponent } from "./reports/pages/reused-passwords-report.component";
-import { UnsecuredWebsitesReportComponent } from "./reports/pages/unsecured-websites-report.component";
-import { WeakPasswordsReportComponent } from "./reports/pages/weak-passwords-report.component";
-import { SecurityAssessmentReportComponent } from "./reports/pages/security-assessment-report.component";
-import { ConfiguredTwoFactorReportComponent } from "./reports/pages/configured-two-factor-report.component";
+import { BreachReportComponent } from "./tools/reports/pages/breach-report.component";
+import { ExposedPasswordsReportComponent } from "./tools/reports/pages/exposed-passwords-report.component";
+import { InactiveTwoFactorReportComponent } from "./tools/reports/pages/inactive-two-factor-report.component";
+import { ReportListComponent } from "./tools/reports/shared/report-list/report-list.component";
+import { ReportsLayoutComponent } from "./tools/reports/reports-layout.component";
+import { ReusedPasswordsReportComponent } from "./tools/reports/pages/reused-passwords-report.component";
+import { UnsecuredWebsitesReportComponent } from "./tools/reports/pages/unsecured-websites-report.component";
+import { WeakPasswordsReportComponent } from "./tools/reports/pages/weak-passwords-report.component";
+import { SecurityAssessmentReportComponent } from "./tools/reports/pages/security-assessment-report.component";
+import { ConfiguredTwoFactorReportComponent } from "./tools/reports/pages/configured-two-factor-report.component";
 
 const routes: Routes = [
   {
@@ -79,22 +77,24 @@ const routes: Routes = [
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
       {
         path: "login-with-device",
-        component: LoginWithDeviceComponent,
+        component: LoginViaAuthRequestComponent,
         data: { titleId: "loginWithDevice" },
       },
       {
+        path: "login-with-passkey",
+        component: LoginViaWebAuthnComponent,
+        data: { titleId: "loginWithPasskey" },
+      },
+      {
         path: "admin-approval-requested",
-        component: LoginWithDeviceComponent,
-        data: { titleId: "loginWithDevice" },
+        component: LoginViaAuthRequestComponent,
+        data: { titleId: "adminApprovalRequested" },
       },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
       {
         path: "login-initiated",
         component: LoginDecryptionOptionsComponent,
-        canActivate: [
-          tdeDecryptionRequiredGuard(),
-          canAccessFeature(FeatureFlag.TrustedDeviceEncryption),
-        ],
+        canActivate: [tdeDecryptionRequiredGuard()],
       },
       {
         path: "register",
@@ -122,18 +122,23 @@ const routes: Routes = [
       {
         path: "lock",
         component: LockComponent,
-        canActivate: [lockGuard()],
+        canActivate: [deepLinkGuard(), lockGuard()],
       },
       { path: "verify-email", component: VerifyEmailTokenComponent },
       {
         path: "accept-organization",
         component: AcceptOrganizationComponent,
+        canActivate: [deepLinkGuard()],
         data: { titleId: "joinOrganization", doNotSaveUrl: false },
       },
       {
         path: "accept-emergency",
-        component: AcceptEmergencyComponent,
+        canActivate: [deepLinkGuard()],
         data: { titleId: "acceptEmergency", doNotSaveUrl: false },
+        loadComponent: () =>
+          import("./auth/emergency-access/accept/accept-emergency.component").then(
+            (mod) => mod.AcceptEmergencyComponent,
+          ),
       },
       {
         path: "recover-delete",
@@ -170,12 +175,19 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { titleId: "removeMasterPassword" },
       },
+      {
+        path: "migrate-legacy-encryption",
+        loadComponent: () =>
+          import("./auth/migrate-encryption/migrate-legacy-encryption.component").then(
+            (mod) => mod.MigrateFromLegacyEncryptionComponent,
+          ),
+      },
     ],
   },
   {
     path: "",
     component: UserLayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [deepLinkGuard(), AuthGuard],
     children: [
       {
         path: "vault",
@@ -231,11 +243,17 @@ const routes: Routes = [
         children: [
           { path: "", pathMatch: "full", redirectTo: "generator" },
           {
-            path: "",
+            path: "import",
+            loadComponent: () =>
+              import("./tools/import/import-web.component").then((mod) => mod.ImportWebComponent),
+            data: {
+              titleId: "importData",
+            },
+          },
+          {
+            path: "export",
             loadChildren: () =>
-              import("./tools/import-export/import-export.module").then(
-                (m) => m.ImportExportModule
-              ),
+              import("./tools/vault-export/export.module").then((m) => m.ExportModule),
           },
           {
             path: "generator",
