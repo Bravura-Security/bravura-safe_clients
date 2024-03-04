@@ -12,6 +12,7 @@
     [isProvider]="!!providerId"
     [acceptingSponsorship]="acceptingSponsorship"
   ></app-org-info>
+  <!--
   <h2 class="mt-5">{{ "chooseYourPlan" | i18n }}</h2>
   <div *ngFor="let selectableProduct of selectableProducts" class="form-check form-check-block">
     <input
@@ -151,6 +152,7 @@
       <span *ngIf="selectableProduct.product == productTypes.Free">{{ "freeForever" | i18n }}</span>
     </label>
   </div>
+  -->
   <div *ngIf="formGroup.value.product !== productTypes.Free">
     <ng-container
       *ngIf="
@@ -345,6 +347,7 @@
   </div>
 
   <!-- Secrets Manager -->
+  <!--
   <div class="tw-my-10">
     <sm-subscribe
       *ngIf="planOffersSecretsManager && !hasProvider"
@@ -353,8 +356,10 @@
       [upgradeOrganization]="!createOrganization"
     ></sm-subscribe>
   </div>
+  -->
 
   <!-- Payment info -->
+  <!--
   <div *ngIf="formGroup.value.product !== productTypes.Free">
     <h2 class="mb-4">
       {{ (createOrganization ? "paymentInformation" : "billingInformation") | i18n }}
@@ -390,6 +395,7 @@
       <app-payment [showMethods]="false"></app-payment>
     </ng-container>
   </div>
+  -->
   <div *ngIf="singleOrgPolicyBlock" class="mt-4">
     <app-callout [type]="'error'">{{ "singleOrgBlockCreateMessage" | i18n }}</app-callout>
   </div>

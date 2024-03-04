@@ -163,6 +163,14 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
       if (this.product === ProductType.Enterprise || this.product === ProductType.Teams) {
         this.formGroup.controls.businessOwned.setValue(true);
       }
+    } else {
+      const plans = await this.apiService.getPlans();
+      this.passwordManagerPlans = plans.data.filter(
+        (plan) =>
+          !!plan.PasswordManager && 
+          ( plan.type ===  PlanType.BravuraEnterprise || plan.type ===  PlanType.BravuraTeams)
+      );
+      this.secretsManagerPlans = plans.data.filter((plan) => !!plan.SecretsManager);
     }
 
     if (this.currentPlan && this.currentPlan.product !== ProductType.Enterprise) {
@@ -201,7 +209,10 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         this.singleOrgPolicyAppliesToActiveUser = policyAppliesToActiveUser;
       });
 
-    this.changedProduct();
+    if (!this.selfHosted) {
+      this.changedProduct();
+    }
+
     this.loading = false;
   }
 

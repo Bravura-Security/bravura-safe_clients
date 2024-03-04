@@ -75,6 +75,13 @@ const routes: Routes = [
         path: "options",
         loadChildren: () => import("./options").then((m) => m.OrganizationOptionsModule),
       },
+      {
+        path: "billing",
+        loadChildren: () =>
+          import("../../billing/organizations/organization-billing.module").then(
+            (m) => m.OrganizationBillingModule,
+          ),
+      },
     ],
   },
 ];
