@@ -7715,7 +7715,7 @@
     "message": "Force password reset"
   },
   "forcePasswordResetHelp": {
-    "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
+    "message": "When resetting a master password for a user they will be forced to change their master password upon next login. (Default: enabled)"
   },
   "seeDetailedInstructions": {
     "message": "Consultez les instructions détaillées sur notre site d'aide à",
