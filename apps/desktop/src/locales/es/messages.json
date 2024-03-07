@@ -1567,11 +1567,11 @@
     "message": "Establecer contraseña maestra"
   },
   "orgPermissionsUpdatedMustSetPassword": {
-    "message": "Your organization permissions were updated, requiring you to set a master password.",
+    "message": "Your team permissions were updated, requiring you to set a master password.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
   },
   "orgRequiresYouToSetPassword": {
-    "message": "Your organization requires you to set a master password.",
+    "message": "Your team requires you to set a master password.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
   },
   "currentMasterPass": {
@@ -1701,7 +1701,7 @@
     "message": "Una política de organización está afectando a sus opciones de propiedad."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "An organization policy has blocked importing items into your individual vault."
+    "message": "A team policy has blocked importing items into your individual vault."
   },
   "allSends": {
     "message": "Todos los Share",
@@ -2029,7 +2029,7 @@
     "message": "Exportando caja fuerte personal"
   },
   "exportingIndividualVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
+    "message": "Only the individual safe items associated with $EMAIL$ will be exported. Team safe items will not be included. Only safe item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2324,7 +2324,7 @@
     "message": "Region"
   },
   "ssoIdentifierRequired": {
-    "message": "Organization SSO identifier is required."
+    "message": "Team SSO identifier is required."
   },
   "eu": {
     "message": "EU",
@@ -2516,7 +2516,7 @@
     "message": "Total"
   },
   "importWarning": {
-    "message": "You are importing data to $ORGANIZATION$. Your data may be shared with members of this organization. Do you want to proceed?",
+    "message": "You are importing data to $ORGANIZATION$. Your data may be shared with members of this team. Do you want to proceed?",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2550,7 +2550,7 @@
   },
   "importTargetHint": {
     "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team safe.",
     "placeholders": {
       "destination": {
         "content": "$1",
