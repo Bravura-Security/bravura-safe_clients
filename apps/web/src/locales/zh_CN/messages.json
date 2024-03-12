@@ -1502,7 +1502,7 @@
   },
   "importTargetHint": {
     "message": "如果您希望将导入的文件内容移动到某个 $DESTINATION$，请选择此选项",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team vault.",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team safe.",
     "placeholders": {
       "destination": {
         "content": "$1",
@@ -5343,7 +5343,7 @@
     "message": "Set a unique SP entity ID"
   },
   "spUniqueEntityIdDesc": {
-    "message": "Generate an identifier that is unique to your organization"
+    "message": "Generate an identifier that is unique to your team"
   },
   "idpEntityId": {
     "message": "实体 ID"
@@ -7691,7 +7691,7 @@
     "message": "Force password reset"
   },
   "forcePasswordResetHelp": {
-    "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
+    "message": "When resetting a master password for a user they will be forced to change their master password upon next login. (Default: enabled)"
   },
   "seeDetailedInstructions": {
     "message": "请参阅我们的帮助网站上的详细说明：",
@@ -7701,7 +7701,7 @@
     "message": "工程访问权限已更新"
   },
   "unexpectedErrorSend": {
-    "message": "加载此 Send 时发生意外错误。请稍后再试。"
+    "message": "加载此 Share 时发生意外错误。请稍后再试。"
   },
   "seatLimitReached": {
     "message": "已达到席位限制"

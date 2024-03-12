@@ -40,7 +40,6 @@
   </ng-container>
 
   <button type="submit" bitButton buttonType="primary" bitFormButton>
-    <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
     <span>{{ (tokenSent ? "changeEmail" : "continue") | i18n }}</span>
   </button>
   <button type="button" bitButton *ngIf="tokenSent" (click)="reset()">

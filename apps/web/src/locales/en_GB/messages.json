@@ -1502,7 +1502,7 @@
   },
   "importTargetHint": {
     "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team vault.",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team safe.",
     "placeholders": {
       "destination": {
         "content": "$1",
@@ -1621,7 +1621,7 @@
     "message": "Secure your account by requiring an additional step when logging in."
   },
   "twoStepLoginTeamsDesc": {
-    "message": "Enable two-step login for your organization."
+    "message": "Enable two-step login for your team."
   },
   "twoStepLoginEnterpriseDescStart": {
     "message": "Enforce Bravura Safe Two-step Login options for members by using the ",
@@ -3852,16 +3852,16 @@
     "message": "Team suspended"
   },
   "secretsAccessSuspended": {
-    "message": "Suspended organizations cannot be accessed. Please contact your organization owner for assistance."
+    "message": "Suspended teams cannot be accessed. Please contact your team owner for assistance."
   },
   "secretsCannotCreate": {
-    "message": "Secrets cannot be created in suspended organizations. Please contact your organization owner for assistance."
+    "message": "Secrets cannot be created in suspended teams. Please contact your team owner for assistance."
   },
   "projectsCannotCreate": {
-    "message": "Projects cannot be created in suspended organizations. Please contact your organization owner for assistance."
+    "message": "Projects cannot be created in suspended teams. Please contact your team owner for assistance."
   },
   "serviceAccountsCannotCreate": {
-    "message": "Service accounts cannot be created in suspended organizations. Please contact your organization owner for assistance."
+    "message": "Service accounts cannot be created in suspended teams. Please contact your team owner for assistance."
   },
   "disabledOrganizationFilterError": {
     "message": "Items in suspended teams cannot be accessed. Contact your team owner for assistance."
@@ -5349,7 +5349,7 @@
     "message": "Set a unique SP entity ID"
   },
   "spUniqueEntityIdDesc": {
-    "message": "Generate an identifier that is unique to your organization"
+    "message": "Generate an identifier that is unique to your team"
   },
   "idpEntityId": {
     "message": "Entity ID"
@@ -6144,12 +6144,6 @@
   "selectPlaceholder": {
     "message": "-- Select --"
   },
-  "selectPlaceholder": {
-    "message": "-- Select --"
-  },
-  "selectPlaceholder": {
-    "message": "-- Select --"
-  },
   "multiSelectPlaceholder": {
     "message": "-- Type to filter --"
   },
@@ -6214,14 +6208,6 @@
   "secretProjectAssociationDescription": {
     "message": "Select projects that the secret will be associated with. Only team users with access to these projects will be able to see the secret.",
     "description": "A prompt explaining how secrets can be associated with projects."
-  },
-  "selectProjects": {
-    "message": "Select projects",
-    "description": "A label for a type-to-filter input field to choose projects."
-  },
-  "searchProjects": {
-    "message": "Search projects",
-    "description": "Label for the search bar used to search projects."
   },
   "selectProjects": {
     "message": "Select projects"
@@ -6906,7 +6892,7 @@
     }
   },
   "teamsStarterPlanInvLimitReachedNoManageBilling": {
-    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade your plan and invite more members.",
+    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Contact your team owner to upgrade your plan and invite more members.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -7368,11 +7354,11 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "orgPermissionsUpdatedMustSetPassword": {
-    "message": "Your organization permissions were updated, requiring you to set a master password.",
+    "message": "Your team permissions were updated, requiring you to set a master password.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
   },
   "orgRequiresYouToSetPassword": {
-    "message": "Your organization requires you to set a master password.",
+    "message": "Your team requires you to set a master password.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
   },
   "notFound": {
@@ -7549,7 +7535,7 @@
     "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
   },
   "free2PersonOrganization": {
-    "message": "Free 2-person Organizations"
+    "message": "Free 2-person Teams"
   },
   "unlimitedSecrets": {
     "message": "Unlimited secrets"
@@ -7615,7 +7601,7 @@
     "message": "Collection management"
   },
   "collectionManagementDesc": {
-    "message": "Manage the collection behavior for the organization"
+    "message": "Manage the collection behavior for the team"
   },
   "limitCollectionCreationDeletionDesc": {
     "message": "Limit collection creation and deletion to owners and admins"
@@ -7730,7 +7716,7 @@
     "message": "Force password reset"
   },
   "forcePasswordResetHelp": {
-    "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
+    "message": "When resetting a master password for a user they will be forced to change their master password upon next login. (Default: enabled)"
   },
   "seeDetailedInstructions": {
     "message": "See detailed instructions on our help site at",
@@ -7740,7 +7726,7 @@
     "message": "Project access updated"
   },
   "unexpectedErrorSend": {
-    "message": "An unexpected error has occurred while loading this Send. Try again later."
+    "message": "An unexpected error has occurred while loading this Share. Try again later."
   },
   "seatLimitReached": {
     "message": "Seat limit has been reached"

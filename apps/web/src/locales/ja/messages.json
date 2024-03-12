@@ -1502,7 +1502,7 @@
   },
   "importTargetHint": {
     "message": "インポートしたファイルコンテンツを $DESTINATION$ に移動したい場合は、このオプションを選択してください。",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team vault.",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team safe.",
     "placeholders": {
       "destination": {
         "content": "$1",
@@ -4368,7 +4368,7 @@
     "message": "期限切れ"
   },
   "searchSends": {
-    "message": "Sendを検索",
+    "message": "Shareを検索",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendProtectedPassword": {
@@ -4376,18 +4376,18 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendProtectedPasswordDontKnow": {
-    "message": "パスワードがわかりませんか？このSendにアクセスするには送信者にパスワードをご確認ください。",
+    "message": "パスワードがわかりませんか？このShareにアクセスするには送信者にパスワードをご確認ください。",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendHiddenByDefault": {
-    "message": "このSendはデフォルトでは非表示になっています。下のボタンで表示・非表示が切り替え可能です。",
+    "message": "このShareはデフォルトでは非表示になっています。下のボタンで表示・非表示が切り替え可能です。",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "downloadAttachments": {
     "message": "添付ファイルをダウンロード"
   },
   "sendAccessUnavailable": {
-    "message": "アクセスしようとしているSendは存在しないか、利用できません。",
+    "message": "アクセスしようとしているShareは存在しないか、利用できません。",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "missingSendFile": {
@@ -4395,7 +4395,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "noSendsInList": {
-    "message": "表示するSendがありません",
+    "message": "表示するShareがありません",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "emergencyAccess": {
@@ -7715,7 +7715,7 @@
     "message": "Force password reset"
   },
   "forcePasswordResetHelp": {
-    "message": "If checked, when resetting a password for a user they will be forced to change their master password in the next login."
+    "message": "When resetting a master password for a user they will be forced to change their master password upon next login. (Default: enabled)"
   },
   "seeDetailedInstructions": {
     "message": "詳細な手順はこちらをご覧ください：",
@@ -7725,7 +7725,7 @@
     "message": "プロジェクトへのアクセスを更新しました"
   },
   "unexpectedErrorSend": {
-    "message": "この Send の読み込み中に予期しないエラーが発生しました。後でもう一度お試しください。"
+    "message": "この Share の読み込み中に予期しないエラーが発生しました。後でもう一度お試しください。"
   },
   "seatLimitReached": {
     "message": "シート数の上限に達しました"
