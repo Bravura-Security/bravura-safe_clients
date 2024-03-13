@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { PlanType } from "@bitwarden/common/billing/enums";
 
 import { BasePolicy, BasePolicyComponent } from "./base-policy.component";
 
@@ -10,6 +12,10 @@ export class SendOptionsPolicy extends BasePolicy {
   description = "sendOptionsPolicyDesc";
   type = PolicyType.SendOptions;
   component = SendOptionsPolicyComponent;
+
+  display(organization: Organization) {
+    return organization.planType === PlanType.BravuraEnterprise;
+  }
 }
 
 @Component({
