@@ -50,7 +50,7 @@ export class AccountComponent {
   // FormGroup validators taken from server Organization domain object
   protected formGroup = this.formBuilder.group({
     orgName: this.formBuilder.control(
-      { value: "", disabled: true },
+      { value: "", disabled: false },
       {
         validators: [Validators.required, Validators.maxLength(50)],
         updateOn: "change",
