@@ -50,7 +50,7 @@ export class AccountComponent {
   // FormGroup validators taken from server Organization domain object
   protected formGroup = this.formBuilder.group({
     orgName: this.formBuilder.control(
-      { value: "", disabled: false },
+      { value: "", disabled: true },
       {
         validators: [Validators.required, Validators.maxLength(50)],
         updateOn: "change",
@@ -118,8 +118,9 @@ export class AccountComponent {
         this.canUseApi = organization.useApi;
 
         // Update disabled states - reactive forms prefers not using disabled attribute
-        if (!this.selfHosted) {
+        if (this.selfHosted) {
           this.formGroup.get("orgName").enable();
+        } else {
           this.formGroup.get("businessName").enable();
           this.collectionManagementFormGroup.get("limitCollectionCreationDeletion").enable();
           this.collectionManagementFormGroup.get("allowAdminAccessToAllCollectionItems").enable();
