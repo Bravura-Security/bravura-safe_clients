@@ -125,7 +125,7 @@
       </bit-label>
     </div>
 
-    <div>
+    <div class="tw-mb-3">
       <ng-container *ngIf="!accountCreated">
         <button
           [block]="true"
@@ -136,10 +136,6 @@
         >
           {{ "createAccount" | i18n }}
         </button>
-        <a bitButton [block]="true" buttonType="secondary" routerLink="/login">
-          <i class="fa fa-sign-in tw-mr-2"></i>
-          {{ "logIn" | i18n }}
-        </a>
       </ng-container>
       <ng-container *ngIf="accountCreated">
         <button
@@ -151,6 +147,14 @@
         >
           {{ "logIn" | i18n }}
         </button>
+      </ng-container>
+    </div>
+    <div class="tw-mb-3">
+      <ng-container *ngIf="!accountCreated">
+        <a bitButton [block]="true" buttonType="secondary" routerLink="/login">
+          <i class="fa fa-sign-in tw-mr-2"></i>
+          {{ "logIn" | i18n }}
+        </a>
       </ng-container>
     </div>
     <p class="tw-m-0 tw-mt-5 tw-text-sm">
