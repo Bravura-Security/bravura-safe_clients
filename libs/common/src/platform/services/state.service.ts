@@ -2356,18 +2356,21 @@ export class StateService<
 
   async getOrganizationInvitation(options?: StorageOptions): Promise<any> {
     return (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+      //await this.getGlobals(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.organizationInvitation;
   }
 
   async setOrganizationInvitation(value: any, options?: StorageOptions): Promise<void> {
     const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
+      //this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
     );
     globals.organizationInvitation = value;
     await this.saveGlobals(
       globals,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
+      //this.reconcileOptions(options, await this.defaultInMemoryOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
     );
   }
 
