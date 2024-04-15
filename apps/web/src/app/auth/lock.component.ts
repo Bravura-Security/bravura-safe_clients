@@ -19,12 +19,15 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { DialogService } from "@bitwarden/components";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 @Component({
   selector: "app-lock",
   templateUrl: "lock.component.html",
 })
 export class LockComponent extends BaseLockComponent {
+  syncService: SyncService;
+
   constructor(
     router: Router,
     i18nService: I18nService,
@@ -45,6 +48,7 @@ export class LockComponent extends BaseLockComponent {
     deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
     userVerificationService: UserVerificationService,
     pinCryptoService: PinCryptoServiceAbstraction,
+    syncService: SyncService,
   ) {
     super(
       router,
@@ -67,12 +71,14 @@ export class LockComponent extends BaseLockComponent {
       userVerificationService,
       pinCryptoService,
     );
+    this.syncService = syncService;
   }
 
   async ngOnInit() {
     await super.ngOnInit();
     this.onSuccessfulSubmit = async () => {
       this.router.navigateByUrl(this.successRoute);
+      await this.syncService.fullSync(true);
     };
   }
 }
