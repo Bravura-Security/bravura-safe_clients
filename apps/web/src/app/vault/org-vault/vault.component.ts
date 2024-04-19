@@ -269,15 +269,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     );
 
     const allGroups$ = organizationId$.pipe(
-      switchMap((organizationId) => {
-        if (this.organization.canUseAdminCollections) {
-          return this.groupService.getAll(organizationId);
-        }
-        else {
-          return of([]);
-        }
-      }),
-
+      switchMap((organizationId) => this.groupService.getAll(organizationId)),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 

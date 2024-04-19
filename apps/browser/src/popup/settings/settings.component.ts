@@ -451,7 +451,7 @@ export class SettingsComponent implements OnInit {
       type: "info",
     });
     if (confirmed) {
-      BrowserApi.createNewTab("http://bravurasecuritydocs.com/safe/#/home/41827/10/11");
+      BrowserApi.createNewTab(this.environmentService.getWebVaultUrl());
     }
   }
 
