@@ -1624,7 +1624,7 @@
     "message": "Ative o login em duas etapas para sua team."
   },
   "twoStepLoginEnterpriseDescStart": {
-    "message": "Forçar as opções de login em duas etapas do Bitwarden para membros usando o ",
+    "message": "Forçar as opções de login em duas etapas do Bravura Safe para membros usando o ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bravura Safe Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {

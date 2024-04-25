@@ -1733,7 +1733,7 @@
     "message": "生体認証に失敗しました"
   },
   "biometricsFailedDesc": {
-    "message": "生体認証を完了できません。マスターパスワードを使うかログアウトしてください。それでも直らない場合は、Bitwarden サポートまでお問い合わせください。"
+    "message": "生体認証を完了できません。マスターパスワードを使うかログアウトしてください。それでも直らない場合は、Bravura Safe サポートまでお問い合わせください。"
   },
   "nativeMessaginPermissionErrorTitle": {
     "message": "権限が提供されていません"
@@ -1763,7 +1763,7 @@
     "message": "Bravura Safe はこれらのドメインのログイン情報を保存するよう尋ねません。変更を有効にするにはページを更新する必要があります。"
   },
   "excludedDomainsDescAlt": {
-    "message": "Bitwarden はログインしているすべてのアカウントで、これらのドメインのログイン情報を保存するよう要求しません。 変更を有効にするにはページを更新する必要があります。"
+    "message": "Bravura Safe はログインしているすべてのアカウントで、これらのドメインのログイン情報を保存するよう要求しません。 変更を有効にするにはページを更新する必要があります。"
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ は有効なドメインではありません",
@@ -2555,11 +2555,11 @@
     "description": "Toggling an expand/collapse state."
   },
   "filelessImport": {
-    "message": "Bitwarden にデータをインポートしますか？",
+    "message": "Bravura Safe にデータをインポートしますか？",
     "description": "Default notification title for triggering a fileless import."
   },
   "lpFilelessImport": {
-    "message": "LastPass データを Bitwarden にインポートしますか？",
+    "message": "LastPass データを Bravura Safe にインポートしますか？",
     "description": "LastPass specific notification title for triggering a fileless import."
   },
   "lpCancelFilelessImport": {
@@ -2567,7 +2567,7 @@
     "description": "LastPass specific notification button text for cancelling a fileless import."
   },
   "startFilelessImport": {
-    "message": "Bitwarden にインポート",
+    "message": "Bravura Safe にインポート",
     "description": "Notification button text for starting a fileless import."
   },
   "importing": {
@@ -2605,15 +2605,15 @@
     "message": "コンテンツへ移動"
   },
   "bitwardenOverlayButton": {
-    "message": "Bitwarden 自動入力メニューボタン",
+    "message": "Bravura Safe 自動入力メニューボタン",
     "description": "Page title for the iframe containing the overlay button"
   },
   "toggleBitwardenVaultOverlay": {
-    "message": "Bitwarden 自動入力メニューの切り替え",
+    "message": "Bravura Safe 自動入力メニューの切り替え",
     "description": "Screen reader and tool tip label for the overlay button"
   },
   "bitwardenVault": {
-    "message": "Bitwarden 自動入力メニュー",
+    "message": "Bravura Safe 自動入力メニュー",
     "description": "Page title in overlay"
   },
   "unlockYourAccountToViewMatchingLogins": {
@@ -2645,7 +2645,7 @@
     "description": "Screen reader text (aria-label) for new item button in overlay"
   },
   "bitwardenOverlayMenuAvailable": {
-    "message": "Bitwarden 自動入力メニューがあります。下矢印キーを押すと選択できます。",
+    "message": "Bravura Safe 自動入力メニューがあります。下矢印キーを押すと選択できます。",
     "description": "Screen reader text for announcing when the overlay opens on the page"
   },
   "turnOn": {
