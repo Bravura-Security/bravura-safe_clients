@@ -1733,7 +1733,7 @@
     "message": "生物识别失败"
   },
   "biometricsFailedDesc": {
-    "message": "生物识别无法完成，请尝试使用主密码或注销。如果仍无法解决，请联系 Bitwarden 支持。"
+    "message": "生物识别无法完成，请尝试使用主密码或注销。如果仍无法解决，请联系 Bravura Safe 支持。"
   },
   "nativeMessaginPermissionErrorTitle": {
     "message": "未提供权限"
@@ -1763,7 +1763,7 @@
     "message": "Bravura Safe 将不会询问是否为这些域名保存登录信息。您必须刷新页面才能使更改生效。"
   },
   "excludedDomainsDescAlt": {
-    "message": "Bitwarden 不会询问保存所有已登录的账户的这些域名的登录信息。您必须刷新页面才能使更改生效。"
+    "message": "Bravura Safe 不会询问保存所有已登录的账户的这些域名的登录信息。您必须刷新页面才能使更改生效。"
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ 不是一个有效的域名",
@@ -2555,11 +2555,11 @@
     "description": "Toggling an expand/collapse state."
   },
   "filelessImport": {
-    "message": "导入您的数据到 Bitwarden 吗？",
+    "message": "导入您的数据到 Bravura Safe 吗？",
     "description": "Default notification title for triggering a fileless import."
   },
   "lpFilelessImport": {
-    "message": "保护您的 LastPass 数据并导入到 Bitwarden 吗？",
+    "message": "保护您的 LastPass 数据并导入到 Bravura Safe 吗？",
     "description": "LastPass specific notification title for triggering a fileless import."
   },
   "lpCancelFilelessImport": {
@@ -2567,7 +2567,7 @@
     "description": "LastPass specific notification button text for cancelling a fileless import."
   },
   "startFilelessImport": {
-    "message": "导入到 Bitwarden",
+    "message": "导入到 Bravura Safe",
     "description": "Notification button text for starting a fileless import."
   },
   "importing": {
@@ -2605,15 +2605,15 @@
     "message": "跳转到正文"
   },
   "bitwardenOverlayButton": {
-    "message": "Bitwarden 自动填充菜单按钮",
+    "message": "Bravura Safe 自动填充菜单按钮",
     "description": "Page title for the iframe containing the overlay button"
   },
   "toggleBitwardenVaultOverlay": {
-    "message": "切换 Bitwarden 自动填充菜单",
+    "message": "切换 Bravura Safe 自动填充菜单",
     "description": "Screen reader and tool tip label for the overlay button"
   },
   "bitwardenVault": {
-    "message": "Bitwarden 自动填充菜单",
+    "message": "Bravura Safe 自动填充菜单",
     "description": "Page title in overlay"
   },
   "unlockYourAccountToViewMatchingLogins": {
@@ -2645,7 +2645,7 @@
     "description": "Screen reader text (aria-label) for new item button in overlay"
   },
   "bitwardenOverlayMenuAvailable": {
-    "message": "Bitwarden 自动填充菜单可用。按向下箭头键进行选择。",
+    "message": "Bravura Safe 自动填充菜单可用。按向下箭头键进行选择。",
     "description": "Screen reader text for announcing when the overlay opens on the page"
   },
   "turnOn": {

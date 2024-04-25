@@ -1717,7 +1717,7 @@
     "message": "Biometrie fehlgeschlagen"
   },
   "biometricsFailedDesc": {
-    "message": "Die biometrische Verifizierung kann nicht abgeschlossen werden. Versuch es mit dem Master-Passwort oder melde dich ab. Sollte das Problem weiterhin bestehen, kontaktiere bitte den Bitwarden-Support."
+    "message": "Die biometrische Verifizierung kann nicht abgeschlossen werden. Versuch es mit dem Master-Passwort oder melde dich ab. Sollte das Problem weiterhin bestehen, kontaktiere bitte den Bravura Safe-Support."
   },
   "nativeMessaginPermissionErrorTitle": {
     "message": "Berechtigung nicht erteilt"
@@ -1747,7 +1747,7 @@
     "message": "Bravura Safe wird keine Login-Daten für diese Domäne speichern. Du musst die Seite aktualisieren, damit die Änderungen wirksam werden."
   },
   "excludedDomainsDescAlt": {
-    "message": "Bitwarden wird für alle angemeldeten Konten nicht danach fragen Zugangsdaten für diese Domains speichern. Du musst die Seite neu laden, damit die Änderungen wirksam werden."
+    "message": "Bravura Safe wird für alle angemeldeten Konten nicht danach fragen Zugangsdaten für diese Domains speichern. Du musst die Seite neu laden, damit die Änderungen wirksam werden."
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ ist keine gültige Domäne",
@@ -2515,11 +2515,11 @@
     "description": "Toggling an expand/collapse state."
   },
   "filelessImport": {
-    "message": "Deine Daten in Bitwarden importieren?",
+    "message": "Deine Daten in Bravura Safe importieren?",
     "description": "Default notification title for triggering a fileless import."
   },
   "lpFilelessImport": {
-    "message": "Deine LastPass-Daten schützen und in Bitwarden importieren?",
+    "message": "Deine LastPass-Daten schützen und in Bravura Safe importieren?",
     "description": "LastPass specific notification title for triggering a fileless import."
   },
   "lpCancelFilelessImport": {
@@ -2527,7 +2527,7 @@
     "description": "LastPass specific notification button text for cancelling a fileless import."
   },
   "startFilelessImport": {
-    "message": "In Bitwarden importieren",
+    "message": "In Bravura Safe importieren",
     "description": "Notification button text for starting a fileless import."
   },
   "importing": {
@@ -2565,15 +2565,15 @@
     "message": "Zum Inhalt wechseln"
   },
   "bitwardenOverlayButton": {
-    "message": "Bitwarden Auto-Ausfüllen Menütaste",
+    "message": "Bravura Safe Auto-Ausfüllen Menütaste",
     "description": "Page title for the iframe containing the overlay button"
   },
   "toggleBitwardenVaultOverlay": {
-    "message": "Bitwarden Auto-Ausfüllen Menü umschalten",
+    "message": "Bravura Safe Auto-Ausfüllen Menü umschalten",
     "description": "Screen reader and tool tip label for the overlay button"
   },
   "bitwardenVault": {
-    "message": "Bitwarden Auto-Ausfüllen Menü",
+    "message": "Bravura Safe Auto-Ausfüllen Menü",
     "description": "Page title in overlay"
   },
   "unlockYourAccountToViewMatchingLogins": {
@@ -2605,7 +2605,7 @@
     "description": "Screen reader text (aria-label) for new item button in overlay"
   },
   "bitwardenOverlayMenuAvailable": {
-    "message": "Bitwarden Auto-Ausfüllen Menü verfügbar. Drücke die Pfeiltaste nach unten zum Auswählen.",
+    "message": "Bravura Safe Auto-Ausfüllen Menü verfügbar. Drücke die Pfeiltaste nach unten zum Auswählen.",
     "description": "Screen reader text for announcing when the overlay opens on the page"
   },
   "turnOn": {
