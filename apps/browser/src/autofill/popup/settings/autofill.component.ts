@@ -132,7 +132,7 @@ export class AutofillComponent implements OnInit {
     } else if (this.platformUtilsService.isVivaldi()) {
       BrowserApi.createNewTab("vivaldi://extensions/shortcuts");
     } else {
-      BrowserApi.createNewTab("https://bitwarden.com/help/keyboard-shortcuts");
+      BrowserApi.createNewTab("https://bravurasecuritydocs.com/safe/#/home/26969/10/11");
     }
   }
 
@@ -150,7 +150,7 @@ export class AutofillComponent implements OnInit {
       return "vivaldi://settings/autofill";
     }
 
-    return "https://bitwarden.com/help/disable-browser-autofill/";
+    return "https://bravurasecuritydocs.com/safe/#/home/44739/10/11";
   }
 
   protected openDisablePasswordManagerLink(event: Event) {
