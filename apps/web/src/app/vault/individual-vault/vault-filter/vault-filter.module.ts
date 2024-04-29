@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { VaultFilterSharedModule } from "../../individual-vault/vault-filter/shared/vault-filter-shared.module";
 
-import { LinkSsoComponent } from "./components/link-sso.component";
+import { LinkSsoDirective } from "./components/link-sso.directive";
 import { OrganizationListComponent } from "./components/organization-list.component";
 import { OrganizationOptionsComponent } from "./components/organization-options.component";
 import { VaultFilterComponent } from "./components/vault-filter.component";
@@ -11,7 +11,7 @@ import { VaultFilterService } from "./services/vault-filter.service";
 
 @NgModule({
   imports: [VaultFilterSharedModule],
-  declarations: [VaultFilterComponent, OrganizationListComponent, OrganizationOptionsComponent, LinkSsoComponent],
+  declarations: [VaultFilterComponent, OrganizationListComponent, OrganizationOptionsComponent, LinkSsoDirective],
   exports: [VaultFilterComponent, OrganizationListComponent],
   providers: [
     {

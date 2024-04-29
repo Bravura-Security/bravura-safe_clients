@@ -12,15 +12,15 @@
 <table class="table table-hover table-list" *ngIf="!loading">
   <tbody>
     <ng-template ngFor let-p [ngForOf]="policies">
-      <tr *ngIf="p.display(organization)">
-        <td>
-          <a href="#" appStopClick (click)="edit(p)">{{ p.name | i18n }}</a>
-          <span bitBadge badgeType="success" *ngIf="policiesEnabledMap.get(p.type)">{{
-            "on" | i18n
-          }}</span>
-          <small class="text-muted d-block">{{ p.description | i18n }}</small>
-        </td>
-      </tr>
+    <tr *ngIf="p.display(organization)">
+      <td>
+        <a href="#" appStopClick (click)="edit(p)">{{ p.name | i18n }}</a>
+        <span bitBadge variant="success" *ngIf="policiesEnabledMap.get(p.type)">{{
+          "on" | i18n
+        }}</span>
+        <small class="text-muted d-block">{{ p.description | i18n }}</small>
+      </td>
+    </tr>
     </ng-template>
   </tbody>
 </table>

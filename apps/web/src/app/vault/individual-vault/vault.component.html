@@ -39,6 +39,8 @@
         (onAddCipher)="addCipher()"
         (onAddCollection)="addCollection()"
         (onAddFolder)="addFolder()"
+        (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
+        (onDeleteCollection)="deleteCollection(selectedCollection.node)"
       ></app-vault-header>
       <app-callout type="warning" *ngIf="activeFilter.isDeleted" icon="fa-exclamation-triangle">
         {{ trashCleanupWarning }}
@@ -56,9 +58,10 @@
         [showBulkMove]="showBulkMove"
         [showBulkTrashOptions]="filter.type === 'trash'"
         [useEvents]="false"
-        [editableCollections]="false"
         [cloneableOrganizationCiphers]="false"
+        [showAdminActions]="false"
         (onEvent)="onVaultItemsEvent($event)"
+        [showBulkEditCollectionAccess]="showBulkCollectionAccess$ | async"
         [showHeaderCheckboxMenu]="filter.collectionId !== 'all'"
       >
       </app-vault-items>
@@ -92,14 +95,6 @@
       </div>
       <div class="vertical-spacer"></div>
       <app-footer></app-footer>
-    </div>
-    <div class="col-3">
-      <div class="card border-warning mb-4" *ngIf="showUpdateKey">
-        <div class="card-header bg-warning text-white">
-          <i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>
-          {{ "updateKeyTitle" | i18n }}
-        </div>
-      </div>
     </div>
   </div>
 </div>

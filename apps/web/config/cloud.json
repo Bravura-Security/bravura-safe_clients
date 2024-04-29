@@ -14,9 +14,11 @@
     "proxyApi": "https://api.hitachi-id.com",
     "proxyIdentity": "https://identity.hitachi-id.com",
     "proxyEvents": "https://events.hitachi-id.com"
+    "proxyNotifications": "https://notifications.hitachi-id.com"
   },
   "flags": {
     "secretsManager": true,
-    "showPasswordless": true
+    "showPasswordless": true,
+    "enableCipherKeyEncryption": false
   }
 }

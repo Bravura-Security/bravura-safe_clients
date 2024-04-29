@@ -1,0 +1,95 @@
+<div class="login-with-device">
+  <header>
+    <h1 class="login-center">
+      <span class="title">{{ "logIn" | i18n }}</span>
+    </h1>
+  </header>
+  <div class="content login-page text-center" style="
+    overflow-y: scroll;
+    height: 555px
+    ">
+    <ng-container *ngIf="state == StateEnum.StandardAuthRequest">
+    <div>
+      <p class="lead"><b>{{ "loginInitiated" | i18n }}</b></p>
+
+      <div>
+        <p>{{ "notificationSentDevice" | i18n }}</p>
+
+        <p><b>
+          {{ "pleaseUnlockVault" | i18n }}
+        </b></p>
+      </div>
+
+      <div>
+        <span id="iconsFaStack" class="fa-stack fa-2x"
+          style="
+            font-size: 750%;
+            text-align: center;
+        ">
+          <i id="outerIcon" class="fa fa-solid fa-user-o fa-stack-2x"></i>
+          <i id="innerIcon" class="fa fa-mobile"
+            style="
+              font-size: 80%;
+              position: relative;
+              top: 20%;
+          "></i>
+          <i id="innerInnerIcon" class="fa fa-unlock-alt"
+            style="
+              font-size: 25%;
+              position: absolute;
+              top: 70%;
+              width: 100%;
+              left: 0;
+              text-align: center;
+          "></i>
+        </span>
+      </div>
+
+      <details>
+        <summary>{{ "details" | i18n }}</summary>
+        <div>
+          <b class="fingerprint-phrase-header">{{ "fingerprintPhraseHeader" | i18n }}</b>
+          <p>
+            {{ "fingerprintMatchInfo" | i18n }}
+          </p>
+          <p class="fingerprint-text">
+            <code>{{ fingerprintPhrase }}</code>
+          </p>
+        </div>
+      </details>
+
+      <div class="resend-notification" *ngIf="showResendNotification">
+        <a (click)="startAuthRequestLogin()">{{ "resendNotification" | i18n }}</a>
+      </div>
+
+      <div class="footer">
+        {{ "loginWithDeviceEnabledInfo" | i18n }}
+          <a href="#" (click)="back()">{{ "viewAllLoginOptions" | i18n }}</a>
+      </div>
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="state == StateEnum.AdminAuthRequest">
+      <div>
+        <p class="lead">{{ "adminApprovalRequested" | i18n }}</p>
+
+        <div>
+          <p>{{ "adminApprovalRequestSentToAdmins" | i18n }}</p>
+          <p>{{ "youWillBeNotifiedOnceApproved" | i18n }}</p>
+  </div>
+
+        <div>
+          <b class="fingerprint-phrase-header">{{ "fingerprintPhraseHeader" | i18n }}</b>
+          <p class="fingerprint-text">
+            <code>{{ fingerprintPhrase }}</code>
+          </p>
+</div>
+
+        <div class="footer">
+          {{ "troubleLoggingIn" | i18n }}
+          <a routerLink="/login-initiated">{{ "viewAllLoginOptions" | i18n }}</a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

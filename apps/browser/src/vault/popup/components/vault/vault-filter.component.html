@@ -1,9 +1,9 @@
-<header>
+<app-header>
   <div class="left">
     <app-pop-out></app-pop-out>
   </div>
   <h1 class="sr-only">{{ "myVault" | i18n }}</h1>
-  <div class="search">
+  <div class="search center">
     <input
       type="{{ searchTypeSearch ? 'search' : 'text' }}"
       placeholder="{{ 'searchVault' | i18n }}"
@@ -21,7 +21,7 @@
       <i class="fa fa-plus fa-lg fa-fw" aria-hidden="true"></i>
     </button>
   </div>
-</header>
+</app-header>
 <main tabindex="-1" cdk-scrollable>
   <app-vault-select
     (onVaultSelectionChanged)="vaultFilterChanged()"
@@ -69,7 +69,9 @@
             <div class="icon"><i class="fa fa-fw fa-lg fa-globe"></i></div>
             <span class="text">{{ "typeLogin" | i18n }}</span>
           </div>
-          <span class="row-sub-label">{{ typeCounts.get(cipherType.Login) || 0 }}</span>
+          <span class="row-sub-label">
+            {{ typeCounts.get(cipherType.Login) || 0 }}
+          </span>
           <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
         </button>
         <button

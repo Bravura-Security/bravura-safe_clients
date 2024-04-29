@@ -121,13 +121,13 @@
     <value>Bravura Safe</value>
   </data>
   <data name="Summary" xml:space="preserve">
-    <value>Un gestore di password sicuro e gratis per tutti i tuoi dispositivi</value>
+    <value>Un password manager sicuro e gratis per tutti i tuoi dispositivi</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Bravura Security Inc.</value>
   </data>
   <data name="AssetTitle" xml:space="preserve">
-    <value>Un gestore di password sicuro e gratis per tutti i tuoi dispositivi</value>
+    <value>Un password manager sicuro e gratis per tutti i tuoi dispositivi</value>
   </data>
   <data name="ScreenshotSync" xml:space="preserve">
     <value>Sincronizza e accedi alla tua cassaforte da più dispositivi</value>
@@ -145,6 +145,6 @@
     <value>Genera automaticamente password complesse, casuali e sicure</value>
   </data>
   <data name="ScreenshotEdit" xml:space="preserve">
-    <value>Le tue informazioni sono salvate in modo sicuro grazie all'algoritmo di criptografia AES-256</value>
+    <value>Le tue informazioni sono salvate in modo sicuro grazie all'algoritmo di crittografia AES-256</value>
   </data>
 </root>

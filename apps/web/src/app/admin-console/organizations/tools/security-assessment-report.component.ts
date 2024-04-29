@@ -5,18 +5,17 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
-import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { PasswordRepromptService } from "@bitwarden/vault";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { NgxCaptureService } from "ngx-capture";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { SecurityAssessmentReportComponent as BaseSecurityAssessmentReportComponent } from "../../../reports/pages/security-assessment-report.component";
+import { SecurityAssessmentReportComponent as BaseSecurityAssessmentReportComponent } from "../../../tools/reports/pages/security-assessment-report.component";
 import { ExposedPasswordsReportComponent } from "./exposed-passwords-report.component";
 import { ReusedPasswordsReportComponent } from "./reused-passwords-report.component";
 import { WeakPasswordsReportComponent } from "./weak-passwords-report.component";
@@ -26,7 +25,7 @@ import { ConfiguredTwoFactorReportComponent } from "./configured-two-factor-repo
 
 @Component({
   selector: "app-org-security-assessment-report",
-  templateUrl: "../../../reports/pages/security-assessment-report.component.html",
+  templateUrl: "../../../tools/reports/pages/security-assessment-report.component.html",
 })
 
 export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentReportComponent {
@@ -37,9 +36,8 @@ export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentRep
     cipherService: CipherService,
     auditService: AuditService,
     modalService: ModalService,
-    messagingService: MessagingService,
     stateService: StateService,
-    private organizationService: OrganizationService,
+    organizationService: OrganizationService,
     private organizationUserService: OrganizationUserService,
     private route: ActivatedRoute,
     passwordRepromptService: PasswordRepromptService,
@@ -54,7 +52,7 @@ export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentRep
       cipherService,
       auditService,
       modalService,
-      messagingService,
+      organizationService,
       stateService,
       passwordRepromptService,
       passwordStrengthService,
@@ -64,11 +62,11 @@ export class SecurityAssessmentReportComponent extends BaseSecurityAssessmentRep
       syncService
     );
 
-    this.exposedPasswords = new ExposedPasswordsReportComponent(cipherService, auditService, modalService, messagingService, organizationService, route, passwordRepromptService);
-    this.reusedPasswords = new ReusedPasswordsReportComponent(cipherService, modalService, messagingService, stateService, route, organizationService, passwordRepromptService);
-    this.weakPasswords = new WeakPasswordsReportComponent(cipherService, passwordStrengthService, modalService, messagingService, route, organizationService, passwordRepromptService);
-    this.unsecuredWebsites = new UnsecuredWebsitesReportComponent(cipherService, modalService, messagingService, route, organizationService, passwordRepromptService);
-    this.inactiveTwoFactor = new InactiveTwoFactorReportComponent(cipherService, modalService, messagingService, route, logService, passwordRepromptService, organizationService);
+    this.exposedPasswords = new ExposedPasswordsReportComponent(cipherService, auditService, modalService, organizationService, route, passwordRepromptService);
+    this.reusedPasswords = new ReusedPasswordsReportComponent(cipherService, modalService, route, organizationService, passwordRepromptService);
+    this.weakPasswords = new WeakPasswordsReportComponent(cipherService, passwordStrengthService, modalService, route, organizationService, passwordRepromptService);
+    this.unsecuredWebsites = new UnsecuredWebsitesReportComponent(cipherService, modalService, route, organizationService, passwordRepromptService);
+    this.inactiveTwoFactor = new InactiveTwoFactorReportComponent(cipherService, modalService, route, logService, passwordRepromptService, organizationService);
     this.configuredTwoFactor = new ConfiguredTwoFactorReportComponent(auditService, stateService, route, apiService, organizationService, organizationUserService);
   }
 

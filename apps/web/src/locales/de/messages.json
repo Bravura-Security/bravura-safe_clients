@@ -601,9 +601,6 @@
   "maxFileSize": {
     "message": "Die maximale Dateigröße beträgt 1.8 GB."
   },
-  "updateKey": {
-    "message": "Sie können diese Funktion nicht nutzen, bevor Sie Ihren Verschlüsselungscode aktualisiert haben."
-  },
   "addedItem": {
     "message": "Eintrag hinzugefügt"
   },
@@ -706,6 +703,99 @@
   },
   "loginWithMasterPassword": {
     "message": "Mit Master-Passwort anmelden"
+  },
+  "readingPasskeyLoading": {
+    "message": "Lese Passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Behalte dieses Fenster geöffnet und folge den Anweisungen deines Browsers."
+  },
+  "useADifferentLogInMethod": {
+    "message": "Eine andere Anmeldemethode verwenden"
+  },
+  "loginWithPasskey": {
+    "message": "Mit Passkey anmelden"
+  },
+  "invalidPasskeyPleaseTryAgain": {
+    "message": "Ungültiger Passkey. Bitte versuche es erneut."
+  },
+  "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
+    "message": "2FA für Passkeys wird nicht unterstützt. Aktualisiere die App, um dich anzumelden."
+  },
+  "loginWithPasskeyInfo": {
+    "message": "Verwende einen generierten Passkey, der dich automatisch ohne Passwort anmeldet. Biometrische Merkmale wie Gesichtserkennung oder Fingerabdruck oder eine andere FIDO2-Sicherheitsmethode verifizieren deine Identität."
+  },
+  "newPasskey": {
+    "message": "Neuer Passkey"
+  },
+  "learnMoreAboutPasswordless": {
+    "message": "Erfahre mehr über die passwortlose Anmeldung"
+  },
+  "passkeyEnterMasterPassword": {
+    "message": "Gib dein Master-Passwort ein, um die Einstellungen für die Anmeldung mit Passkeys zu ändern."
+  },
+  "creatingPasskeyLoading": {
+    "message": "Passkey wird erstellt..."
+  },
+  "creatingPasskeyLoadingInfo": {
+    "message": "Behalte dieses Fenster offen und folge den Anweisungen deines Browsers."
+  },
+  "errorCreatingPasskey": {
+    "message": "Fehler beim Erstellen des Passkeys."
+  },
+  "errorCreatingPasskeyInfo": {
+    "message": "Es gab ein Problem beim Erstellen deines Passkeys."
+  },
+  "passkeySuccessfullyCreated": {
+    "message": "Passkey erfolgreich erstellt!"
+  },
+  "customPasskeyNameInfo": {
+    "message": "Benenne deinen Passkey, um ihn zu identifizieren."
+  },
+  "useForVaultEncryption": {
+    "message": "Zur Tresorverschlüsselung verwenden"
+  },
+  "useForVaultEncryptionInfo": {
+    "message": "Anmelden und Entsperren auf unterstützten Geräten ohne dein Master-Passwort. Folge den Anweisungen deines Browsers, um die Einrichtung abzuschließen."
+  },
+  "useForVaultEncryptionErrorReadingPasskey": {
+    "message": "Fehler beim Lesen des Passkeys. Versuche es erneut oder deaktiviere diese Option."
+  },
+  "encryptionNotSupported": {
+    "message": "Verschlüsselung nicht unterstützt"
+  },
+  "enablePasskeyEncryption": {
+    "message": "Verschlüsselung einrichten"
+  },
+  "usedForEncryption": {
+    "message": "Wird für die Verschlüsselung verwendet"
+  },
+  "loginWithPasskeyEnabled": {
+    "message": "Anmeldung mit Passkey aktiviert"
+  },
+  "passkeySaved": {
+    "message": "$NAME$ gespeichert",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Personal yubikey"
+      }
+    }
+  },
+  "passkeyRemoved": {
+    "message": "Passkey gelöscht"
+  },
+  "removePasskey": {
+    "message": "Passkey löschen"
+  },
+  "removePasskeyInfo": {
+    "message": "Wenn alle Passkeys entfernt werden, kannst du dich ohne dein Master-Passwort nicht auf neuen Geräten anmelden."
+  },
+  "passkeyLimitReachedInfo": {
+    "message": "Passkey-Limit erreicht. Entferne einen Passkey, um ein weiteren hinzuzufügen."
+  },
+  "tryAgain": {
+    "message": "Erneut versuchen"
   },
   "createAccount": {
     "message": "Konto erstellen"
@@ -1080,6 +1170,9 @@
   "export": {
     "message": "Exportieren"
   },
+  "exportFrom": {
+    "message": "Exportieren ab"
+  },
   "exportVault": {
     "message": "Tresor exportieren"
   },
@@ -1155,6 +1248,9 @@
   },
   "length": {
     "message": "Länge"
+  },
+  "passwordMinLength": {
+    "message": "Minimale Passwortlänge"
   },
   "uppercase": {
     "message": "Großbuchstaben (A-Z)",
@@ -1406,7 +1502,7 @@
   },
   "importTargetHint": {
     "message": "Wähle diese Option, wenn der importierte Dateiinhalt in eine(n) $DESTINATION$ verschoben werden soll",
-    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team vault.",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or a team safe.",
     "placeholders": {
       "destination": {
         "content": "$1",
@@ -1524,7 +1620,10 @@
   "twoStepLoginDesc": {
     "message": "Sichern Sie Ihr Konto mit Zwei-Faktor-Authentifizierung."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "Zwei-Faktor-Authentifizierung für deine Organisation aktivieren."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "Erzwinge eine Zwei-Faktor-Authentifizierung in Bravura Safe für Mitglieder durch Verwendung der ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bravura Safe Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1577,6 +1676,9 @@
   },
   "manage": {
     "message": "Verwalten"
+  },
+  "canManage": {
+    "message": "Darf verwalten"
   },
   "disable": {
     "message": "Deaktivieren"
@@ -2077,8 +2179,8 @@
   "premiumSignUpStorage": {
     "message": "1 GB verschlüsselter Speicherplatz für Dateianhänge."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Zusätzliche Zwei-Faktor-Authentifizierungsmöglichkeiten wie z.B. YubiKey, FIDO U2F und Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietäre Optionen für die Zwei-Faktor Authentifizierung wie YubiKey und Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Notfallzugriff"
@@ -2192,6 +2294,9 @@
         "example": "month or year"
       }
     }
+  },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Deine Zahlungsmethode wird für alle unbezahlten Abonnements belastet."
   },
   "paymentChargedWithTrial": {
     "message": "Dein Tarif beinhaltet eine kostenlose 7-Tage-Testversion. Deine Zahlungsart wird nicht belastet, bis die Testphase abgelaufen ist. Du erhältst pro $INTERVAL$ eine Rechnung. Eine Kündigung ist zu jeder Zeit möglich."
@@ -2361,6 +2466,9 @@
   "contactSupport": {
     "message": "Kundensupport kontaktieren"
   },
+  "contactSupportShort": {
+    "message": "Support kontaktieren"
+  },
   "updatedPaymentMethod": {
     "message": "Zahlungsart aktualisiert."
   },
@@ -2461,6 +2569,9 @@
   },
   "planDescTeams": {
     "message": "Für Unternehmen und andere Teamorganisationen."
+  },
+  "planNameTeamsStarter": {
+    "message": "Teams Starter"
   },
   "planNameEnterprise": {
     "message": "Unternehmen"
@@ -2824,6 +2935,9 @@
   },
   "webVault": {
     "message": "Web-Tresor"
+  },
+  "cli": {
+    "message": "CLI"
   },
   "bitWebVault": {
     "message": "Bravura Safe Web-Tresor"
@@ -3548,6 +3662,9 @@
   "subscriptionUpdated": {
     "message": "Abonnement aktualisiert"
   },
+  "subscribedToSecretsManager": {
+    "message": "Abonnement aktualisiert. Du hast nun Zugriff auf den Secrets Manager."
+  },
   "additionalOptions": {
     "message": "Weitere Optionen"
   },
@@ -3566,6 +3683,15 @@
       }
     }
   },
+  "subscriptionUserSeatsWithoutAdditionalSeatsOption": {
+    "message": "Du kannst bis zu $COUNT$ Mitglieder ohne zusätzliche Kosten einladen. Wende dich an den Kundensupport, um dein Abonnement zu erweitern und mehr Mitglieder einzuladen.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "subscriptionFreePlan": {
     "message": "Du kannst nicht mehr als $COUNT$ Benutzer einladen ohne dein Abonnement hochzustufen.",
     "placeholders": {
@@ -3575,12 +3701,12 @@
       }
     }
   },
-  "subscriptionFamiliesPlan": {
-    "message": "Du kannst nicht mehr als $COUNT$ Benutzer einladen ohne dein Abonnement zu upgraden. Bitte kontaktiere dafür den Kundensupport.",
+  "subscriptionUpgrade": {
+    "message": "Du kannst nicht mehr als $COUNT$ Mitglieder einladen ohne dein Abonnement upzugraden.",
     "placeholders": {
       "count": {
         "content": "$1",
-        "example": "6"
+        "example": "2"
       }
     }
   },
@@ -3626,17 +3752,11 @@
   "keyUpdated": {
     "message": "Schlüssel aktualisiert"
   },
-  "updateKeyTitle": {
-    "message": "Schlüssel aktualisieren"
-  },
   "updateEncryptionKey": {
     "message": "Verschlüsselungsschlüssel aktualisieren"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "Sie verwenden derzeit ein veraltetes Verschlüsselungsschema."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "Wir sind auf größere Verschlüsselungscodes umgestiegen, welche bessere Sicherheit und Zugang zu neuen Features bieten. Das Update Ihres Verschlüsselungscodes ist schnell und einfach. Geben Sie einfach hier Ihr Master-Passwort ein. Das Update wird irgendwann verpflichtend."
+  "updateEncryptionSchemeDesc": {
+    "message": "Wir haben das Verschlüsselungsschema geändert, um die Sicherheit zu verbessern. Aktualisieren Sie jetzt Ihren Verschlüsselungsschlüssel, indem Sie Ihr Master-Passwort unten eingeben."
   },
   "updateEncryptionKeyWarning": {
     "message": "Nach der Aktualisierung Ihres Verschlüsselungsschlüssels musst du dich bei allen Bravura Safe-Anwendungen, die du momentan benutzt, erneut anmelden (wie z.B. die mobile App oder die Browser-Erweiterungen). Fehler bei Ab- und Anmeldung (die deinen neuen Verschlüsselungsschlüssel herunterlädt) könnte zu einer Beschädigung der Daten führen. Wir werden versuchen dich automatisch abzumelden, was jedoch verzögert geschehen kann."
@@ -3692,6 +3812,9 @@
   "vaultTimeoutDesc": {
     "message": "Lege einen Timeout für den Tresor und die auszuführende Aktion fest."
   },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Wähle aus, wann du von deinem Tresor abgemeldet wirst."
+  },
   "oneMinute": {
     "message": "1 Minute"
   },
@@ -3727,6 +3850,18 @@
   },
   "organizationIsDisabled": {
     "message": "Organisation ist deaktiviert"
+  },
+  "secretsAccessSuspended": {
+    "message": "Auf deaktivierte Organisationen kann nicht zugegriffen werden. Bitte wende dich an deinen Organisationseigentümer."
+  },
+  "secretsCannotCreate": {
+    "message": "Geheimnisse können in deaktivierten Organisationen nicht erstellt werden. Bitte kontaktiere deinen Organisationseigentümer, um Unterstützung zu erhalten."
+  },
+  "projectsCannotCreate": {
+    "message": "Projekte können in deaktivierten Organisationen nicht erstellt werden. Bitte kontaktiere deinen Organisationseigentümer, um Unterstützung zu erhalten."
+  },
+  "serviceAccountsCannotCreate": {
+    "message": "Dienstkonten können in deaktivierten Organisationen nicht erstellt werden. Bitte kontaktiere deinen Organisationseigentümer, um Unterstützung zu erhalten."
   },
   "disabledOrganizationFilterError": {
     "message": "Auf Einträge in deaktivierten Organisationen kann nicht zugegriffen werden. Kontaktiere deinen Organisationseigentümer für Unterstützung."
@@ -3845,15 +3980,6 @@
   },
   "couldNotChargeCardPayInvoice": {
     "message": "Wir konnten deine Karte nicht belasten. Bitte sieh dir die unten aufgeführte unbezahlte Rechnung an und begleiche sie."
-  },
-  "inAppPurchase": {
-    "message": "In-App-Kauf"
-  },
-  "cannotPerformInAppPurchase": {
-    "message": "Du kannst diese Aktion nicht durchführen, wenn du eine In-App-Kauf Zahlungsmethode nutzt."
-  },
-  "manageSubscriptionFromStore": {
-    "message": "Du musst dein Abonnement im entsprechenden App Store verwalten, über den der In-App-Kauf getätigt wurde."
   },
   "minLength": {
     "message": "Mindestlänge"
@@ -4037,9 +4163,6 @@
   "setMasterPassword": {
     "message": "Master-Passwort festlegen"
   },
-  "ssoCompleteRegistration": {
-    "message": "Bitte lege ein Master-Passwort für den Schutz deines Tresors fest, um die Anmeldung über SSO abzuschließen."
-  },
   "identifier": {
     "message": "Kennung"
   },
@@ -4058,6 +4181,21 @@
   "includeAllTeamsFeatures": {
     "message": "Alle Teams-Funktionen, plus:"
   },
+  "includeAllTeamsStarterFeatures": {
+    "message": "Alle Teams Starter-Funktionen, plus:"
+  },
+  "chooseMonthlyOrAnnualBilling": {
+    "message": "Monatliche oder jährliche Abrechnung wählen"
+  },
+  "abilityToAddMoreThanNMembers": {
+    "message": "Möglichkeit mehr als $COUNT$ Mitglieder hinzuzufügen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "includeSsoAuthentication": {
     "message": "SSO-Authentifizierung über SAML2.0 und OpenID Connect"
   },
@@ -4073,8 +4211,9 @@
   "ssoIdentifier": {
     "message": "SSO-Kennung"
   },
-  "ssoIdentifierHint": {
-    "message": "Gib diese Kennung an deine Mitglieder weiter, damit sie sich mit SSO anmelden können."
+  "ssoIdentifierHintPartOne": {
+    "message": "Gib diese ID deinen Mitgliedern zur Anmeldung über SSO. Um diesen Schritt zu umgehen, aktiviere die ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Provide this ID to your members to login with SSO. To bypass this step, set up Domain verification'"
   },
   "unlinkSso": {
     "message": "SSO-Verknüpfung aufheben"
@@ -4244,8 +4383,8 @@
     "message": "Dieses Share ist standardmäßig ausgeblendet. Du kannst die Sichtbarkeit mit dem Button unten umschalten.",
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
-  "downloadFile": {
-    "message": "Datei herunterladen"
+  "downloadAttachments": {
+    "message": "Anhänge herunterladen"
   },
   "sendAccessUnavailable": {
     "message": "Das Share, auf das du zugreifen möchtest, existiert nicht oder ist nicht mehr verfügbar.",
@@ -4635,8 +4774,8 @@
     "message": "um es heute auszuprobieren.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bravura Safe Share or sign up to **try it today.**'"
   },
-  "sendCreatorIdentifier": {
-    "message": "Bravura Safe Benutzer $USER_IDENTIFIER$ hat Folgendes mit dir geteilt",
+  "sendAccessCreatorIdentifier": {
+    "message": "Bravura Safe-Mitglied $USER_IDENTIFIER$ hat Folgendes mit dir geteilt",
     "placeholders": {
       "user_identifier": {
         "content": "$1",
@@ -4887,7 +5026,7 @@
     "message": "Fehler"
   },
   "accountRecoveryManageUsers": {
-    "message": "Manage users must also be granted with the manage account recovery permission"
+    "message": "Manage users must also be granted with the manage master password reset permission"
   },
   "setupProvider": {
     "message": "Anbieter-Einrichtung"
@@ -5205,6 +5344,12 @@
   },
   "spValidateCertificates": {
     "message": "Zertifikate validieren"
+  },
+  "spUniqueEntityId": {
+    "message": "Set a unique SP entity ID"
+  },
+  "spUniqueEntityIdDesc": {
+    "message": "Generate an identifier that is unique to your team"
   },
   "idpEntityId": {
     "message": "Entitäts-ID"
@@ -5575,6 +5720,19 @@
   "required": {
     "message": "erforderlich"
   },
+  "charactersCurrentAndMaximum": {
+    "message": "$CURRENT$/$MAX$ erlaubten Zeichen",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "max": {
+        "content": "$2",
+        "example": "100"
+      }
+    }
+  },
   "characterMaximum": {
     "message": "Maximal $MAX$ Zeichen",
     "placeholders": {
@@ -5925,6 +6083,9 @@
   },
   "on": {
     "message": "Ein"
+  },
+  "off": {
+    "message": "Aus"
   },
   "members": {
     "message": "Mitglieder"
@@ -6726,6 +6887,24 @@
       }
     }
   },
+  "teamsStarterPlanInvLimitReachedManageBilling": {
+    "message": "Teams Starter-Abonnements können bis zu $SEATCOUNT$ Mitglieder enthalten. Upgrade, um mehr Mitglieder einzuladen.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "teamsStarterPlanInvLimitReachedNoManageBilling": {
+    "message": "Teams Starter-Abonnements können bis zu $SEATCOUNT$ Mitglieder haben. Kontaktiere deinen Organisationseigentümer, um dein Abonnement zu aktualisieren und mehr Mitglieder einzuladen.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "freeOrgMaxCollectionReachedManageBilling": {
     "message": "Kostenlose Organisationen können bis zu $COLLECTIONCOUNT$ Sammlungen haben. Wechsle auf ein kostenpflichtiges Abonnement, um mehr Sammlungen hinzuzufügen.",
     "placeholders": {
@@ -7124,28 +7303,68 @@
       }
     }
   },
+  "loginInitiated": {
+    "message": "Anmeldung eingeleitet"
+  },
+  "deviceApprovalRequired": {
+    "message": "Geräte-Genehmigung erforderlich. Wähle unten eine Genehmigungsoption aus:"
+  },
+  "rememberThisDevice": {
+    "message": "Dieses Gerät merken"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Deaktivieren, wenn ein öffentliches Gerät verwendet wird"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Von deinem anderen Gerät genehmigen"
+  },
+  "requestAdminApproval": {
+    "message": "Admin-Genehmigung anfragen"
+  },
+  "approveWithMasterPassword": {
+    "message": "Mit Master-Passwort genehmigen"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Vertrauenswürdige Geräteverschlüsselung"
+  },
   "trustedDevices": {
     "message": "Vertrauenswürdige Geräte"
   },
-  "memberDecryptionTdeDescriptionPartOne": {
-    "message": "Einmal authentifiziert, entschlüsseln Mitglieder Tresordaten mit einem Schlüssel auf ihrem Gerät. Die",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "Einmal authentifiziert, entschlüsseln Mitglieder Tresordaten mit einem Schlüssel auf ihrem Gerät. Die Richtlinie für",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkOne": {
-    "message": "Unternehmensrichtlinie für eine einzelne Organisation",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "einzelne Team",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartTwo": {
-    "message": "und die",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": ", die Richtlinie zum",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionLinkTwo": {
-    "message": "Richtlinie für die Kontowiederherstellungsverwaltung",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "Verlangen einer SSO-Authentifizierung",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
   },
-  "memberDecryptionTdeDescriptionPartThree": {
-    "message": "mit automatischer Registrierung wird aktiviert, wenn diese Option verwendet wird.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "und die Richtlinie für die",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO Required policy, and master password reset administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "Kontowiederherstellungsverwaltung",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "mit automatischer Registrierung werden aktiviert, wenn diese Option verwendet wird.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single team policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Deine Organisationsberechtigungen wurden aktualisiert und verlangen, dass du ein Master-Passwort festlegen musst.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Deine Organisation verlangt, dass du ein Master-Passwort festlegen musst.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
   },
   "notFound": {
     "message": "$RESOURCE$ nicht gefunden",
@@ -7234,6 +7453,27 @@
   "removeMembersWithoutMasterPasswordWarning": {
     "message": "Mitglieder ohne Master-Passwort zu entfernen, ohne ein solches zu setzen, kann den Zugang zu deren gesamtem Konto einschränken."
   },
+  "approvedAuthRequest": {
+    "message": "Genehmigtes Gerät für $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Abgelehntes Gerät für $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Geräte-Genehmigung anfragen."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Starte deine 7-tägige kostenlose Testversion von Bravura Safe für $ORG$",
     "placeholders": {
@@ -7246,14 +7486,35 @@
   "next": {
     "message": "Weiter"
   },
-  "usFlag": {
-    "message": "US-Flagge"
-  },
-  "euFlag": {
-    "message": "EU-Flagge"
+  "ssoLoginIsRequired": {
+    "message": "SSO-Anmeldung ist erforderlich"
   },
   "selectedRegionFlag": {
     "message": "Flagge der ausgewählten Region"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Konto erfolgreich erstellt!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin-Genehmigung angefragt"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Deine Anfrage wurde an deinen Administrator gesendet."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Nach einer Genehmigung wirst du benachrichtigt."
+  },
+  "troubleLoggingIn": {
+    "message": "Probleme beim Anmelden?"
+  },
+  "loginApproved": {
+    "message": "Anmeldung genehmigt"
+  },
+  "userEmailMissing": {
+    "message": "E-Mail-Adresse des Benutzers fehlt"
+  },
+  "deviceTrusted": {
+    "message": "Gerät wird vertraut"
   },
   "sendsNoItemsTitle": {
     "message": "Keine aktiven Shares",
@@ -7279,7 +7540,7 @@
     "message": "Für Entwicklungs- und DevOps-Teams zur Verwaltung von Geheimnissen während des gesamten Softwareentwicklungszyklus."
   },
   "free2PersonOrganization": {
-    "message": "Free 2-person Teams"
+    "message": "Kostenlose Teams mit 2 Personen"
   },
   "unlimitedSecrets": {
     "message": "Unbegrenzte Geheimnisse"
@@ -7314,8 +7575,8 @@
       }
     }
   },
-  "addSecretsManager": {
-    "message": "Secrets Manager hinzufügen"
+  "subscribeToSecretsManager": {
+    "message": "Secrets Manager abonnieren"
   },
   "addSecretsManagerUpgradeDesc": {
     "message": "Füge den Secrets Manager zu deinem aktualisierten Abonnement hinzu, um den Zugriff auf alle Geheimnisse zu erhalten, die mit deinem vorherigen Abonnement erstellt wurden."
@@ -7341,6 +7602,21 @@
       }
     }
   },
+  "collectionManagement": {
+    "message": "Verwaltung der Sammlungen"
+  },
+  "collectionManagementDesc": {
+    "message": "Verwalte das Sammlungsverhalten für die Organisation"
+  },
+  "limitCollectionCreationDeletionDesc": {
+    "message": "Sammlungserstellung und -löschung auf Eigentümer und Administratoren beschränken"
+  },
+  "allowAdminAccessToAllCollectionItemsDesc": {
+    "message": "Besitzer und Administratoren können alle Sammlungen und Einträge verwalten"
+  },
+  "collectionManagementUpdated": {
+    "message": "Verhalten der Sammlungsverwaltung gespeichert"
+  },
   "passwordManagerPlanPrice": {
     "message": "Passwort-Manager Abonnementpreis"
   },
@@ -7351,7 +7627,7 @@
     "message": "Passwort-Manager"
   },
   "freeOrganization": {
-    "message": "Free Team"
+    "message": "Kostenlose Team"
   },
   "limitServiceAccounts": {
     "message": "Dienstkonten beschränken (optional)"
@@ -7364,6 +7640,9 @@
   },
   "maxServiceAccountCost": {
     "message": "Maximale potentielle Kosten für Dienstkonten"
+  },
+  "loggedInExclamation": {
+    "message": "Angemeldet!"
   },
   "smBetaEndedDesc": {
     "message": "Die Secrets Manager Beta endete am $BETA_ENDING_DATE$. Du hast $DAYS$ Tage Zeit, um den Secrets Manager zu deinem kostenpflichtigen Abonnement hinzuzufügen und den Zugriff auf die Daten des Secrets Manager zu erhalten. Kontaktiere den Kundensupport, um den Secrets Manager zu deinem Abonnement hinzuzufügen.",
@@ -7384,8 +7663,50 @@
   "beta": {
     "message": "Beta"
   },
+  "assignCollectionAccess": {
+    "message": "Sammlungszugriff zuweisen"
+  },
+  "editedCollections": {
+    "message": "Bearbeitete Sammlungen"
+  },
+  "baseUrl": {
+    "message": "Server-URL"
+  },
+  "aliasDomain": {
+    "message": "Alias-Domain"
+  },
   "alreadyHaveAccount": {
     "message": "Hast du bereits ein Konto?"
+  },
+  "skipToContent": {
+    "message": "Zum Inhalt wechseln"
+  },
+  "customBillingStart": {
+    "message": "Eine individuelle Abrechnung wird nicht berücksichtigt. Besuche die "
+  },
+  "customBillingEnd": {
+    "message": " Seite für die aktuelle Rechnung."
+  },
+  "managePermissionRequired": {
+    "message": "Mindestens ein Mitglied oder eine Gruppe muss die \"Darf verwalten\"-Berechtigung besitzen."
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey wird nicht kopiert"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "Der Passkey wird nicht in den duplizierten Eintrag kopiert. Möchtest du mit dem Duplizieren dieses Eintrags fortfahren?"
+  },
+  "modifiedCollectionManagement": {
+    "message": "Sammlungsverwaltungs-Einstellung bearbeitet $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
   },
   "skip2faForSsoPolicyTitle": {
     "message": "Bypass personal two-step login when using SSO"
@@ -7395,5 +7716,46 @@
   },
   "skip2faForSsoPolicyWarning": {
     "message": "Skipping the Bravura safe provided personal Two-step Login provider (ex OTP or email code ) is less secure. Ensure the SSO provider enforces multi-factor authentication."
+  },
+  "forcePasswordReset": {
+    "message": "Force password reset"
+  },
+  "forcePasswordResetHelp": {
+    "message": "When resetting a master password for a user they will be forced to change their master password upon next login. (Default: enabled)"
+  },
+  "seeDetailedInstructions": {
+    "message": "Detaillierte Anleitungen auf unserer Hilfeseite unter",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "projectAccessUpdated": {
+    "message": "Projektzugriff aktualisiert"
+  },
+  "unexpectedErrorSend": {
+    "message": "Beim Laden dieses Sends ist ein unerwarteter Fehler aufgetreten. Versuche es später erneut."
+  },
+  "seatLimitReached": {
+    "message": "Benutzerplatzlimit wurde erreicht"
+  },
+  "contactYourProvider": {
+    "message": "Kontaktiere deinen Anbieter, um zusätzliche Benutzerplätze zu erwerben."
+  },
+  "seatLimitReachedContactYourProvider": {
+    "message": "Das Benutzerplatzlimit wurde erreicht. Kontaktiere deinen Anbieter, um zusätzliche Benutzerplätze zu erwerben."
+  },
+  "collectionAccessRestricted": {
+    "message": "Zugriff auf Sammlungen ist eingeschränkt"
+  },
+  "grantCollectionAccess": {
+    "message": "Grant groups or members access to this collection."
+  },
+  "adminCollectionAccess": {
+    "message": "Administrators can access and manage collections."
+  },
+  "serviceAccountAccessUpdated": {
+    "message": "Zugriff zum Dienstkonto aktualisiert"
+  },
+  "commonImportFormats": {
+    "message": "Gängigste Formate",
+    "description": "Label indicating the most common import formats"
   }
 }

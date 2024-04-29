@@ -2,6 +2,7 @@ import { Component, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
+import { PinCryptoServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -18,14 +19,15 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { DialogService } from "@bitwarden/components";
-
-import { RouterService } from "../core";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 @Component({
   selector: "app-lock",
   templateUrl: "lock.component.html",
 })
 export class LockComponent extends BaseLockComponent {
+  syncService: SyncService;
+
   constructor(
     router: Router,
     i18nService: I18nService,
@@ -35,7 +37,6 @@ export class LockComponent extends BaseLockComponent {
     vaultTimeoutService: VaultTimeoutService,
     vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     environmentService: EnvironmentService,
-    private routerService: RouterService,
     stateService: StateService,
     apiService: ApiService,
     logService: LogService,
@@ -45,7 +46,9 @@ export class LockComponent extends BaseLockComponent {
     passwordStrengthService: PasswordStrengthServiceAbstraction,
     dialogService: DialogService,
     deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
-    userVerificationService: UserVerificationService
+    userVerificationService: UserVerificationService,
+    pinCryptoService: PinCryptoServiceAbstraction,
+    syncService: SyncService,
   ) {
     super(
       router,
@@ -65,18 +68,17 @@ export class LockComponent extends BaseLockComponent {
       passwordStrengthService,
       dialogService,
       deviceTrustCryptoService,
-      userVerificationService
+      userVerificationService,
+      pinCryptoService,
     );
+    this.syncService = syncService;
   }
 
   async ngOnInit() {
     await super.ngOnInit();
     this.onSuccessfulSubmit = async () => {
-      const previousUrl = await this.routerService.getPreviousUrl();
-      if (previousUrl && previousUrl !== "/" && previousUrl.indexOf("lock") === -1) {
-        this.successRoute = previousUrl;
-      }
       this.router.navigateByUrl(this.successRoute);
+      await this.syncService.fullSync(true);
     };
   }
 }

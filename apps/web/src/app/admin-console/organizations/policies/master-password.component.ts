@@ -7,6 +7,8 @@ import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { PlanType } from "@bitwarden/common/billing/enums";
 
 import { BasePolicy, BasePolicyComponent } from "./base-policy.component";
 
@@ -15,6 +17,10 @@ export class MasterPasswordPolicy extends BasePolicy {
   description = "masterPassPolicyDesc";
   type = PolicyType.MasterPassword;
   component = MasterPasswordPolicyComponent;
+
+  display(organization: Organization) {
+    return organization.planType === PlanType.BravuraEnterprise;
+  }
 }
 
 @Component({
@@ -40,7 +46,7 @@ export class MasterPasswordPolicyComponent extends BasePolicyComponent {
   constructor(
     private formBuilder: FormBuilder,
     i18nService: I18nService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
   ) {
     super();
 

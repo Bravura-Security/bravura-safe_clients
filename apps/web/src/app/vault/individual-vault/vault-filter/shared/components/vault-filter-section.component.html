@@ -91,8 +91,7 @@
             ></i>
             {{ f.node.name }}
           </button>
-
-          <span class="ml-auto">
+          <span class="ml-auto tw-flex tw-items-center">
             <button
               type="button"
               *ngIf="editInfo && f.node.id"
@@ -107,16 +106,11 @@
               class="org-options fa fa-fw fa-exclamation-triangle text-danger"
               [attr.aria-label]="'organizationIsDisabled' | i18n"
               appA11yTitle="{{ 'organizationIsDisabled' | i18n }}"
-            ></i
-            ><ng-container *ngIf="optionsInfo && !f.node.hideOptions"
-              ><button type="button" [bitMenuTriggerFor]="optionsMenu" class="filter-options-icon">
-                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-              </button>
-              <bit-menu class="filter-organization-options" #optionsMenu>
+            ></i>
+            <ng-container *ngIf="optionsInfo && !f.node.hideOptions">
                 <ng-container
                   *ngComponentOutlet="optionsInfo.component; injector: createInjector(f.node)"
                 ></ng-container>
-              </bit-menu>
             </ng-container>
           </span>
         </span>

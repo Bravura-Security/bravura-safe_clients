@@ -14,7 +14,10 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 })
 
 export class OrganizationSwitcherComponent implements OnInit {
-  constructor(private organizationService: OrganizationService, private i18nService: I18nService) {}
+  constructor(
+    private organizationService: OrganizationService,
+    private i18nService: I18nService,
+  ) {}
 
   @Input() activeOrganization: Organization = null;
   organizations$: Observable<Organization[]>;
@@ -23,7 +26,7 @@ export class OrganizationSwitcherComponent implements OnInit {
 
   async ngOnInit() {
     this.organizations$ = this.organizationService.memberOrganizations$.pipe(
-      map((orgs) => orgs.sort((a, b) => a.name.localeCompare(b.name)))
+      map((orgs) => orgs.sort((a, b) => a.name.localeCompare(b.name))),
     );
 
     this.loaded = true;

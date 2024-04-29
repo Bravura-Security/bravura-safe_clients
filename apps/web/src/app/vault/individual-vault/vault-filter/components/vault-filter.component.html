@@ -1,34 +1,32 @@
 <div class="groupings">
   <div class="content">
     <div class="inner-content">
-<div class="card vault-filters">
-  <div class="container loading-spinner" *ngIf="!isLoaded">
-    <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
-  </div>
-  <div *ngIf="isLoaded">
-    <div class="card-body">
-      <div class="search-container">
-      <input
-        type="search"
-        placeholder="{{ searchPlaceholder | i18n }}"
-        id="search"
-        class="form-control"
-        [ngModel]="searchText"
-        (ngModelChange)="onSearchTextChanged($event)"
-        autocomplete="off"
-        appAutofocus
-      />
-      </div>
-      <div class="filter-container">
-      <ng-container *ngFor="let f of filtersList">
-        <div class="filter">
-          <app-filter-section [activeFilter]="activeFilter" [section]="f"> </app-filter-section>
+      <div class="card vault-filters">
+        <div class="container loading-spinner" *ngIf="!isLoaded">
+          <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
         </div>
-      </ng-container>
+        <div *ngIf="isLoaded">
+          <div class="card-body">
+            <div class="search-container">
+              <bit-search
+                id="search"
+                placeholder="{{ searchPlaceholder | i18n }}"
+                [(ngModel)]="searchText"
+                (ngModelChange)="onSearchTextChanged($event)"
+                autocomplete="off"
+                appAutofocus
+              />
+            </div>
+            <div class="filter-container">
+              <ng-container *ngFor="let f of filtersList">
+                <div class="filter">
+                  <app-filter-section [activeFilter]="activeFilter" [section]="f"> </app-filter-section>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
     </div>
   </div>
 </div>

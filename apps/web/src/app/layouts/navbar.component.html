@@ -38,14 +38,16 @@
         </ng-container>
       </ul>
     </div>
+    <!--
     <product-switcher buttonType="light"></product-switcher>
+    -->
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
       <li>
         <button
           type="button"
           [bitMenuTriggerFor]="accountMenu"
           class="tw-border-0 tw-bg-transparent tw-text-alt2 tw-opacity-70 hover:tw-opacity-90 nav-item nav-link"
-          attr.aria-label="{{ 'accountLoggedInAsName' | i18n : name }}"
+          attr.aria-label="{{ 'accountLoggedInAsName' | i18n: name }}"
         >
           <dynamic-avatar
             [text]="name"

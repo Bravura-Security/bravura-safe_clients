@@ -16,6 +16,7 @@ import { OrganizationPermissionsGuard } from "../../admin-console/organizations/
 import { OrganizationRedirectGuard } from "../../admin-console/organizations/guards/org-redirect.guard";
 import { OrganizationLayoutComponent } from "../../admin-console/organizations/layouts/organization-layout.component";
 import { GroupsComponent } from "../../admin-console/organizations/manage/groups.component";
+import { deepLinkGuard } from "../../auth/guards/deep-link.guard";
 import { VaultModule } from "../../vault/org-vault/vault.module";
 
 import { OptionsComponent } from "./options/options.component";
@@ -25,7 +26,7 @@ const routes: Routes = [
   {
     path: ":organizationId",
     component: OrganizationLayoutComponent,
-    canActivate: [AuthGuard, OrganizationPermissionsGuard],
+    canActivate: [deepLinkGuard(), AuthGuard, OrganizationPermissionsGuard],
     data: {
       organizationPermissions: canAccessVaultTab,
     },
@@ -47,7 +48,7 @@ const routes: Routes = [
         path: "settings",
         loadChildren: () =>
           import("./settings/organization-settings.module").then(
-            (m) => m.OrganizationSettingsModule
+            (m) => m.OrganizationSettingsModule,
           ),
       },
       {
@@ -67,12 +68,19 @@ const routes: Routes = [
         path: "reporting",
         loadChildren: () =>
           import("../organizations/reporting/organization-reporting.module").then(
-            (m) => m.OrganizationReportingModule
+            (m) => m.OrganizationReportingModule,
           ),
       },
       {
         path: "options",
         loadChildren: () => import("./options").then((m) => m.OrganizationOptionsModule),
+      },
+      {
+        path: "billing",
+        loadChildren: () =>
+          import("../../billing/organizations/organization-billing.module").then(
+            (m) => m.OrganizationBillingModule,
+          ),
       },
     ],
   },

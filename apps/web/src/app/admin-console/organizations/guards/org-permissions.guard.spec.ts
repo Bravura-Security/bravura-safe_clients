@@ -23,7 +23,7 @@ const orgFactory = (props: Partial<Organization> = {}) =>
       enabled: true,
       type: OrganizationUserType.Admin,
     },
-    props
+    props,
   );
 
 describe("Team Permissions Guard", () => {
@@ -52,7 +52,7 @@ describe("Team Permissions Guard", () => {
       organizationService,
       mock<PlatformUtilsService>(),
       mock<I18nService>(),
-      mock<SyncService>()
+      mock<SyncService>(),
     );
   });
 

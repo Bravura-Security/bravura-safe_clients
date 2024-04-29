@@ -35,25 +35,27 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { TotpService } from "@bitwarden/common/abstractions/totp.service";
 import { canAccessOrgAdmin, OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { EventType } from "@bitwarden/common/enums";
-import { ServiceUtils } from "@bitwarden/common/misc/serviceUtils";
-import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
+import { ServiceUtils } from "@bitwarden/common/vault/service-utils";
 import { DialogService, Icons } from "@bitwarden/components";
+import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { GroupService, GroupView } from "../../admin-console/organizations/core";
 import { openEntityEventsDialog } from "../../admin-console/organizations/manage/entity-events.component";
@@ -83,6 +85,10 @@ import { getNestedCollectionTree } from "../utils/collection-utils";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
+import {
+  BulkCollectionsDialogComponent,
+  BulkCollectionsDialogResult,
+} from "./bulk-collections-dialog";
 import { CollectionsComponent } from "./collections.component";
 import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -124,6 +130,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected isEmpty: boolean;
   protected showMissingCollectionPermissionMessage: boolean;
   protected currentSearchText$: Observable<string>;
+  protected showBulkEditCollectionAccess$ = this.configService.getFeatureFlag$(
+    FeatureFlag.BulkCollectionAccess,
+    false,
+  );
+  protected flexibleCollectionsEnabled: boolean;
 
   private searchText$ = new Subject<string>();
   private refresh$ = new BehaviorSubject<void>(null);
@@ -155,27 +166,28 @@ export class VaultComponent implements OnInit, OnDestroy {
     private eventCollectionService: EventCollectionService,
     private totpService: TotpService,
     private apiService: ApiService,
-    protected collectionService: CollectionService
+    protected configService: ConfigServiceAbstraction,
+    protected collectionService: CollectionService,
   ) {}
 
   async ngOnInit() {
     this.trashCleanupWarning = this.i18nService.t(
       this.platformUtilsService.isSelfHost()
         ? "trashCleanupWarningSelfHosted"
-        : "trashCleanupWarning"
+        : "trashCleanupWarning",
     );
 
     const filter$ = this.routedVaultFilterService.filter$;
     const organizationId$ = filter$.pipe(
       map((filter) => filter.organizationId),
       filter((filter) => filter !== undefined),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
 
     const organization$ = organizationId$.pipe(
       switchMap((organizationId) => this.organizationService.get$(organizationId)),
       takeUntil(this.destroy$),
-      shareReplay({ refCount: false, bufferSize: 1 })
+      shareReplay({ refCount: false, bufferSize: 1 }),
     );
 
     const firstSetup$ = combineLatest([organization$, this.route.queryParams]).pipe(
@@ -189,7 +201,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
         return undefined;
       }),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
@@ -218,37 +230,32 @@ export class VaultComponent implements OnInit, OnDestroy {
           queryParams: { search: Utils.isNullOrEmpty(searchText) ? null : searchText },
           queryParamsHandling: "merge",
           replaceUrl: true,
-        })
+        }),
       );
 
     this.currentSearchText$ = this.route.queryParams.pipe(map((queryParams) => queryParams.search));
 
-    const allCollectionsWithoutUnassigned$ = organizationId$.pipe(
-      switchMap(async (orgId) => {
-        let tempCollections: CollectionAdminView[] = [];
-        if (this.organization.canUseAdminCollections) {
-          tempCollections = await this.collectionAdminService.getAll(orgId);
-        }
-        else {
-          let collections = await this.collectionService.getAllDecrypted();
-          collections.forEach((collection) => {
-            let cloned = new CollectionAdminView();
-            cloned.groups = [];
-            cloned.users = [];
-            cloned.assigned = true;
-            cloned.id = collection.id;
-            cloned.externalId = collection.externalId;
-            cloned.hidePasswords = collection.hidePasswords;
-            cloned.name = collection.name;
-            cloned.organizationId = collection.organizationId;
-            cloned.readOnly = collection.readOnly;
-            tempCollections.push(cloned);
-          });
-        }
-        return tempCollections;
-      }),
+    const allCollectionsWithoutUnassigned$ = combineLatest([
+      organizationId$.pipe(switchMap((orgId) => this.collectionAdminService.getAll(orgId))),
+      this.collectionService.getAllDecrypted(),
+    ]).pipe(
+      map(([adminCollections, syncCollections]) => {
+        const syncCollectionDict = Object.fromEntries(syncCollections.map((c) => [c.id, c]));
 
-      shareReplay({ refCount: true, bufferSize: 1 })
+        return adminCollections.map((collection) => {
+          const currentId: any = collection.id;
+
+          const match = syncCollectionDict[currentId];
+
+          if (match) {
+            collection.manage = match.manage;
+            collection.readOnly = match.readOnly;
+            collection.hidePasswords = match.hidePasswords;
+          }
+          return collection;
+        });
+      }),
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const allCollections$ = combineLatest([organizationId$, allCollectionsWithoutUnassigned$]).pipe(
@@ -258,20 +265,12 @@ export class VaultComponent implements OnInit, OnDestroy {
         noneCollection.id = Unassigned;
         noneCollection.organizationId = organizationId;
         return allCollections.concat(noneCollection);
-      })
+      }),
     );
 
     const allGroups$ = organizationId$.pipe(
-      switchMap((organizationId) => {
-        if (this.organization.canUseAdminCollections) {
-          return this.groupService.getAll(organizationId);
-        }
-        else {
-          return of([]);
-        }
-      }),
-
-      shareReplay({ refCount: true, bufferSize: 1 })
+      switchMap((organizationId) => this.groupService.getAll(organizationId)),
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const allCiphers$ = organization$.pipe(
@@ -281,12 +280,12 @@ export class VaultComponent implements OnInit, OnDestroy {
           ciphers = await this.cipherService.getAllFromApiForOrganization(organization.id);
         } else {
           ciphers = (await this.cipherService.getAllDecrypted()).filter(
-            (c) => c.organizationId === organization.id
+            (c) => c.organizationId === organization.id,
           );
         }
         await this.searchService.indexCiphers(ciphers, organization.id);
         return ciphers;
-      })
+      }),
     );
 
     const ciphers$ = combineLatest([allCiphers$, filter$, this.currentSearchText$]).pipe(
@@ -304,12 +303,12 @@ export class VaultComponent implements OnInit, OnDestroy {
 
         return ciphers.filter(filterFunction);
       }),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const nestedCollections$ = allCollections$.pipe(
       map((collections) => getNestedCollectionTree(collections)),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const collections$ = combineLatest([nestedCollections$, filter$, this.currentSearchText$]).pipe(
@@ -328,7 +327,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         } else {
           const selectedCollection = ServiceUtils.getTreeNodeObjectFromList(
             collections,
-            filter.collectionId
+            filter.collectionId,
           );
           collectionsToReturn = selectedCollection?.children.map((c) => c.node) ?? [];
         }
@@ -338,14 +337,14 @@ export class VaultComponent implements OnInit, OnDestroy {
             collectionsToReturn,
             searchText,
             (collection) => collection.name,
-            (collection) => collection.id
+            (collection) => collection.id,
           );
         }
 
         return collectionsToReturn;
       }),
       takeUntil(this.destroy$),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const selectedCollection$ = combineLatest([nestedCollections$, filter$]).pipe(
@@ -361,7 +360,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
         return ServiceUtils.getTreeNodeObjectFromList(collections, filter.collectionId);
       }),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const showMissingCollectionPermissionMessage$ = combineLatest([
@@ -379,7 +378,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             !organization.canUseAdminCollections)
         );
       }),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     firstSetup$
@@ -400,7 +399,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             this.platformUtilsService.showToast(
               "error",
               this.i18nService.t("errorOccurred"),
-              this.i18nService.t("unknownCipher")
+              this.i18nService.t("unknownCipher"),
             );
             this.router.navigate([], {
               queryParams: { cipherId: null, itemId: null },
@@ -408,7 +407,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             });
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
 
@@ -427,7 +426,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             this.platformUtilsService.showToast(
               "error",
               this.i18nService.t("errorOccurred"),
-              this.i18nService.t("unknownCipher")
+              this.i18nService.t("unknownCipher"),
             );
             this.router.navigate([], {
               queryParams: { viewEvents: null },
@@ -435,7 +434,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             });
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
 
@@ -453,9 +452,9 @@ export class VaultComponent implements OnInit, OnDestroy {
             collections$,
             selectedCollection$,
             showMissingCollectionPermissionMessage$,
-          ])
+          ]),
         ),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(
         ([
@@ -476,7 +475,6 @@ export class VaultComponent implements OnInit, OnDestroy {
           this.collections = collections;
           this.selectedCollection = selectedCollection;
           this.showMissingCollectionPermissionMessage = showMissingCollectionPermissionMessage;
-
           this.isEmpty = collections?.length === 0 && ciphers?.length === 0;
 
           // This is a temporary fix to avoid double fetching collections.
@@ -485,7 +483,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
           this.refreshing = false;
           this.performingInitialLoad = false;
-        }
+        },
       );
   }
 
@@ -529,10 +527,12 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
       } else if (event.type === "copyField") {
         await this.copy(event.item, event.field);
-      } else if (event.type === "edit") {
+      } else if (event.type === "editCollection") {
         await this.editCollection(event.item, CollectionDialogTabType.Info);
-      } else if (event.type === "viewAccess") {
+      } else if (event.type === "viewCollectionAccess") {
         await this.editCollection(event.item, CollectionDialogTabType.Access);
+      } else if (event.type === "bulkEditCollectionAccess") {
+        await this.bulkEditCollectionAccess(event.items);
       } else if (event.type === "viewEvents") {
         await this.viewEvents(event.item);
       } else if (event.type === "launch") {
@@ -572,7 +572,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         comp.onDeletedAttachment
           .pipe(takeUntil(this.destroy$))
           .subscribe(() => (madeAttachmentChanges = true));
-      }
+      },
     );
 
     modal.onClosed.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -597,13 +597,13 @@ export class VaultComponent implements OnInit, OnDestroy {
           modal.close();
           this.refresh();
         });
-      }
+      },
     );
   }
 
   async addCipher() {
     const collections = (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
-      (c) => !c.readOnly && c.id != Unassigned
+      (c) => !c.readOnly && c.id != Unassigned,
     );
 
     await this.editCipher(null, (comp) => {
@@ -621,14 +621,14 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async editCipher(
     cipher: CipherView,
-    additionalComponentParameters?: (comp: AddEditComponent) => void
+    additionalComponentParameters?: (comp: AddEditComponent) => void,
   ) {
     return this.editCipherId(cipher?.id, additionalComponentParameters);
   }
 
   async editCipherId(
     cipherId: string,
-    additionalComponentParameters?: (comp: AddEditComponent) => void
+    additionalComponentParameters?: (comp: AddEditComponent) => void,
   ) {
     const cipher = await this.cipherService.get(cipherId);
     // if cipher exists (cipher is null when new) and MP reprompt
@@ -669,7 +669,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         : (comp) => {
             defaultComponentParameters(comp);
             additionalComponentParameters(comp);
-          }
+          },
     );
 
     modal.onClosedPromise().then(() => {
@@ -680,8 +680,20 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async cloneCipher(cipher: CipherView) {
+    if (cipher.login?.hasFido2Credentials) {
+      const confirmed = await this.dialogService.openSimpleDialog({
+        title: { key: "passkeyNotCopied" },
+        content: { key: "passkeyNotCopiedAlert" },
+        type: "info",
+      });
+
+      if (!confirmed) {
+        return false;
+      }
+    }
+
     const collections = (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
-      (c) => !c.readOnly && c.id != Unassigned
+      (c) => !c.readOnly && c.id != Unassigned,
     );
 
     await this.editCipher(cipher, (comp) => {
@@ -720,7 +732,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("nothingSelected")
+        this.i18nService.t("nothingSelected"),
       );
       return;
     }
@@ -752,7 +764,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t(permanent ? "permanentlyDeletedItem" : "deletedItem")
+        this.i18nService.t(permanent ? "permanentlyDeletedItem" : "deletedItem"),
       );
       this.refresh();
     } catch (e) {
@@ -761,14 +773,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async deleteCollection(collection: CollectionView): Promise<void> {
-    if (
-      !this.organization.canDeleteAssignedCollections &&
-      !this.organization.canDeleteAnyCollection
-    ) {
+    if (!collection.canDelete(this.organization)) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("missingPermissions")
+        this.i18nService.t("missingPermissions"),
       );
       return;
     }
@@ -786,7 +795,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("deletedCollectionId", collection.name)
+        this.i18nService.t("deletedCollectionId", collection.name),
       );
 
       // Navigate away if we deleted the colletion we were viewing
@@ -807,7 +816,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   async bulkDelete(
     ciphers: CipherView[],
     collections: CollectionView[],
-    organization: Organization
+    organization: Organization,
   ) {
     if (!(await this.repromptCipher(ciphers))) {
       return;
@@ -817,7 +826,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("nothingSelected")
+        this.i18nService.t("nothingSelected"),
       );
       return;
     }
@@ -825,7 +834,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       data: {
         permanent: this.filter.type === "trash",
         cipherIds: ciphers.map((c) => c.id),
-        collectionIds: collections.map((c) => c.id),
+        collections: collections,
         organization,
       },
     });
@@ -873,7 +882,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.platformUtilsService.showToast(
       "info",
       null,
-      this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
+      this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey)),
     );
 
     if (field === "password") {
@@ -910,6 +919,29 @@ export class VaultComponent implements OnInit, OnDestroy {
       result.action === CollectionDialogAction.Saved ||
       result.action === CollectionDialogAction.Deleted
     ) {
+      this.refresh();
+    }
+  }
+
+  async bulkEditCollectionAccess(collections: CollectionView[]): Promise<void> {
+    if (collections.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected"),
+      );
+      return;
+    }
+
+    const dialog = BulkCollectionsDialogComponent.open(this.dialogService, {
+      data: {
+        collections,
+        organizationId: this.organization?.id,
+      },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === BulkCollectionsDialogResult.Saved) {
       this.refresh();
     }
   }

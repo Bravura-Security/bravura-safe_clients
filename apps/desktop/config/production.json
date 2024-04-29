@@ -1,5 +1,6 @@
 {
   "flags": {
-    "showDDGSetting": false
+    "showDDGSetting": false,
+    "enableCipherKeyEncryption": false
   }
 }
