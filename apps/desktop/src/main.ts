@@ -236,7 +236,7 @@ export class Main {
         }
 
         const message =
-          s.indexOf("bitwarden://import-callback-lp") === 0
+          s.indexOf("bravurasafe://import-callback-lp") === 0
             ? "importCallbackLastPass"
             : "ssoCallback";
         this.messagingService.send(message, { code: code, state: receivedState });

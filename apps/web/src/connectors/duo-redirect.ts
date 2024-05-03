@@ -2,7 +2,7 @@ import { getQsParam } from "./common";
 
 require("./duo-redirect.scss");
 
-const mobileDesktopCallback = "bitwarden://duo-callback";
+const mobileDesktopCallback = "bravurasafe://duo-callback";
 
 window.addEventListener("load", () => {
   const client = getQsParam("client");

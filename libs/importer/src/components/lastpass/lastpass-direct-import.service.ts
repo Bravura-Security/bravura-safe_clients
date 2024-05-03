@@ -144,7 +144,7 @@ export class LastPassDirectImportService {
   private getOidcRedirectUrlWithParams(oidcCode: string, oidcState: string) {
     const redirectUri = this.oidcClient.settings.redirect_uri;
     const params = "code=" + oidcCode + "&state=" + oidcState;
-    if (redirectUri.indexOf("bitwarden://") === 0) {
+    if (redirectUri.indexOf("bravurasafe://") === 0) {
       return redirectUri + "/?" + params;
     }
 
@@ -154,7 +154,7 @@ export class LastPassDirectImportService {
   private getOidcRedirectUrl() {
     const clientType = this.platformUtilsService.getClientType();
     if (clientType === ClientType.Desktop) {
-      return "bitwarden://import-callback-lp";
+      return "bravurasafe://import-callback-lp";
     }
     const webUrl = this.environmentService.getWebVaultUrl();
     return webUrl + "/sso-connector.html?lp=1";
