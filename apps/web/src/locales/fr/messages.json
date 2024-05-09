@@ -3833,6 +3833,9 @@
   "fourHours": {
     "message": "4 heures"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "Au rechargement de la page"
   },
@@ -5224,6 +5227,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "Le délai d'expiration personnalisé minimum est de 1 minute."
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "Le délai de mise en veille du coffre n'est pas dans l'intervalle de temps autorisé."

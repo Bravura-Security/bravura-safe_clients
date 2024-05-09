@@ -22,6 +22,7 @@
           class="form-control"
           type="number"
           min="0"
+          max="8"
           name="hours"
           formControlName="hours"
         />
@@ -33,6 +34,7 @@
           class="form-control"
           type="number"
           min="0"
+          max="59"
           name="minutes"
           formControlName="minutes"
         />
@@ -40,8 +42,8 @@
       </div>
     </div>
 
-    <small *ngIf="!exceedsMinimumTimout" class="tw-text-danger">
-      <i class="fa fa-error" aria-hidden="true"></i> {{ "vaultCustomTimeoutMinimum" | i18n }}
+    <small *ngIf="!timeoutInRange" class="tw-text-danger">
+      <i class="fa fa-error" aria-hidden="true"></i> {{ "vaultCustomTimeoutRange" | i18n }}
     </small>
   </div>
 </div>

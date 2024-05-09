@@ -3833,6 +3833,9 @@
   "fourHours": {
     "message": "4 horas"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "Quando Reiniciar o Navegador"
   },
@@ -5224,6 +5227,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "Tempo limite mínimo personalizado é 1 minuto."
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "Tempo limite do cofre não está dentro do intervalo permitido."
