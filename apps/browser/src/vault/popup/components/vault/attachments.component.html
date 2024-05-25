@@ -1,7 +1,7 @@
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
   <header>
     <div class="left">
-      <button type="button" (click)="close()" *ngIf="openedAttachmentsInPopup">
+      <button type="button" (click)="close()" *ngIf="openedAttachmentsInPopup" [disabled]="form.loading">
         {{ "close" | i18n }}
       </button>
       <button type="button" (click)="back()" *ngIf="!openedAttachmentsInPopup">
@@ -14,7 +14,7 @@
     </h1>
     <div class="right">
       <button type="submit" [disabled]="form.loading">
-        <span [hidden]="form.loading">{{ "save" | i18n }}</span>
+        <span [hidden]="form.loading">{{ "add" | i18n }}</span>
         <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
     </div>
@@ -22,7 +22,8 @@
   <main tabindex="-1">
     <div class="box" *ngIf="cipher && cipher.hasAttachments">
       <div class="box-content no-hover single-line">
-        <div class="box-content-row box-content-row-flex" *ngFor="let a of cipher.attachments">
+        <ng-template ngFor let-a [ngForOf]="cipher.attachments">
+          <div class="box-content-row box-content-row-flex" *ngIf="a.validated">
           <div class="row-main">
             {{ a.fileName }}
           </div>
@@ -52,6 +53,7 @@
             </button>
           </div>
         </div>
+      </ng-template>
       </div>
     </div>
     <div class="box">
@@ -62,10 +64,14 @@
         <div class="box-content-row">
           <label for="file">{{ "file" | i18n }}</label>
           <input type="file" id="file" name="file" aria-describedby="fileHelp" required />
+          <div *ngIf="form.loading">
+            <small class="form-text text-muted"> {{ "fileSize" | i18n : fileSize }}</small><br>
+            <small class="tw-text-danger">{{ "fileUploadTime" | i18n }}</small>
+          </div>
         </div>
-      </div>
       <div id="fileHelp" class="box-footer">
         {{ "maxFileSize" | i18n }}
+      </div>
       </div>
     </div>
   </main>

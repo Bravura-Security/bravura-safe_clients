@@ -20,8 +20,8 @@ export class CipherResponse extends CipherWithIdExport implements BaseResponse {
     super();
     this.object = "item";
     this.build(o);
-    if (o.attachments != null) {
-      this.attachments = o.attachments.map((a) => new AttachmentResponse(a));
+    if (o.hasAttachments) {
+      this.attachments = o.attachments.filter((a) => { return ( a.validated ); }).map((a) => new AttachmentResponse(a));
     }
     this.revisionDate = o.revisionDate;
     if (o.creationDate != null) {

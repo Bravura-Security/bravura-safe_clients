@@ -7,7 +7,7 @@
       <span class="title">{{ title }}</span>
     </h1>
     <div class="right">
-      <button type="submit">
+      <button type="submit" [disabled]="form.loading">
         <span [hidden]="form.loading">{{ "save" | i18n }}</span>
         <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
@@ -73,7 +73,7 @@
           <label for="file">{{ "file" | i18n }}</label>
           <div class="row-main">{{ send.file.fileName }} ({{ send.file.sizeName }})</div>
         </div>
-        <div class="box-content-row" *ngIf="showFileSelector">
+        <div class="box-content-row" *ngIf="showFileSelector && !editMode">
           <label for="file">{{ "file" | i18n }}</label>
           <input
             type="file"
@@ -82,6 +82,15 @@
             aria-describedby="fileHelp"
             [readonly]="disableSend"
           />
+          <div *ngIf="form.loading">
+            <small class="form-text text-muted">
+              {{ "fileSize" | i18n : selectedFileSize }}
+            </small>
+            <br>
+            <small class="tw-text-danger">
+              {{ "fileUploadTime" | i18n }}
+            </small>
+          </div>
         </div>
       </div>
       <div id="fileHelp" class="box-footer" *ngIf="showFileSelector">

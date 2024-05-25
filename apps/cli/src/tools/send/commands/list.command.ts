@@ -1,6 +1,7 @@
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
+import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
 
 import { Response } from "../../../models/response";
 import { ListResponse } from "../../../models/response/list.response";
@@ -15,6 +16,7 @@ export class SendListCommand {
 
   async run(cmdOptions: Record<string, any>): Promise<Response> {
     let sends = await this.sendService.getAllDecryptedFromState();
+    sends = sends.filter((s) => { return ( s.type == SendType.Text ) || ( s.type == SendType.File && s.file.validated ); });
 
     const normalizedOptions = new Options(cmdOptions);
     if (normalizedOptions.search != null && normalizedOptions.search.trim() !== "") {

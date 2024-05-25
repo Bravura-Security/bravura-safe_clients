@@ -7771,5 +7771,17 @@
   "addAPaymentMethod": {
     "message": "add a payment method",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
+  },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser window until file is fully uploaded."
   }
 }

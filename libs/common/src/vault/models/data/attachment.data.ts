@@ -7,6 +7,7 @@ export class AttachmentData {
   key: string;
   size: string;
   sizeName: string;
+  validated: boolean;
 
   constructor(response?: AttachmentResponse) {
     if (response == null) {
@@ -18,5 +19,6 @@ export class AttachmentData {
     this.key = response.key;
     this.size = response.size;
     this.sizeName = response.sizeName;
+    this.validated = response.validated;
   }
 }
