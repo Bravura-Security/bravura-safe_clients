@@ -11,6 +11,7 @@ export class AttachmentView implements View {
   sizeName: string = null;
   fileName: string = null;
   key: SymmetricCryptoKey = null;
+  validated: string = null;
 
   constructor(a?: Attachment) {
     if (!a) {
@@ -21,6 +22,7 @@ export class AttachmentView implements View {
     this.url = a.url;
     this.size = a.size;
     this.sizeName = a.sizeName;
+    this.validated = a.validated;
   }
 
   get fileSize(): number {

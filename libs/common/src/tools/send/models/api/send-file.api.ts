@@ -5,6 +5,7 @@ export class SendFileApi extends BaseResponse {
   fileName: string;
   size: string;
   sizeName: string;
+  validated: boolean;
 
   constructor(data: any = null) {
     super(data);
@@ -15,5 +16,6 @@ export class SendFileApi extends BaseResponse {
     this.fileName = this.getResponseProperty("FileName");
     this.size = this.getResponseProperty("Size");
     this.sizeName = this.getResponseProperty("SizeName");
+    this.validated = this.getResponseProperty("Validated") ?? false;
   }
 }

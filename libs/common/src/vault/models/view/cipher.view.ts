@@ -91,7 +91,11 @@ export class CipherView implements View, InitializerMetadata {
   }
 
   get hasAttachments(): boolean {
-    return this.attachments && this.attachments.length > 0;
+    if(this.attachments) {
+      const validAttachments = this.attachments.filter((a) => { return ( a.validated ); });
+      return validAttachments && validAttachments.length > 0;
+    }
+    else return false;
   }
 
   get hasOldAttachments(): boolean {

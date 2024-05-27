@@ -1857,7 +1857,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendFileDesc": {
-    "message": "The file you want to send."
+    "message": "The file you want to share."
   },
   "deletionDate": {
     "message": "Deletion date"
@@ -1912,7 +1912,7 @@
     "description": "'Share' is a noun and the name of a feature called 'Bravura Safe Share'. It should not be translated."
   },
   "sendTextDesc": {
-    "message": "The text you want to send."
+    "message": "The text you want to share."
   },
   "sendHideText": {
     "message": "Hide this Share's text by default.",
@@ -2962,5 +2962,20 @@
   "makeDefault": {
     "message": "Make default",
     "description": "Button text for the setting that allows overriding the default browser autofill settings"
+  },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser extension until file is fully uploaded."
+  },
+  "add": {
+    "message": "Add"
   }
 }

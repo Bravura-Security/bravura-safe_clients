@@ -7,6 +7,7 @@ export class SendFileView implements View {
   size: string = null;
   sizeName: string = null;
   fileName: string = null;
+  validated: boolean = false;
 
   constructor(f?: SendFile) {
     if (!f) {
@@ -16,6 +17,7 @@ export class SendFileView implements View {
     this.id = f.id;
     this.size = f.size;
     this.sizeName = f.sizeName;
+    this.validated = f.validated;
   }
 
   get fileSize(): number {

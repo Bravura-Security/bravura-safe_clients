@@ -78,7 +78,7 @@ export class SendComponent implements OnInit, OnDestroy {
   async load(filter: (send: SendView) => boolean = null) {
     this.loading = true;
     this.sendService.sendViews$.pipe(takeUntil(this.destroy$)).subscribe((sends) => {
-      this.sends = sends;
+      this.sends = sends.filter((s) => { return ( s.type == SendType.Text ) || ( s.type == SendType.File && s.file.validated ); });
     });
     if (this.onSuccessfulLoad != null) {
       await this.onSuccessfulLoad();
