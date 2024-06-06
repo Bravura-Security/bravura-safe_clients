@@ -50,7 +50,10 @@
         [showAdminActions]="true"
         (onEvent)="onVaultItemsEvent($event)"
         [showBulkEditCollectionAccess]="showBulkEditCollectionAccess$ | async"
-        [viewingOrgVault]="true"
+        [viewingOrgVault]="
+          (filter.type === undefined && filter.collectionId === undefined) ||
+            filter.collectionId !== undefined
+        "
         [showHeaderCheckboxMenu]="true"
       >
       </app-vault-items>
