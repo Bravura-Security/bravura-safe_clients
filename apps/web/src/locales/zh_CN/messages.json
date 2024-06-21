@@ -3833,6 +3833,9 @@
   "fourHours": {
     "message": "4 小时"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "浏览器刷新时"
   },
@@ -5224,6 +5227,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "自定义超时时间最小为 1 分钟。"
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "密码库超时不在允许的范围内。"
@@ -7727,5 +7736,17 @@
   "commonImportFormats": {
     "message": "通用格式",
     "description": "Label indicating the most common import formats"
+  },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser window until file is fully uploaded."
   }
 }

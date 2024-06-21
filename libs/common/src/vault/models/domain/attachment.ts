@@ -14,6 +14,7 @@ export class Attachment extends Domain {
   sizeName: string; // Readable size, ex: "4.2 KB" or "1.43 GB"
   key: EncString;
   fileName: EncString;
+  validated: string;
 
   constructor(obj?: AttachmentData) {
     super();
@@ -31,8 +32,9 @@ export class Attachment extends Domain {
         sizeName: null,
         fileName: null,
         key: null,
+        validated: null,
       },
-      ["id", "url", "sizeName"],
+      ["id", "url", "sizeName", "validated"],
     );
   }
 

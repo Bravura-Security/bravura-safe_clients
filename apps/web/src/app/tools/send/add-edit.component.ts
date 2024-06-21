@@ -14,6 +14,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
 import { DialogService } from "@bitwarden/components";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Component({
   selector: "app-send-add-edit",
@@ -69,6 +70,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     const fileInputEl = <HTMLInputElement>event.target;
     const file = fileInputEl.files.length > 0 ? fileInputEl.files[0] : null;
     this.selectedFile = file;
+    this.selectedFileSize = Utils.ReadableBytesSize(file.size);
   }
 
   submitAndClose = async () => {
@@ -77,9 +79,20 @@ export class AddEditComponent extends BaseAddEditComponent {
       return;
     }
 
+    if(this.selectedFile){
+      this.dialogRef.disableClose = true;
+
+      window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+      });
+    }
+
     const success = await this.submit();
     if (success) {
       this.dialogRef.close();
+    }
+    else{
+      this.dialogRef.disableClose = false;
     }
   };
 

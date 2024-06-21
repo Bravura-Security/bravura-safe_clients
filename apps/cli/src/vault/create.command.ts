@@ -132,7 +132,7 @@ export class CreateCommand {
     if (userKey == null) {
       return Response.error(
         "You must update your encryption key before you can use this feature. " +
-          "See https://help.bravurasecurity.com/article/update-encryption-key/"
+          "See https://bravurasecuritydocs.com/safe/#/home/41954/10/11"
       );
     }
 

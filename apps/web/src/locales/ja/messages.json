@@ -3833,6 +3833,9 @@
   "fourHours": {
     "message": "4時間"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "ページ更新時"
   },
@@ -5224,6 +5227,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "カスタムタイムアウトの最小値は1分です。"
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "保管庫のタイムアウトは許可された範囲内にありません。"
@@ -7751,5 +7760,17 @@
   "commonImportFormats": {
     "message": "一般的な形式",
     "description": "Label indicating the most common import formats"
+  },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser window until file is fully uploaded."
   }
 }

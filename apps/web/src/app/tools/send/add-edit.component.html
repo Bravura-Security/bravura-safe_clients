@@ -1,4 +1,4 @@
-<form
+<form #form
   [formGroup]="formGroup"
   [bitSubmit]="submitAndClose"
       [appApiAction]="formPromise"
@@ -67,11 +67,23 @@
             </div>
           <bit-form-field *ngIf="!editMode">
             <bit-label>{{ "file" | i18n }}</bit-label>
-            <div>
+            <div class="none">
+              <bit-hint>
+                {{ "sendFileDesc" | i18n }} {{ "maxFileSize" | i18n }}
+              </bit-hint>
+              <br>
               <button bitButton type="button" buttonType="secondary" (click)="fileSelector.click()">
                 {{ "chooseFile" | i18n }}
               </button>
+              <small class="form-text text-muted">
               {{ selectedFile?.name ?? ("noFileChosen" | i18n) }}
+                <div *ngIf="selectedFile">
+                  {{ "fileSize" | i18n : selectedFileSize }}
+                </div>
+              </small>
+              <small class="tw-text-danger" *ngIf="selectedFile">
+                {{ "fileUploadTime" | i18n }}
+              </small>
             </div>
               <input
               bitInput
@@ -83,10 +95,9 @@
               formControlName="file"
               (change)="setSelectedFile($event)"
               />
-            <bit-hint>{{ "sendFileDesc" | i18n }} {{ "maxFileSize" | i18n }}</bit-hint>
           </bit-form-field>
-            </div>
-        </ng-container>
+        </div>
+      </ng-container>
       <h4 bitTypography="h4" class="tw-mt-5">{{ "share" | i18n }}</h4>
 
       <bit-form-field *ngIf="link">
@@ -265,6 +276,7 @@
         buttonType="secondary"
         [appA11yTitle]="'cancel' | i18n"
         bitDialogClose
+        [disabled]="form.loading"
       >
           {{ "cancel" | i18n }}
         </button>

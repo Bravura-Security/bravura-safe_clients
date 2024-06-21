@@ -99,7 +99,6 @@ export class SecurityAssessmentReportComponent implements OnInit {
 
   async loadExposedPasswords() {
     await this.exposedPasswords.load();
-    await this.exposedPasswords.setCiphers();
     this.exposedPasswordsCiphers = this.exposedPasswords.ciphers;
     this.exposedPasswordsLoaded = true;
   }
