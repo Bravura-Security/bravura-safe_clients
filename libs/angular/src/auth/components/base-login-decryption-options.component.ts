@@ -14,6 +14,10 @@ import {
   throwError,
 } from "rxjs";
 
+import {
+  UserDecryptionOptions,
+  UserDecryptionOptionsServiceAbstraction,
+} from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
@@ -21,6 +25,7 @@ import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abst
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { PasswordResetEnrollmentServiceAbstraction } from "@bitwarden/common/auth/abstractions/password-reset-enrollment.service.abstraction";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -29,7 +34,6 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
-import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 
 enum State {
   NewUser,
@@ -87,7 +91,9 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     protected validationService: ValidationService,
     protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
     protected platformUtilsService: PlatformUtilsService,
+    protected userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     protected passwordResetEnrollmentService: PasswordResetEnrollmentServiceAbstraction,
+    protected ssoLoginService: SsoLoginServiceAbstraction,
   ) {}
 
   async ngOnInit() {
@@ -99,22 +105,25 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     await this.setRememberDeviceDefaultValue();
 
     try {
-      const accountDecryptionOptions: AccountDecryptionOptions =
-        await this.stateService.getAccountDecryptionOptions();
+      const userDecryptionOptions = await firstValueFrom(
+        this.userDecryptionOptionsService.userDecryptionOptions$,
+      );
 
       // see sso-login.strategy - to determine if a user is new or not it just checks if there is a key on the token response..
       // can we check if they have a user key or master key in crypto service? Would that be sufficient?
       if (
-        !accountDecryptionOptions?.trustedDeviceOption?.hasAdminApproval &&
-        !accountDecryptionOptions?.hasMasterPassword
+        !userDecryptionOptions?.trustedDeviceOption?.hasAdminApproval &&
+        !userDecryptionOptions?.hasMasterPassword
       ) {
         // We are dealing with a new account if:
         //  - User does not have admin approval (i.e. has not enrolled into admin reset)
         //  - AND does not have a master password
 
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.loadNewUserData();
       } else {
-        this.loadUntrustedDeviceData(accountDecryptionOptions);
+        this.loadUntrustedDeviceData(userDecryptionOptions);
       }
 
       // Note: this is probably not a comprehensive write up of all scenarios:
@@ -161,7 +170,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
   async loadNewUserData() {
     const autoEnrollStatus$ = defer(() =>
-      this.stateService.getUserSsoOrganizationIdentifier(),
+      this.ssoLoginService.getActiveUserOrganizationSsoIdentifier(),
     ).pipe(
       switchMap((organizationIdentifier) => {
         if (organizationIdentifier == undefined) {
@@ -191,7 +200,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     this.loading = false;
   }
 
-  loadUntrustedDeviceData(accountDecryptionOptions: AccountDecryptionOptions) {
+  loadUntrustedDeviceData(userDecryptionOptions: UserDecryptionOptions) {
     this.loading = true;
 
     const email$ = from(this.stateService.getEmail()).pipe(
@@ -211,13 +220,12 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       )
       .subscribe((email) => {
         const showApproveFromOtherDeviceBtn =
-          accountDecryptionOptions?.trustedDeviceOption?.hasLoginApprovingDevice || false;
+          userDecryptionOptions?.trustedDeviceOption?.hasLoginApprovingDevice || false;
 
         const showReqAdminApprovalBtn =
-          !!accountDecryptionOptions?.trustedDeviceOption?.hasAdminApproval || false;
+          !!userDecryptionOptions?.trustedDeviceOption?.hasAdminApproval || false;
 
-        const showApproveWithMasterPasswordBtn =
-          accountDecryptionOptions?.hasMasterPassword || false;
+        const showApproveWithMasterPasswordBtn = userDecryptionOptions?.hasMasterPassword || false;
 
         const userEmail = email;
 
@@ -237,15 +245,21 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     }
 
     this.loginService.setEmail(this.data.userEmail);
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/login-with-device"]);
   }
 
   async requestAdminApproval() {
     this.loginService.setEmail(this.data.userEmail);
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/admin-approval-requested"]);
   }
 
   async approveWithMasterPassword() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/lock"], { queryParams: { from: "login-initiated" } });
   }
 

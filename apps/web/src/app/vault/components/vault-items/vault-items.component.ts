@@ -42,6 +42,7 @@ export class VaultItemsComponent {
   @Input() allCollections: CollectionView[] = [];
   @Input() allGroups: GroupView[] = [];
   @Input() showBulkEditCollectionAccess = false;
+  @Input() showBulkAddToCollections = false;
   @Input() showHeaderCheckboxMenu: boolean;
   @Input() showPermissionsColumn = false;
   @Input() viewingOrgVault: boolean;
@@ -88,6 +89,10 @@ export class VaultItemsComponent {
     return (
       this.showBulkMove && this.selection.selected.filter((item) => item.collection).length === 0
     );
+  }
+
+  get bulkAssignToCollectionsAllowed() {
+    return this.ciphers.length > 0;
   }
 
   protected canEditCollection(collection: CollectionView): boolean {
@@ -183,4 +188,13 @@ export class VaultItemsComponent {
         .map((item) => item.collection),
     });
   }
+
+  protected assignToCollections() {
+    this.event({
+      type: "assignToCollections",
+      items: this.selection.selected
+        .filter((item) => item.cipher !== undefined)
+        .map((item) => item.cipher),
+    });
+}
 }

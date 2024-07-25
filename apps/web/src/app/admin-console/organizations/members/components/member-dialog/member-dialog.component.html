@@ -16,7 +16,10 @@
         ></i>
         <span class="sr-only">{{ "loading" | i18n }}</span>
       </ng-container>
-      <bit-tab-group *ngIf="!loading" [(selectedIndex)]="tabIndex">
+      <bit-tab-group
+        *ngIf="!loading && organization"><!--$ | async as organization"-->
+        [(selectedIndex)]="tabIndex"
+      >
         <bit-tab [label]="'role' | i18n">
           <ng-container *ngIf="!editMode">
             <p>{{ "inviteUserDesc" | i18n }}</p>
@@ -37,7 +40,7 @@
               {{ "memberRole" | i18n }}
               <a
                 target="_blank"
-                rel="noopener"
+                rel="noreferrer"
                 appA11yTitle="{{ 'learnMore' | i18n }}"
                 href="https://bravurasecuritydocs.com/safe/#/home/41832/10/11"
               >
@@ -61,7 +64,10 @@
                 </div>
               </label>
             </div>
-            <div *ngIf="!flexibleCollectionsEnabled" class="tw-mb-2 tw-flex tw-items-baseline">
+            <div
+              *ngIf="!organization.flexibleCollections"
+              class="tw-mb-2 tw-flex tw-items-baseline"
+            >
               <input
                 type="radio"
                 id="userTypeManager"
@@ -120,12 +126,12 @@
                 formControlName="type"
                 name="type"
                 class="tw-relative tw-bottom-[-1px] tw-mr-2"
-                [attr.disabled]="!canUseCustomPermissions || null"
+                [attr.disabled]="!organization.useCustomPermissions || null"
                 (change)="handleMasterPasswordResetTab()"
               />
               <label class="tw-m-0" for="userTypeCustom">
                 {{ "custom" | i18n }}
-                <ng-container *ngIf="!canUseCustomPermissions; else enterprise">
+                <ng-container *ngIf="!organization.useCustomPermissions; else enterprise">
                   <div class="text-base tw-block tw-font-normal">
                     {{ "customDescNonEnterpriseStart" | i18n
                     }}<a href="https://bravurasecurity.com/contact/" target="_blank">{{
@@ -143,7 +149,7 @@
             </div>
           </fieldset>
           <ng-container *ngIf="customUserTypeSelected">
-            <ng-container *ngIf="!flexibleCollectionsEnabled; else customPermissionsFC">
+            <ng-container *ngIf="!organization.flexibleCollections; else customPermissionsFC">
               <h3 class="mt-4 d-flex tw-font-semibold">
                 {{ "permissions" | i18n }}
               </h3>
@@ -374,7 +380,7 @@
               </div>
             </ng-template>
           </ng-container>
-          <ng-container *ngIf="canUseSecretsManager">
+          <ng-container *ngIf="organization.useSecretsManager">
             <h3 class="mt-4">
               {{ "secretsManager" | i18n }}
             </h3>
@@ -389,7 +395,11 @@
         </bit-tab>
         <bit-tab *ngIf="organization.useGroups" [label]="'groups' | i18n">
           <div class="tw-mb-6">
-            {{ "groupAccessUserDesc" | i18n }}
+            {{
+              (restrictedAccess$ | async)
+                ? ("restrictedGroupAccess" | i18n)
+                : ("groupAccessUserDesc" | i18n)
+            }}
           </div>
           <bit-access-selector
             formControlName="groups"
@@ -397,14 +407,18 @@
             [columnHeader]="'groups' | i18n"
             [selectorLabelText]="'selectGroups' | i18n"
             [emptySelectionText]="'noGroupsAdded' | i18n"
-            [flexibleCollectionsEnabled]="flexibleCollectionsEnabled"
+            [flexibleCollectionsEnabled]="organization.flexibleCollections"
+            [hideMultiSelect]="restrictedAccess$ | async"
           ></bit-access-selector>
         </bit-tab>
         <bit-tab [label]="'collections' | i18n">
-          <div *ngIf="organization.useGroups" class="tw-mb-6">
+          <div class="tw-mb-6" *ngIf="restrictedAccess$ | async">
+            {{ "restrictedCollectionAccess" | i18n }}
+          </div>
+          <div *ngIf="organization.useGroups && !(restrictedAccess$ | async)" class="tw-mb-6">
             {{ "userPermissionOverrideHelper" | i18n }}
           </div>
-          <div *ngIf="!flexibleCollectionsEnabled" class="tw-mb-6">
+          <div *ngIf="!organization.flexibleCollections" class="tw-mb-6">
             <bit-form-control>
               <input type="checkbox" bitCheckbox formControlName="accessAllCollections" />
               <bit-label>
@@ -412,7 +426,7 @@
               </bit-label>
               <a
                 target="_blank"
-                rel="noopener"
+                  rel="noreferrer"
                 appA11yTitle="{{ 'learnMore' | i18n }}"
                 href="https://bravurasecuritydocs.com/safe/#/home/41832/10/11"
               >
@@ -430,7 +444,8 @@
             [columnHeader]="'collection' | i18n"
             [selectorLabelText]="'selectCollections' | i18n"
             [emptySelectionText]="'noCollectionsAdded' | i18n"
-            [flexibleCollectionsEnabled]="flexibleCollectionsEnabled"
+            [flexibleCollectionsEnabled]="organization.flexibleCollections"
+            [hideMultiSelect]="restrictedAccess$ | async"
           ></bit-access-selector
         ></bit-tab>
         <bit-tab *ngIf="canViewPasswordResetTab" [label]="'accountRecoveryPolicy' | i18n">

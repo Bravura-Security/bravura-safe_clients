@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 
 import { PasswordCalloutComponent } from "@bitwarden/auth/angular";
+//import { LayoutComponent, NavigationModule } from "@bitwarden/components";
 
 import { OrganizationSwitcherComponent } from "../admin-console/components/organization-switcher.component";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
@@ -13,7 +14,6 @@ import { ExposedPasswordsReportComponent as OrgExposedPasswordsReportComponent }
 import { InactiveTwoFactorReportComponent as OrgInactiveTwoFactorReportComponent } from "../admin-console/organizations/tools/inactive-two-factor-report.component";
 import { SecurityAssessmentReportComponent as OrgSecurityAssessmentReportComponent } from "../admin-console/organizations/tools/security-assessment-report.component";
 import { ReusedPasswordsReportComponent as OrgReusedPasswordsReportComponent } from "../admin-console/organizations/tools/reused-passwords-report.component";
-import { ToolsComponent as OrgToolsComponent } from "../admin-console/organizations/tools/tools.component";
 import { UnsecuredWebsitesReportComponent as OrgUnsecuredWebsitesReportComponent } from "../admin-console/organizations/tools/unsecured-websites-report.component";
 import { WeakPasswordsReportComponent as OrgWeakPasswordsReportComponent } from "../admin-console/organizations/tools/weak-passwords-report.component";
 import { ProvidersComponent } from "../admin-console/providers/providers.component";
@@ -64,12 +64,13 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
+import { PaymentMethodWarningsModule } from "../billing/shared";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
-import { PaymentMethodBannersComponent } from "../components/payment-method-banners/payment-method-banners.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
 import { FooterComponent } from "../layouts/footer.component";
 import { FrontendLayoutComponent } from "../layouts/frontend-layout.component";
 import { NavbarComponent } from "../layouts/navbar.component";
+import { HeaderModule } from "../layouts/header/header.module";
 import { ProductSwitcherModule } from "../layouts/product-switcher/product-switcher.module";
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { DomainRulesComponent } from "../settings/domain-rules.component";
@@ -117,7 +118,12 @@ import { SharedModule } from "./shared.module";
     PipesModule,
     PasswordCalloutComponent,
     DangerZoneComponent,
-    PaymentMethodBannersComponent,
+    //LayoutComponent,
+    //NavigationModule,
+    HeaderModule,
+    //OrganizationLayoutComponent,
+    //UserLayoutComponent,
+    PaymentMethodWarningsModule,
   ],
   declarations: [
     AcceptFamilySponsorshipComponent,
@@ -155,7 +161,6 @@ import { SharedModule } from "./shared.module";
     OrgExposedPasswordsReportComponent,
     OrgInactiveTwoFactorReportComponent,
     OrgReusedPasswordsReportComponent,
-    OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
     OrgUserConfirmComponent,
     OrgWeakPasswordsReportComponent,
@@ -244,7 +249,6 @@ import { SharedModule } from "./shared.module";
     OrgExposedPasswordsReportComponent,
     OrgInactiveTwoFactorReportComponent,
     OrgReusedPasswordsReportComponent,
-    OrgToolsComponent,
     OrgUnsecuredWebsitesReportComponent,
     OrgUserConfirmComponent,
     OrgWeakPasswordsReportComponent,
@@ -294,6 +298,7 @@ import { SharedModule } from "./shared.module";
     BaseReportsComponent,
     ReportingComponent,
     LowKdfComponent,
+    HeaderModule,
     DangerZoneComponent,
   ],
 })

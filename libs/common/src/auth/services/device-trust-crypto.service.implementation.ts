@@ -1,13 +1,17 @@
+import { firstValueFrom, map, Observable } from "rxjs";
+
+import { UserDecryptionOptionsServiceAbstraction } from "@bitwarden/auth/common";
+
 import { AppIdService } from "../../platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
+import { KeyGenerationService } from "../../platform/abstractions/key-generation.service";
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import { EncString } from "../../platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
-import { CsprngArray } from "../../types/csprng";
 import { UserKey, DeviceKey } from "../../types/key";
 import { DeviceTrustCryptoServiceAbstraction } from "../abstractions/device-trust-crypto.service.abstraction";
 import { DeviceResponse } from "../abstractions/devices/responses/device.response";
@@ -19,7 +23,10 @@ import {
 } from "../models/request/update-devices-trust.request";
 
 export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstraction {
+  supportsDeviceTrust$: Observable<boolean>;
+
   constructor(
+    private keyGenerationService: KeyGenerationService,
     private cryptoFunctionService: CryptoFunctionService,
     private cryptoService: CryptoService,
     private encryptService: EncryptService,
@@ -28,7 +35,12 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     private devicesApiService: DevicesApiServiceAbstraction,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-  ) {}
+    private userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
+  ) {
+    this.supportsDeviceTrust$ = this.userDecryptionOptionsService.userDecryptionOptions$.pipe(
+      map((options) => options?.trustedDeviceOption != null ?? false),
+    );
+  }
 
   /**
    * @description Retrieves the users choice to trust the device which can only happen after decryption
@@ -108,7 +120,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     }
 
     // At this point of rotating their keys, they should still have their old user key in state
-    const oldUserKey = await this.stateService.getUserKey();
+    const oldUserKey = await firstValueFrom(this.cryptoService.activeUserKey$);
 
     const deviceIdentifier = await this.appIdService.getAppId();
     const secretVerificationRequest = new SecretVerificationRequest();
@@ -150,7 +162,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
     trustRequest.currentDevice = currentDeviceUpdateRequest;
     trustRequest.otherDevices = [];
 
-    await this.devicesApiService.updateTrust(trustRequest);
+    await this.devicesApiService.updateTrust(trustRequest, deviceIdentifier);
   }
 
   async getDeviceKey(): Promise<DeviceKey> {
@@ -163,10 +175,7 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
 
   private async makeDeviceKey(): Promise<DeviceKey> {
     // Create 512-bit device key
-    const randomBytes: CsprngArray = await this.cryptoFunctionService.aesGenerateKey(512);
-    const deviceKey = new SymmetricCryptoKey(randomBytes) as DeviceKey;
-
-    return deviceKey;
+    return (await this.keyGenerationService.createKey(512)) as DeviceKey;
   }
 
   async decryptUserKeyWithDeviceKey(
@@ -202,10 +211,5 @@ export class DeviceTrustCryptoService implements DeviceTrustCryptoServiceAbstrac
 
       return null;
     }
-  }
-
-  async supportsDeviceTrust(): Promise<boolean> {
-    const decryptionOptions = await this.stateService.getAccountDecryptionOptions();
-    return decryptionOptions?.trustedDeviceOption != null;
   }
 }

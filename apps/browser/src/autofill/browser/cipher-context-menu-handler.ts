@@ -147,6 +147,10 @@ export class CipherContextMenuHandler {
   }
 
   async update(url: string) {
+    if (this.mainContextMenuHandler.initRunning) {
+      return;
+    }
+
     const authStatus = await this.authService.getAuthStatus();
     await MainContextMenuHandler.removeAll();
     if (authStatus !== AuthenticationStatus.Unlocked) {

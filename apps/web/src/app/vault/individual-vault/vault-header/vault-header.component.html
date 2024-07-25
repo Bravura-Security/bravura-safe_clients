@@ -1,3 +1,7 @@
+<!--
+<app-header [title]="title" [icon]="icon">
+  <bit-breadcrumbs *ngIf="showBreadcrumbs" slot="breadcrumbs">
+-->
 <div class="tw-mb-4 tw-flex tw-items-start tw-justify-between page-header">
   <div>
     <bit-breadcrumbs *ngIf="showBreadcrumbs">
@@ -21,6 +25,11 @@
         </bit-breadcrumb>
       </ng-container>
     </bit-breadcrumbs>
+  <!--
+
+  <ng-container slot="title-suffix">
+    <ng-container *ngIf="collection != null && (canEditCollection || canDeleteCollection)">
+  -->
     <h1 class="tw-mb-0 tw-mt-1 tw-flex tw-items-center tw-space-x-2">
       <i
         *ngIf="filter.collectionId && filter.collectionId !== All"
@@ -34,7 +43,7 @@
           [bitMenuTriggerFor]="editCollectionMenu"
           size="small"
           type="button"
-          aria-haspopup
+        aria-haspopup="true"
         ></button>
         <bit-menu #editCollectionMenu>
           <button
@@ -55,12 +64,7 @@
             <i class="fa fa-fw fa-users" aria-hidden="true"></i>
             {{ "access" | i18n }}
           </button>
-          <button
-            type="button"
-            *ngIf="canDeleteCollection"
-            bitMenuItem
-            (click)="deleteCollection()"
-          >
+        <button type="button" *ngIf="canDeleteCollection" bitMenuItem (click)="deleteCollection()">
             <span class="tw-text-danger">
               <i class="fa fa-fw fa-trash" aria-hidden="true"></i>
               {{ "delete" | i18n }}
@@ -69,13 +73,16 @@
         </bit-menu>
       </ng-container>
       <small *ngIf="loading">
-          <i
+      <i
             class="fa fa-spinner fa-spin text-muted"
-            title="{{ 'loading' | i18n }}"
-            aria-hidden="true"
-          ></i>
+        title="{{ 'loading' | i18n }}"
+        aria-hidden="true"
+      ></i>
         <span class="tw-sr-only">{{ "loading" | i18n }}</span>
       </small>
+  <!--
+  </ng-container>
+  -->
     </h1>
   </div>
 
@@ -107,4 +114,7 @@
       </bit-menu>
     </div>
   </div>
+<!--
+</app-header>
+-->
 </div>

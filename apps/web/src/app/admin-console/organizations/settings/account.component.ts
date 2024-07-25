@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, from, lastValueFrom, of, Subject, switchMap, takeUntil } from "rxjs";
 
-import { DialogService } from "@bitwarden/components";
+import { DialogService, SimpleDialogOptions } from "@bitwarden/components";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -42,6 +42,12 @@ export class AccountComponent {
   canUseApi = false;
   org: OrganizationResponse;
   taxFormPromise: Promise<unknown>;
+
+  protected flexibleCollectionsMigrationEnabled$ = this.configService.getFeatureFlag$(
+    FeatureFlag.FlexibleCollectionsMigration,
+    false,
+  );
+
   flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
     FeatureFlag.FlexibleCollectionsV1,
     false,
@@ -182,6 +188,26 @@ export class AccountComponent {
     this.platformUtilsService.showToast("success", null, this.i18nService.t("organizationUpdated"));
   };
 
+  async showConfirmCollectionEnhancementsDialog() {
+    const collectionEnhancementsDialogOptions: SimpleDialogOptions = {
+      title: this.i18nService.t("confirmCollectionEnhancementsDialogTitle"),
+      content: this.i18nService.t("confirmCollectionEnhancementsDialogContent"),
+      type: "warning",
+      acceptButtonText: this.i18nService.t("continue"),
+      acceptAction: async () => {
+        await this.organizationApiService.enableCollectionEnhancements(this.organizationId);
+
+        this.platformUtilsService.showToast(
+          "success",
+          null,
+          this.i18nService.t("updatedCollectionManagement"),
+        );
+      },
+    };
+
+    await this.dialogService.openSimpleDialog(collectionEnhancementsDialogOptions);
+  }
+
   submitCollectionManagement = async () => {
     // Early exit if self-hosted
     if (this.selfHosted) {
@@ -199,7 +225,7 @@ export class AccountComponent {
     this.platformUtilsService.showToast(
       "success",
       null,
-      this.i18nService.t("collectionManagementUpdated"),
+      this.i18nService.t("updatedCollectionManagement"),
     );
   };
 
@@ -214,6 +240,8 @@ export class AccountComponent {
     const result = await lastValueFrom(dialog.closed);
 
     if (result === DeleteOrganizationDialogResult.Deleted) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.router.navigate(["/"]);
       }
   }

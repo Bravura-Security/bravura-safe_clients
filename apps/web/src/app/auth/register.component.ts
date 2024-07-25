@@ -7,7 +7,8 @@ import { first } from "rxjs/operators";
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/auth/components/register.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+//import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { LoginStrategyServiceAbstraction } from "@bitwarden/auth/common";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
@@ -42,7 +43,8 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
     formBuilder: UntypedFormBuilder,
-    authService: AuthService,
+    //authService: AuthService,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     i18nService: I18nService,
     cryptoService: CryptoService,
@@ -62,7 +64,8 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     super(
       formValidationErrorService,
       formBuilder,
-      authService,
+      //authService,
+      loginStrategyService,
       router,
       i18nService,
       cryptoService,

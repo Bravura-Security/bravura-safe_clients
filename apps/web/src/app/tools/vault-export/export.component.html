@@ -1,23 +1,22 @@
-<form
-  #form
-  (ngSubmit)="submit()"
-  [appApiAction]="formPromise"
-  [formGroup]="exportForm"
-  *ngIf="exportForm"
->
-  <div class="page-header d-flex">
-    <h1>{{ "exportVault" | i18n }}</h1>
-  </div>
+<!--
+<app-header></app-header>
+-->
+<div class="page-header d-flex">
+  <h1>{{ "exportVault" | i18n }}</h1>
+</div>
 
+<bit-container>
+  <form [formGroup]="exportForm" [bitSubmit]="submit">
   <bit-callout type="danger" title="{{ 'vaultExportDisabled' | i18n }}" *ngIf="disabledByPolicy">
     {{ "personalVaultExportPolicyInEffect" | i18n }}
   </bit-callout>
-  <app-export-scope-callout
+    <tools-export-scope-callout
     [organizationId]="organizationId"
     *ngIf="!disabledByPolicy"
-  ></app-export-scope-callout>
+    ></tools-export-scope-callout>
 
-  <bit-form-field *ngIf="flexibleCollectionsEnabled$ | async">
+    <ng-container *ngIf="organizations$ | async as organizations">
+      <bit-form-field *ngIf="organizations.length > 0">
     <bit-label>{{ "exportFrom" | i18n }}</bit-label>
     <bit-select formControlName="vaultSelector">
       <bit-option [label]="'myVault' | i18n" value="myVault" icon="fa-user" />
@@ -29,6 +28,7 @@
       />
     </bit-select>
   </bit-form-field>
+    </ng-container>
 
   <bit-form-field>
     <bit-label>{{ "fileFormat" | i18n }}</bit-label>
@@ -84,7 +84,8 @@
           ></button>
           <bit-hint>{{ "exportPasswordDescription" | i18n }}</bit-hint>
         </bit-form-field>
-        <app-password-strength [password]="filePassword" [showText]="true"> </app-password-strength>
+          <app-password-strength [password]="filePassword" [showText]="true">
+          </app-password-strength>
       </div>
       <bit-form-field>
         <bit-label>{{ "confirmFilePassword" | i18n }}</bit-label>
@@ -108,11 +109,12 @@
 
   <button
     bitButton
+      bitFormButton
     type="submit"
     buttonType="primary"
-    [loading]="form.loading"
     [disabled]="disabledByPolicy"
   >
     {{ "confirmFormat" | i18n }}
   </button>
 </form>
+</bit-container>

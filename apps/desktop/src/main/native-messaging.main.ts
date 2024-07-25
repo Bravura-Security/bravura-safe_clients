@@ -26,7 +26,7 @@ export class NativeMessagingMain {
     private exePath: string,
   ) {}
 
-  async listen() {
+  listen() {
     ipc.config.id = "bitwarden";
     ipc.config.retry = 1500;
     const ipcSocketRoot = getIpcSocketRoot();
@@ -109,14 +109,22 @@ export class NativeMessagingMain {
           // need to create `browsers` folder to make sure both firefox.json and chrome.json can be created, writeManifest does not guarantee chrome.json is created
           await fs.mkdir(destination);
         }
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.writeManifest(path.join(destination, this.firefoxJsonFilename), firefoxJson);
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.writeManifest(path.join(destination, this.chromeJsonFilename), chromeJson);
-        // check if Firefox is installed for Local Machine and Current User, but only create in Current User
+
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.createWindowsRegistry(
           "HKLM\\SOFTWARE\\Mozilla\\Firefox",
           "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe",
           path.join(destination, this.firefoxJsonFilename),
         );
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.createWindowsRegistry(
           "HKCU\\SOFTWARE\\Mozilla\\Firefox",
           "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe",
@@ -168,6 +176,8 @@ export class NativeMessagingMain {
       }
       case "linux":
         if (existsSync(`${this.homedir()}/.mozilla/`)) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.writeManifest(
             `${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`,
             firefoxJson,
@@ -175,6 +185,8 @@ export class NativeMessagingMain {
         }
 
         if (existsSync(`${this.homedir()}/.config/google-chrome/`)) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.writeManifest(
             `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
             chromeJson,
@@ -182,6 +194,8 @@ export class NativeMessagingMain {
         }
 
         if (existsSync(`${this.homedir()}/.config/microsoft-edge/`)) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.writeManifest(
             `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
             chromeJson,
@@ -217,11 +231,19 @@ export class NativeMessagingMain {
   removeManifests() {
     switch (process.platform) {
       case "win32":
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         fs.unlink(path.join(this.userPath, "browsers", this.firefoxJsonFilename));
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         fs.unlink(path.join(this.userPath, "browsers", this.chromeJsonFilename));
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.deleteWindowsRegistry(
           "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe"
         );
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.deleteWindowsRegistry(
           "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
         );
@@ -231,6 +253,8 @@ export class NativeMessagingMain {
         for (const [, value] of Object.entries(nmhs)) {
           const p = path.join(value, "NativeMessagingHosts", "com.hitachiid.safe.json");
           if (existsSync(p)) {
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             fs.unlink(p);
           }
         }
@@ -240,6 +264,8 @@ export class NativeMessagingMain {
         if (
           existsSync(`${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`)
         ) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           fs.unlink(`${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`);
         }
 
@@ -248,6 +274,8 @@ export class NativeMessagingMain {
             `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
           )
         ) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           fs.unlink(
             `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
           );
@@ -258,6 +286,8 @@ export class NativeMessagingMain {
             `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
           )
         ) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           fs.unlink(
             `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
           );
@@ -274,6 +304,8 @@ export class NativeMessagingMain {
         /* eslint-disable-next-line no-useless-escape */
         const path = `${this.homedir()}/Library/Containers/com.duckduckgo.macos.browser/Data/Library/Application\ Support/NativeMessagingHosts/com.hitachiid.safe.json`;
         if (existsSync(path)) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           fs.unlink(path);
         }
         break;

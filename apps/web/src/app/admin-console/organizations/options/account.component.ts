@@ -19,13 +19,20 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { SsoComponent } from "@bitwarden/angular/auth/components/sso.component";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+//import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
+
 
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
 import { firstValueFrom } from "rxjs";
+import {
+  UserDecryptionOptionsServiceAbstraction,
+  LoginStrategyServiceAbstraction,
+} from "@bitwarden/auth/common";
+
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 
 @Component({
@@ -53,12 +60,15 @@ export class AccountComponent {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private syncService: SyncService,
-    private authService: AuthService,
+    //private authService: AuthService,
+    private ssoLoginService: SsoLoginServiceAbstraction,
+    private loginStrategyService: LoginStrategyServiceAbstraction,
     private router: Router,
     private cryptoFunctionService: CryptoFunctionService,
     private environmentService: EnvironmentService,
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private dialogService: DialogService,
+    private userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     private configService: ConfigServiceAbstraction,
   ) {}
 
@@ -162,7 +172,9 @@ export class AccountComponent {
     let returnUri = "/settings/organizations";
 
     ssoComponent = new SsoComponent(
-      this.authService,
+      //this.authService,
+      this.ssoLoginService,
+      this.loginStrategyService,
       this.router,
       this.i18nService,
       this.route,
@@ -173,6 +185,7 @@ export class AccountComponent {
       this.environmentService,
       this.passwordGenerationService,
       this.logService,
+      this.userDecryptionOptionsService,
       this.configService);
     ssoComponent.setRedirectUri(window.location.origin + "/sso-connector.html");
     ssoComponent.setClientId("web");

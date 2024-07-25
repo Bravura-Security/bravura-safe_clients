@@ -1,6 +1,8 @@
 import { BehaviorSubject } from "rxjs";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import {
   AbstractStorageService,
@@ -9,6 +11,7 @@ import {
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/platform/models/domain/storage-options";
+import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
 import { StateService as BaseStateService } from "@bitwarden/common/platform/services/state.service";
 
 import { Account } from "../../models/account";
@@ -32,8 +35,6 @@ export class BrowserStateService
   protected accountsSubject: BehaviorSubject<{ [userId: string]: Account }>;
   @sessionSync({ initializer: (s: string) => s })
   protected activeAccountSubject: BehaviorSubject<string>;
-  @sessionSync({ initializer: (b: boolean) => b })
-  protected activeAccountUnlockedSubject: BehaviorSubject<boolean>;
 
   protected accountDeserializer = Account.fromJSON;
 
@@ -44,6 +45,9 @@ export class BrowserStateService
     logService: LogService,
     stateFactory: StateFactory<GlobalState, Account>,
     accountService: AccountService,
+    environmentService: EnvironmentService,
+    tokenService: TokenService,
+    migrationRunner: MigrationRunner,
     useAccountCache = true,
   ) {
     super(
@@ -53,6 +57,9 @@ export class BrowserStateService
       logService,
       stateFactory,
       accountService,
+      environmentService,
+      tokenService,
+      migrationRunner,
       useAccountCache,
     );
 

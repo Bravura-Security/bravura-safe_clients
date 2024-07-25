@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
 import { OrganizationConnectionType } from "../admin-console/enums";
 import { OrganizationSponsorshipCreateRequest } from "../admin-console/models/request/organization/organization-sponsorship-create.request";
@@ -97,6 +99,7 @@ import { TaxInfoResponse } from "../billing/models/response/tax-info.response";
 import { TaxRateResponse } from "../billing/models/response/tax-rate.response";
 import { DeviceType } from "../enums";
 import { TwoFactorProviderType } from "../auth/enums/two-factor-provider-type";
+import { VaultTimeoutAction } from "../enums/vault-timeout-action.enum";
 import { CollectionBulkDeleteRequest } from "../models/request/collection-bulk-delete.request";
 import { DeleteRecoverRequest } from "../models/request/delete-recover.request";
 import { EventRequest } from "../models/request/event.request";
@@ -120,6 +123,7 @@ import { UserKeyResponse } from "../models/response/user-key.response";
 import { AppIdService } from "../platform/abstractions/app-id.service";
 import { EnvironmentService } from "../platform/abstractions/environment.service";
 import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
+import { StateService } from "../platform/abstractions/state.service";
 import { Utils } from "../platform/misc/utils";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
@@ -160,6 +164,7 @@ export class ApiService implements ApiServiceAbstraction {
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
     private appIdService: AppIdService,
+    private stateService: StateService,
     private logoutCallback: (expired: boolean) => Promise<void>,
     private customUserAgent: string = null,
   ) {
@@ -207,10 +212,12 @@ export class ApiService implements ApiServiceAbstraction {
         ? request.toIdentityToken()
         : request.toIdentityToken(this.platformUtilsService.getClientType());
 
+    const env = await firstValueFrom(this.environmentService.environment$);
+
     const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
+      new Request(env.getIdentityUrl() + "/connect/token", {
         body: this.qsStringify(identityToken),
-        credentials: this.getCredentials(),
+        credentials: await this.getCredentials(),
         cache: "no-store",
         headers: headers,
         method: "POST",
@@ -230,7 +237,6 @@ export class ApiService implements ApiServiceAbstraction {
         responseJson.TwoFactorProviders2 &&
         Object.keys(responseJson.TwoFactorProviders2).length
       ) {
-        await this.tokenService.clearTwoFactorToken();
         return new IdentityTwoFactorResponse(responseJson);
       } else if (
         response.status === 400 &&
@@ -327,13 +333,14 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async postPrelogin(request: PreloginRequest): Promise<PreloginResponse> {
+    const env = await firstValueFrom(this.environmentService.environment$);
     const r = await this.send(
       "POST",
       "/accounts/prelogin",
       request,
       false,
       true,
-      this.environmentService.getIdentityUrl(),
+      env.getIdentityUrl(),
     );
     return new PreloginResponse(r);
   }
@@ -372,13 +379,14 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async postRegister(request: RegisterRequest): Promise<RegisterResponse> {
+    const env = await firstValueFrom(this.environmentService.environment$);
     const r = await this.send(
       "POST",
       "/accounts/register",
       request,
       false,
       true,
-      this.environmentService.getIdentityUrl(),
+      env.getIdentityUrl(),
     );
     return new RegisterResponse(r);
   }
@@ -390,10 +398,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   postReinstatePremium(): Promise<any> {
     return this.send("POST", "/accounts/reinstate-premium", null, true, false);
-  }
-
-  postCancelPremium(): Promise<any> {
-    return this.send("POST", "/accounts/cancel-premium", null, true, false);
   }
 
   async postAccountStorage(request: StorageRequest): Promise<PaymentResponse> {
@@ -1552,10 +1556,11 @@ export class ApiService implements ApiServiceAbstraction {
     if (this.customUserAgent != null) {
       headers.set("User-Agent", this.customUserAgent);
     }
+    const env = await firstValueFrom(this.environmentService.environment$);
     const response = await this.fetch(
-      new Request(this.environmentService.getEventsUrl() + "/collect", {
+      new Request(env.getEventsUrl() + "/collect", {
         cache: "no-store",
-        credentials: this.getCredentials(),
+        credentials: await this.getCredentials(),
         method: "POST",
         body: JSON.stringify(request),
         headers: headers,
@@ -1675,10 +1680,10 @@ export class ApiService implements ApiServiceAbstraction {
   // Helpers
 
   async getActiveBearerToken(): Promise<string> {
-    let accessToken = await this.tokenService.getToken();
+    let accessToken = await this.tokenService.getAccessToken();
     if (await this.tokenService.tokenNeedsRefresh()) {
       await this.doAuthRefresh();
-      accessToken = await this.tokenService.getToken();
+      accessToken = await this.tokenService.getAccessToken();
     }
     return accessToken;
   }
@@ -1712,11 +1717,12 @@ export class ApiService implements ApiServiceAbstraction {
       headers.set("User-Agent", this.customUserAgent);
     }
 
+    const env = await firstValueFrom(this.environmentService.environment$);
     const path = `/sso/prevalidate?domainHint=${encodeURIComponent(identifier)}`;
     const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + path, {
+      new Request(env.getIdentityUrl() + path, {
         cache: "no-store",
-        credentials: this.getCredentials(),
+        credentials: await this.getCredentials(),
         headers: headers,
         method: "GET",
       }),
@@ -1846,16 +1852,17 @@ export class ApiService implements ApiServiceAbstraction {
       headers.set("User-Agent", this.customUserAgent);
     }
 
-    const decodedToken = await this.tokenService.decodeToken();
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const decodedToken = await this.tokenService.decodeAccessToken();
     const response = await this.fetch(
-      new Request(this.environmentService.getIdentityUrl() + "/connect/token", {
+      new Request(env.getIdentityUrl() + "/connect/token", {
         body: this.qsStringify({
           grant_type: "refresh_token",
           client_id: decodedToken.client_id,
           refresh_token: refreshToken,
         }),
         cache: "no-store",
-        credentials: this.getCredentials(),
+        credentials: await this.getCredentials(),
         headers: headers,
         method: "POST",
       }),
@@ -1864,10 +1871,15 @@ export class ApiService implements ApiServiceAbstraction {
     if (response.status === 200) {
       const responseJson = await response.json();
       const tokenResponse = new IdentityTokenResponse(responseJson);
+
+      const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
+      const vaultTimeout = await this.stateService.getVaultTimeout();
+
       await this.tokenService.setTokens(
         tokenResponse.accessToken,
         tokenResponse.refreshToken,
-        null,
+        vaultTimeoutAction as VaultTimeoutAction,
+        vaultTimeout,
       );
     } else {
       const error = await this.handleError(response, true, true);
@@ -1893,7 +1905,14 @@ export class ApiService implements ApiServiceAbstraction {
       throw new Error("Invalid response received when refreshing api token");
     }
 
-    await this.tokenService.setToken(response.accessToken);
+    const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
+    const vaultTimeout = await this.stateService.getVaultTimeout();
+
+    await this.tokenService.setAccessToken(
+      response.accessToken,
+      vaultTimeoutAction as VaultTimeoutAction,
+      vaultTimeout,
+    );
   }
 
   async send(
@@ -1905,7 +1924,8 @@ export class ApiService implements ApiServiceAbstraction {
     apiUrl?: string,
     alterHeaders?: (headers: Headers) => void,
   ): Promise<any> {
-    apiUrl = Utils.isNullOrWhitespace(apiUrl) ? this.environmentService.getApiUrl() : apiUrl;
+    const env = await firstValueFrom(this.environmentService.environment$);
+    apiUrl = Utils.isNullOrWhitespace(apiUrl) ? env.getApiUrl() : apiUrl;
 
     // Prevent directory traversal from malicious paths
     const pathParts = path.split("?");
@@ -1921,7 +1941,7 @@ export class ApiService implements ApiServiceAbstraction {
 
     const requestInit: RequestInit = {
       cache: "no-store",
-      credentials: this.getCredentials(),
+      credentials: await this.getCredentials(),
       method: method,
     };
 
@@ -2000,8 +2020,9 @@ export class ApiService implements ApiServiceAbstraction {
       .join("&");
   }
 
-  private getCredentials(): RequestCredentials {
-    if (!this.isWebClient || this.environmentService.hasBaseUrl()) {
+  private async getCredentials(): Promise<RequestCredentials> {
+    const env = await firstValueFrom(this.environmentService.environment$);
+    if (!this.isWebClient || env.hasBaseUrl()) {
       return "include";
     }
     return undefined;

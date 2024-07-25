@@ -5,9 +5,9 @@
 
   --color-background: 255 255 255;
   --color-background-alt: 251 251 251;
-  --color-background-alt2: 23 92 219;
-  --color-background-alt3: 18 82 163;
-  --color-background-alt4: 13 60 119;
+  --color-background-alt2: 4 196 180;
+  --color-background-alt3: 0 128 128;
+  --color-background-alt4: 0 110 89;
 
   --color-primary-300: 0 128 128;
   --color-primary-500: 0 128 128;
@@ -199,4 +199,10 @@ summary.tw-list-none::-webkit-details-marker {
 .cdk-overlay-backdrop,
 .cdk-overlay-pane {
   z-index: 2000 !important;
+}
+
+.cdk-global-scrollblock {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
 }

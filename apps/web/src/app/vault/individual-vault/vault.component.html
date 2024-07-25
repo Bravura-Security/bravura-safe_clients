@@ -1,3 +1,21 @@
+<!--
+<app-vault-header
+  [filter]="filter"
+  [loading]="refreshing && !performingInitialLoad"
+  [organizations]="allOrganizations"
+  [canCreateCollections]="canCreateCollections"
+  [collection]="selectedCollection"
+  (onAddCipher)="addCipher()"
+  (onAddCollection)="addCollection()"
+  (onAddFolder)="addFolder()"
+  (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
+  (onDeleteCollection)="deleteCollection(selectedCollection.node)"
+></app-vault-header>
+-->
+
+<app-vault-onboarding [ciphers]="ciphers" [orgs]="allOrganizations" (onAddCipher)="addCipher()">
+</app-vault-onboarding>
+
 <div class="container page-content">
   <div class="row">
     <div class="col-3 sidebar-panel d-flex flex-column">

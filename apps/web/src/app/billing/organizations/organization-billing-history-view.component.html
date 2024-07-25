@@ -1,3 +1,6 @@
+<!--
+<app-header>
+-->
 <div class="d-flex page-header">
   <h1>
     {{ "billingHistory" | i18n }}
@@ -15,6 +18,11 @@
     {{ "refresh" | i18n }}
   </button>
 </div>
+<!--
+</app-header>
+
+<bit-container>
+-->
 <ng-container *ngIf="!firstLoaded && loading">
   <i
     class="fa fa-spinner fa-spin text-muted"
@@ -26,3 +34,6 @@
 <ng-container *ngIf="billing">
   <app-billing-history [billing]="billing"></app-billing-history>
 </ng-container>
+<!--
+</bit-container>
+-->

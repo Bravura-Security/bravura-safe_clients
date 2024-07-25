@@ -1,3 +1,17 @@
+<!--
+<app-header>
+  <bit-search
+    [placeholder]="'searchGroups' | i18n"
+    [(ngModel)]="searchText"
+    class="tw-w-80"
+  ></bit-search>
+      <button bitButton type="button" buttonType="primary" (click)="add()">
+      <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+    {{ "newGroup" | i18n }}
+  </button>
+</app-header>
+
+-->
 <div class="container page-content">
   <div class="tw-mb-4 tw-flex page-header">
   <h1>{{ "groups" | i18n }}</h1>
@@ -116,7 +130,7 @@
               <button type="button" bitMenuItem (click)="delete(g)">
                 <span class="tw-text-danger"
                   ><i aria-hidden="true" class="fa fa-fw fa-trash-o"></i> {{ "delete" | i18n }}</span
-            >
+              >
             </button>
             </bit-menu>
         </td>
@@ -127,4 +141,3 @@
 <app-footer></app-footer>
 </ng-container>
 <ng-template #addEdit></ng-template>
-</div>

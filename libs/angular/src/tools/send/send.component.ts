@@ -1,5 +1,5 @@
 import { Directive, NgZone, OnDestroy, OnInit } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, firstValueFrom, takeUntil } from "rxjs";
 
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -149,6 +149,8 @@ export class SendComponent implements OnInit, OnDestroy {
       this.actionPromise = this.sendApiService.removePassword(s.id);
       await this.actionPromise;
       if (this.onSuccessfulRemovePassword != null) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.onSuccessfulRemovePassword();
       } else {
         // Default actions
@@ -181,6 +183,8 @@ export class SendComponent implements OnInit, OnDestroy {
       await this.actionPromise;
 
       if (this.onSuccessfulDelete != null) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.onSuccessfulDelete();
       } else {
         // Default actions
@@ -194,9 +198,9 @@ export class SendComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  copy(s: SendView) {
-    const sendLinkBaseUrl = this.environmentService.getSendUrl();
-    const link = sendLinkBaseUrl + s.accessId + "/" + s.urlB64Key;
+  async copy(s: SendView) {
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const link = env.getSendUrl() + s.accessId + "/" + s.urlB64Key;
     this.platformUtilsService.copyToClipboard(link);
     this.platformUtilsService.showToast(
       "success",
@@ -206,18 +210,24 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   searchTextChanged() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.search(200);
   }
 
   selectAll() {
     this.clearSelections();
     this.selectedAll = true;
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.applyFilter(null);
   }
 
   selectType(type: SendType) {
     this.clearSelections();
     this.selectedType = type;
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.applyFilter((s) => s.type === type);
   }
 

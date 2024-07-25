@@ -2,6 +2,10 @@ import { UserVerificationService as AbstractUserVerificationService } from "@bit
 import { UserVerificationService } from "@bitwarden/common/auth/services/user-verification/user-verification.service";
 
 import {
+  VaultTimeoutSettingsServiceInitOptions,
+  vaultTimeoutSettingsServiceFactory,
+} from "../../../background/service-factories/vault-timeout-settings-service.factory";
+import {
   CryptoServiceInitOptions,
   cryptoServiceFactory,
 } from "../../../platform/background/service-factories/crypto-service.factory";
@@ -19,11 +23,19 @@ import {
   logServiceFactory,
 } from "../../../platform/background/service-factories/log-service.factory";
 import {
+  platformUtilsServiceFactory,
+  PlatformUtilsServiceInitOptions,
+} from "../../../platform/background/service-factories/platform-utils-service.factory";
+import {
   StateServiceInitOptions,
   stateServiceFactory,
 } from "../../../platform/background/service-factories/state-service.factory";
 
 import { PinCryptoServiceInitOptions, pinCryptoServiceFactory } from "./pin-crypto-service.factory";
+import {
+  userDecryptionOptionsServiceFactory,
+  UserDecryptionOptionsServiceInitOptions,
+} from "./user-decryption-options-service.factory";
 import {
   UserVerificationApiServiceInitOptions,
   userVerificationApiServiceFactory,
@@ -36,8 +48,11 @@ export type UserVerificationServiceInitOptions = UserVerificationServiceFactoryO
   CryptoServiceInitOptions &
   I18nServiceInitOptions &
   UserVerificationApiServiceInitOptions &
+  UserDecryptionOptionsServiceInitOptions &
   PinCryptoServiceInitOptions &
-  LogServiceInitOptions;
+  LogServiceInitOptions &
+  VaultTimeoutSettingsServiceInitOptions &
+  PlatformUtilsServiceInitOptions;
 
 export function userVerificationServiceFactory(
   cache: { userVerificationService?: AbstractUserVerificationService } & CachedServices,
@@ -53,8 +68,11 @@ export function userVerificationServiceFactory(
         await cryptoServiceFactory(cache, opts),
         await i18nServiceFactory(cache, opts),
         await userVerificationApiServiceFactory(cache, opts),
+        await userDecryptionOptionsServiceFactory(cache, opts),
         await pinCryptoServiceFactory(cache, opts),
         await logServiceFactory(cache, opts),
+        await vaultTimeoutSettingsServiceFactory(cache, opts),
+        await platformUtilsServiceFactory(cache, opts),
       ),
   );
 }

@@ -1,3 +1,8 @@
+<!--
+<app-header></app-header>
+
+<bit-container>
+-->
 <div class="page-header">
   <h1>
     {{ "inactive2faReport" | i18n }}
@@ -74,7 +79,7 @@
               bitBadge
               href="{{ cipherDocs.get(c.id) }}"
               target="_blank"
-              rel="noopener"
+                rel="noreferrer"
               *ngIf="cipherDocs.has(c.id)"
             >
               {{ "instructions" | i18n }}</a
@@ -86,3 +91,6 @@
   </ng-container>
 </div>
 <ng-template #cipherAddEdit></ng-template>
+<!--
+</bit-container>
+-->

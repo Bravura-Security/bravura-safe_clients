@@ -31,6 +31,10 @@ import {
   i18nServiceFactory,
 } from "../../../platform/background/service-factories/i18n-service.factory";
 import {
+  KeyGenerationServiceInitOptions,
+  keyGenerationServiceFactory,
+} from "../../../platform/background/service-factories/key-generation-service.factory";
+import {
   PlatformUtilsServiceInitOptions,
   platformUtilsServiceFactory,
 } from "../../../platform/background/service-factories/platform-utils-service.factory";
@@ -39,9 +43,15 @@ import {
   stateServiceFactory,
 } from "../../../platform/background/service-factories/state-service.factory";
 
+import {
+  UserDecryptionOptionsServiceInitOptions,
+  userDecryptionOptionsServiceFactory,
+} from "./user-decryption-options-service.factory";
+
 type DeviceTrustCryptoServiceFactoryOptions = FactoryOptions;
 
 export type DeviceTrustCryptoServiceInitOptions = DeviceTrustCryptoServiceFactoryOptions &
+  KeyGenerationServiceInitOptions &
   CryptoFunctionServiceInitOptions &
   CryptoServiceInitOptions &
   EncryptServiceInitOptions &
@@ -49,7 +59,8 @@ export type DeviceTrustCryptoServiceInitOptions = DeviceTrustCryptoServiceFactor
   AppIdServiceInitOptions &
   DevicesApiServiceInitOptions &
   I18nServiceInitOptions &
-  PlatformUtilsServiceInitOptions;
+  PlatformUtilsServiceInitOptions &
+  UserDecryptionOptionsServiceInitOptions;
 
 export function deviceTrustCryptoServiceFactory(
   cache: { deviceTrustCryptoService?: DeviceTrustCryptoServiceAbstraction } & CachedServices,
@@ -61,6 +72,7 @@ export function deviceTrustCryptoServiceFactory(
     opts,
     async () =>
       new DeviceTrustCryptoService(
+        await keyGenerationServiceFactory(cache, opts),
         await cryptoFunctionServiceFactory(cache, opts),
         await cryptoServiceFactory(cache, opts),
         await encryptServiceFactory(cache, opts),
@@ -69,6 +81,7 @@ export function deviceTrustCryptoServiceFactory(
         await devicesApiServiceFactory(cache, opts),
         await i18nServiceFactory(cache, opts),
         await platformUtilsServiceFactory(cache, opts),
+        await userDecryptionOptionsServiceFactory(cache, opts),
       ),
   );
 }

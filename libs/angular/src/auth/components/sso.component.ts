@@ -1,13 +1,19 @@
 import { Directive } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
+import {
+  LoginStrategyServiceAbstraction,
+  SsoLoginCredentials,
+  TrustedDeviceUserDecryptionOption,
+  UserDecryptionOptions,
+  UserDecryptionOptionsServiceAbstraction,
+} from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
-import { SsoLoginCredentials } from "@bitwarden/common/auth/models/domain/login-credentials";
-import { TrustedDeviceUserDecryptionOption } from "@bitwarden/common/auth/models/domain/user-decryption-options/trusted-device-user-decryption-option";
 import { SsoPreValidateResponse } from "@bitwarden/common/auth/models/response/sso-pre-validate.response";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -17,7 +23,6 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { AccountDecryptionOptions } from "@bitwarden/common/platform/models/domain/account";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 @Directive()
@@ -47,7 +52,8 @@ export class SsoComponent {
   protected codeChallenge: string;
 
   constructor(
-    protected authService: AuthService,
+    protected ssoLoginService: SsoLoginServiceAbstraction,
+    protected loginStrategyService: LoginStrategyServiceAbstraction,
     protected router: Router,
     protected i18nService: I18nService,
     protected route: ActivatedRoute,
@@ -58,6 +64,7 @@ export class SsoComponent {
     protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
     protected logService: LogService,
+    protected userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     protected configService: ConfigServiceAbstraction,
   ) {}
 
@@ -65,10 +72,10 @@ export class SsoComponent {
     // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.code != null && qParams.state != null) {
-        const codeVerifier = await this.stateService.getSsoCodeVerifier();
-        const state = await this.stateService.getSsoState();
-        await this.stateService.setSsoCodeVerifier(null);
-        await this.stateService.setSsoState(null);
+        const codeVerifier = await this.ssoLoginService.getCodeVerifier();
+        const state = await this.ssoLoginService.getSsoState();
+        await this.ssoLoginService.setCodeVerifier(null);
+        await this.ssoLoginService.setSsoState(null);
         if (
           qParams.code != null &&
           codeVerifier != null &&
@@ -134,7 +141,7 @@ export class SsoComponent {
       const codeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
       const codeVerifierHash = await this.cryptoFunctionService.hash(codeVerifier, "sha256");
       codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
-      await this.stateService.setSsoCodeVerifier(codeVerifier);
+      await this.ssoLoginService.setCodeVerifier(codeVerifier);
     }
 
     if (state == null) {
@@ -148,10 +155,12 @@ export class SsoComponent {
     state += `_identifier=${this.identifier}`;
 
     // Save state (regardless of new or existing)
-    await this.stateService.setSsoState(state);
+    await this.ssoLoginService.setSsoState(state);
+
+    const env = await firstValueFrom(this.environmentService.environment$);
 
     let authorizeUrl =
-      this.environmentService.getIdentityUrl() +
+      env.getIdentityUrl() +
       "/connect/authorize?" +
       "client_id=" +
       this.clientId +
@@ -181,17 +190,17 @@ export class SsoComponent {
   private async logIn(code: string, codeVerifier: string, orgSsoIdentifier: string): Promise<void> {
     this.loggingIn = true;
     try {
+      const email = await this.ssoLoginService.getSsoEmail();
+
       const credentials = new SsoLoginCredentials(
         code,
         codeVerifier,
         this.redirectUri,
         orgSsoIdentifier,
+        email,
       );
-      this.formPromise = this.authService.logIn(credentials);
+      this.formPromise = this.loginStrategyService.logIn(credentials);
       const authResult = await this.formPromise;
-
-      const acctDecryptionOpts: AccountDecryptionOptions =
-        await this.stateService.getAccountDecryptionOptions();
 
       if (authResult.requiresTwoFactor) {
         return await this.handleTwoFactorRequired(orgSsoIdentifier);
@@ -204,7 +213,7 @@ export class SsoComponent {
       // - TDE login decryption options component
       // - Browser SSO on extension open
       // Note: you cannot set this in state before 2FA b/c there won't be an account in state.
-      await this.stateService.setUserSsoOrganizationIdentifier(orgSsoIdentifier);
+      await this.ssoLoginService.setActiveUserOrganizationSsoIdentifier(orgSsoIdentifier);
 
       // Users enrolled in admin acct recovery can be forced to set a new password after
       // having the admin set a temp password for them (affects TDE & standard users)
@@ -213,15 +222,20 @@ export class SsoComponent {
         return await this.handleForcePasswordReset(orgSsoIdentifier);
       }
 
+      // must come after 2fa check since user decryption options aren't available if 2fa is required
+      const userDecryptionOpts = await firstValueFrom(
+        this.userDecryptionOptionsService.userDecryptionOptions$,
+      );
+
       const tdeEnabled = await this.isTrustedDeviceEncEnabled(
-        acctDecryptionOpts.trustedDeviceOption,
+        userDecryptionOpts.trustedDeviceOption,
       );
 
       if (tdeEnabled) {
         return await this.handleTrustedDeviceEncryptionEnabled(
           authResult,
           orgSsoIdentifier,
-          acctDecryptionOpts,
+          userDecryptionOpts,
         );
       }
 
@@ -229,8 +243,8 @@ export class SsoComponent {
       // have one and they aren't using key connector.
       // Note: TDE & Key connector are mutually exclusive org config options.
       const requireSetPassword =
-        !acctDecryptionOpts.hasMasterPassword &&
-        acctDecryptionOpts.keyConnectorOption === undefined;
+        !userDecryptionOpts.hasMasterPassword &&
+        userDecryptionOpts.keyConnectorOption === undefined;
 
       if (requireSetPassword || authResult.resetMasterPassword) {
         // Change implies going no password -> password in this case
@@ -266,12 +280,12 @@ export class SsoComponent {
   private async handleTrustedDeviceEncryptionEnabled(
     authResult: AuthResult,
     orgIdentifier: string,
-    acctDecryptionOpts: AccountDecryptionOptions,
+    userDecryptionOpts: UserDecryptionOptions,
   ): Promise<void> {
     // If user doesn't have a MP, but has reset password permission, they must set a MP
     if (
-      !acctDecryptionOpts.hasMasterPassword &&
-      acctDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission
+      !userDecryptionOpts.hasMasterPassword &&
+      userDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission
     ) {
       // Set flag so that auth guard can redirect to set password screen after decryption (trusted or untrusted device)
       // Note: we cannot directly navigate in this scenario as we are in a pre-decryption state, and
@@ -283,9 +297,13 @@ export class SsoComponent {
 
     if (this.onSuccessfulLoginTde != null) {
       // Don't await b/c causes hang on desktop & browser
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.onSuccessfulLoginTde();
     }
 
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.navigateViaCallbackOrRoute(
       this.onSuccessfulLoginTdeNavigate,
       // Navigate to TDE page (if user was on trusted device and TDE has decrypted
@@ -321,6 +339,8 @@ export class SsoComponent {
   private async handleSuccessfulLogin() {
     if (this.onSuccessfulLogin != null) {
       // Don't await b/c causes hang on desktop & browser
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.onSuccessfulLogin();
     }
 

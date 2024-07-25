@@ -1,7 +1,17 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { combineLatest, of, shareReplay, Subject, switchMap, takeUntil } from "rxjs";
+import {
+  combineLatest,
+  firstValueFrom,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  Subject,
+  switchMap,
+  takeUntil,
+} from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
@@ -11,14 +21,15 @@ import {
 } from "@bitwarden/common/admin-console/enums";
 import { PermissionsApi } from "@bitwarden/common/admin-console/models/api/permissions.api";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { ProductType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { DialogService } from "@bitwarden/components";
 
-import { flagEnabled } from "../../../../../../utils/flags";
 import { CollectionAdminService } from "../../../../../vault/core/collection-admin.service";
 import {
   CollectionAccessSelectionView,
@@ -37,7 +48,7 @@ import {
 } from "../../../shared/components/access-selector";
 
 import { commaSeparatedEmails } from "./validators/comma-separated-emails.validator";
-import { orgWithoutAdditionalSeatLimitReachedWithUpgradePathValidator } from "./validators/org-without-additional-seat-limit-reached-with-upgrade-path.validator";
+import { orgSeatLimitReachedValidator } from "./validators/org-seat-limit-reached.validator";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 export enum MemberDialogTab {
@@ -75,9 +86,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   access: "all" | "selected" = "selected";
   collections: CollectionView[] = [];
   organizationUserType = OrganizationUserType;
-  canUseCustomPermissions: boolean;
   PermissionMode = PermissionMode;
-  canUseSecretsManager: boolean;
   showNoMasterPasswordWarning = false;
   canViewPasswordResetTab = false;
   canSetForcePasswordReset = false;
@@ -87,7 +96,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
   protected groupAccessItems: AccessItemView[] = [];
   protected tabIndex: MemberDialogTab;
   protected formGroup = this.formBuilder.group({
-    emails: ["", { updateOn: "blur" }],
+    emails: [""],
     type: OrganizationUserType.User,
     externalId: this.formBuilder.control({ value: "", disabled: true }),
     accessAllCollections: false,
@@ -96,6 +105,8 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     groups: [[] as AccessItemValue[]],
     forcePasswordReset: true,
   });
+
+  protected restrictedAccess$: Observable<boolean>;
 
   protected permissionsGroup = this.formBuilder.group({
     manageAssignedCollectionsGroup: this.formBuilder.group<Record<string, boolean>>({
@@ -144,6 +155,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private configService: ConfigServiceAbstraction,
     private stateService: StateService,
+    private accountService: AccountService,
   ) {}
 
   async ngOnInit() {
@@ -151,7 +163,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     this.tabIndex = this.params.initialTab ?? MemberDialogTab.Role;
     this.title = this.i18nService.t(this.editMode ? "editMember" : "inviteMember");
 
-    const organization$ = of(this.organizationService.get(this.params.organizationId)).pipe(
+    const organization$ = this.organizationService.get$(this.params.organizationId).pipe(
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
     const groups$ = organization$.pipe(
@@ -164,21 +176,49 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       }),
     );
 
+    const userDetails$ = this.params.organizationUserId
+      ? this.userService.get(this.params.organizationId, this.params.organizationUserId)
+      : of(null);
+
+    // The orgUser cannot manage their own Group assignments if collection access is restricted
+    // TODO: fix disabled state of access-selector rows so that any controls are hidden
+    this.restrictedAccess$ = combineLatest([
+      organization$,
+      userDetails$,
+      this.accountService.activeAccount$,
+      this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
+    ]).pipe(
+      map(
+        ([organization, userDetails, activeAccount, flexibleCollectionsV1Enabled]) =>
+          // Feature flag conditionals
+          flexibleCollectionsV1Enabled &&
+          organization.flexibleCollections &&
+          // Business logic conditionals
+          userDetails.userId == activeAccount.id &&
+          !organization.allowAdminAccessToAllCollectionItems,
+      ),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
+
+    this.restrictedAccess$.pipe(takeUntil(this.destroy$)).subscribe((restrictedAccess) => {
+      if (restrictedAccess) {
+        this.formGroup.controls.groups.disable();
+      } else {
+        this.formGroup.controls.groups.enable();
+      }
+    });
+
     var loggedUserId = await this.stateService.getUserId();
 
     combineLatest({
       organization: organization$,
       collections: this.collectionAdminService.getAll(this.params.organizationId),
-      userDetails: this.params.organizationUserId
-        ? this.userService.get(this.params.organizationId, this.params.organizationUserId)
-        : of(null),
+      userDetails: userDetails$,
       groups: groups$,
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ organization, collections, userDetails, groups }) => {
         this.organization = organization;
-        this.canUseCustomPermissions = organization.useCustomPermissions;
-        this.canUseSecretsManager = organization.useSecretsManager && flagEnabled("secretsManager");
         this.canViewPasswordResetTab = false;
         this.canSetForcePasswordReset = true;
         if( userDetails ){
@@ -194,7 +234,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
         const emailsControlValidators = [
           Validators.required,
           commaSeparatedEmails,
-          orgWithoutAdditionalSeatLimitReachedWithUpgradePathValidator(
+          orgSeatLimitReachedValidator(
             this.organization,
             this.params.allOrganizationUserEmails,
             this.i18nService.t("subscriptionUpgrade", organization.seats),
@@ -365,15 +405,6 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.canUseCustomPermissions && this.customUserTypeSelected) {
-      this.platformUtilsService.showToast(
-        "error",
-        null,
-        this.i18nService.t("customNonEnterpriseError"),
-      );
-      return;
-    }
-
     const userView = new OrganizationUserAdminView();
     userView.id = this.params.organizationUserId;
     userView.organizationId = this.params.organizationId;
@@ -386,7 +417,11 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
     userView.collections = this.formGroup.value.access
       .filter((v) => v.type === AccessItemType.Collection)
       .map(convertToSelectionView);
-    userView.groups = this.formGroup.value.groups.map((m) => m.id);
+
+    userView.groups = (await firstValueFrom(this.restrictedAccess$))
+      ? null
+      : this.formGroup.value.groups.map((m) => m.id);
+
     userView.accessSecretsManager = this.formGroup.value.accessSecretsManager;
     userView.forcePasswordReset = this.formGroup.value.forcePasswordReset;
 
@@ -394,8 +429,7 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       await this.userService.save(userView);
     } else {
       userView.id = this.params.organizationUserId;
-      const maxEmailsCount =
-        this.organization.planProductType === ProductType.TeamsStarter ? 10 : 20;
+      const maxEmailsCount = this.organization.planProductType === ProductType.TeamsStarter ? 10 : 20;
       const emails = [...new Set(this.formGroup.value.emails.trim().split(/\s*,\s*/))];
       if (emails.length > maxEmailsCount) {
         this.formGroup.controls.emails.setErrors({
@@ -544,10 +578,6 @@ export class MemberDialogComponent implements OnInit, OnDestroy {
       },
       type: "warning",
     });
-  }
-
-  protected get flexibleCollectionsEnabled() {
-    return this.organization?.flexibleCollections;
   }
 
   protected readonly ProductType = ProductType;

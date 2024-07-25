@@ -1,3 +1,18 @@
+<!--
+<app-header>
+  <bit-search
+    class="tw-grow"
+    [(ngModel)]="searchText"
+    [placeholder]="'searchMembers' | i18n"
+  ></bit-search>
+
+  <button type="button" bitButton buttonType="primary" (click)="invite()">
+    <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
+    {{ "inviteMember" | i18n }}
+  </button>
+</app-header>
+-->
+
 <div class="container page-content">
   <div class="tw-mb-4 tw-flex tw-flex-col tw-space-y-4 page-header">
     <h1>{{ "members" | i18n }}</h1>
@@ -258,9 +273,7 @@
                   </span>
                 </button>
                 <bit-menu-divider
-                  *ngIf="
-                    u.status === userStatusType.Accepted || u.status === userStatusType.Invited
-                  "
+                *ngIf="u.status === userStatusType.Accepted || u.status === userStatusType.Invited"
                 ></bit-menu-divider>
                 <button type="button" bitMenuItem (click)="edit(u, memberTab.Role)">
                   <i aria-hidden="true" class="fa fa-fw fa-user"></i> {{ "memberRole" | i18n }}

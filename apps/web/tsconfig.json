@@ -12,7 +12,10 @@
       "@bitwarden/billing": ["../../libs/billing/src"],
       "@bitwarden/common/*": ["../../libs/common/src/*"],
       "@bitwarden/components": ["../../libs/components/src"],
-      "@bitwarden/exporter/*": ["../../libs/exporter/src/*"],
+      "@bitwarden/vault-export-core": [
+        "../../libs/tools/export/vault-export/vault-export-core/src"
+      ],
+      "@bitwarden/vault-export-ui": ["../../libs/tools/export/vault-export/vault-export-ui/src"],
       "@bitwarden/importer/core": ["../../libs/importer/src"],
       "@bitwarden/importer/ui": ["../../libs/importer/src/components"],
       "@bitwarden/platform": ["../../libs/platform/src"],
@@ -24,7 +27,12 @@
     "strictTemplates": true,
     "preserveWhitespaces": true
   },
-  "files": ["src/polyfills.ts", "src/main.ts", "bravura_src/web/sso/src/app/main.ts"],
+  "files": [
+    "src/polyfills.ts",
+    "src/main.ts",
+    "bravura_src/web/sso/src/app/main.ts",
+    "src/theme.ts"
+  ],
   "include": [
     "src/connectors/*.ts",
     "src/**/*.stories.ts",

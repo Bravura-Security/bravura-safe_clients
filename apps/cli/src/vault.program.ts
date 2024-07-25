@@ -1,4 +1,4 @@
-import * as program from "commander";
+import { program, Command } from "commander";
 
 import { ConfirmCommand } from "./admin-console/commands/confirm.command";
 import { ShareCommand } from "./admin-console/commands/share.command";
@@ -53,7 +53,7 @@ export class VaultProgram extends Program {
     return success;
   }
 
-  private listCommand(): program.Command {
+  private listCommand(): Command {
     const listObjects = [
       "items",
       "folders",
@@ -63,11 +63,9 @@ export class VaultProgram extends Program {
       "organizations",
     ];
 
-    return new program.Command("list")
-      .arguments("<object>")
-      .description("List an array of objects from the vault.", {
-        object: "Valid objects are: " + listObjects.join(", "),
-      })
+    return new Command("list")
+      .argument("<object>", "Valid objects are: " + listObjects.join(", "))
+      .description("List an array of objects from the vault.")
       .option("--search <search>", "Perform a search on the listed objects.")
       .option("--url <url>", "Filter items of type login with a url-match search.")
       .option("--folderid <folderid>", "Filter items by folder id.")
@@ -124,7 +122,7 @@ export class VaultProgram extends Program {
       });
   }
 
-  private getCommand(): program.Command {
+  private getCommand(): Command {
     const getObjects = [
       "item",
       "username",
@@ -142,12 +140,10 @@ export class VaultProgram extends Program {
       "fingerprint",
       "send",
     ];
-    return new program.Command("get")
-      .arguments("<object> <id>")
-      .description("Get an object from the vault.", {
-        object: "Valid objects are: " + getObjects.join(", "),
-        id: "Search term or object's globally unique `id`.",
-      })
+    return new Command("get")
+      .argument("<object>", "Valid objects are: " + getObjects.join(", "))
+      .argument("<id>", "Search term or object's globally unique `id`.")
+      .description("Get an object from the vault.")
       .option("--itemid <itemid>", "Attachment's item id.")
       .option("--output <output>", "Output directory or filename for attachment.")
       .option("--organizationid <organizationid>", "Team id for a team object.")
@@ -191,6 +187,7 @@ export class VaultProgram extends Program {
           this.main.apiService,
           this.main.organizationService,
           this.main.eventCollectionService,
+          this.main.billingAccountProfileStateService,
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
@@ -199,12 +196,13 @@ export class VaultProgram extends Program {
 
   private createCommand() {
     const createObjects = ["item", "attachment", "folder", "org-collection"];
-    return new program.Command("create")
-      .arguments("<object> [encodedJson]")
-      .description("Create an object in the vault.", {
-        object: "Valid objects are: " + createObjects.join(", "),
-        encodedJson: "Encoded json of the object to create. Can also be piped into stdin.",
-      })
+    return new Command("create")
+      .argument("<object>", "Valid objects are: " + createObjects.join(", "))
+      .argument(
+        "[encodedJson]",
+        "Encoded json of the object to create. Can also be piped into stdin.",
+      )
+      .description("Create an object in the vault.")
       .option("--file <file>", "Path to file for attachment.")
       .option("--itemid <itemid>", "Attachment's item id.")
       .option("--organizationid <organizationid>", "Team id for a team object.")
@@ -228,25 +226,26 @@ export class VaultProgram extends Program {
         const command = new CreateCommand(
           this.main.cipherService,
           this.main.folderService,
-          this.main.stateService,
           this.main.cryptoService,
           this.main.apiService,
           this.main.folderApiService,
+          this.main.billingAccountProfileStateService,
         );
         const response = await command.run(object, encodedJson, cmd);
         this.processResponse(response);
       });
   }
 
-  private editCommand(): program.Command {
+  private editCommand(): Command {
     const editObjects = ["item", "item-collections", "folder", "org-collection"];
-    return new program.Command("edit")
-      .arguments("<object> <id> [encodedJson]")
-      .description("Edit an object from the vault.", {
-        object: "Valid objects are: " + editObjects.join(", "),
-        id: "Object's globally unique `id`.",
-        encodedJson: "Encoded json of the object to create. Can also be piped into stdin.",
-      })
+    return new Command("edit")
+      .argument("<object>", "Valid objects are: " + editObjects.join(", "))
+      .argument("<id>", "Object's globally unique `id`.")
+      .argument(
+        "[encodedJson]",
+        "Encoded json of the object to create. Can also be piped into stdin.",
+      )
+      .description("Edit an object from the vault.")
       .option("--organizationid <organizationid>", "Team id for a team object.")
       .on("--help", () => {
         writeLn("\n  Examples:");
@@ -282,14 +281,12 @@ export class VaultProgram extends Program {
       });
   }
 
-  private deleteCommand(): program.Command {
+  private deleteCommand(): Command {
     const deleteObjects = ["item", "attachment", "folder", "org-collection"];
-    return new program.Command("delete")
-      .arguments("<object> <id>")
-      .description("Delete an object from the vault.", {
-        object: "Valid objects are: " + deleteObjects.join(", "),
-        id: "Object's globally unique `id`.",
-      })
+    return new Command("delete")
+      .argument("<object>", "Valid objects are: " + deleteObjects.join(", "))
+      .argument("<id>", "Object's globally unique `id`.")
+      .description("Delete an object from the vault.")
       .option("--itemid <itemid>", "Attachment's item id.")
       .option("--organizationid <organizationid>", "Team id for a team object.")
       .option(
@@ -316,23 +313,21 @@ export class VaultProgram extends Program {
         const command = new DeleteCommand(
           this.main.cipherService,
           this.main.folderService,
-          this.main.stateService,
           this.main.apiService,
           this.main.folderApiService,
+          this.main.billingAccountProfileStateService,
         );
         const response = await command.run(object, id, cmd);
         this.processResponse(response);
       });
   }
 
-  private restoreCommand(): program.Command {
+  private restoreCommand(): Command {
     const restoreObjects = ["item"];
-    return new program.Command("restore")
-      .arguments("<object> <id>")
-      .description("Restores an object from the trash.", {
-        object: "Valid objects are: " + restoreObjects.join(", "),
-        id: "Object's globally unique `id`.",
-      })
+    return new Command("restore")
+      .argument("<object>", "Valid objects are: " + restoreObjects.join(", "))
+      .argument("<id>", "Object's globally unique `id`.")
+      .description("Restores an object from the trash.")
       .on("--help", () => {
         writeLn("\n  Examples:");
         writeLn("");
@@ -351,14 +346,15 @@ export class VaultProgram extends Program {
       });
   }
 
-  private shareCommand(commandName: string, deprecated: boolean): program.Command {
-    return new program.Command(commandName)
-      .arguments("<id> <organizationId> [encodedJson]")
-      .description((deprecated ? "--DEPRECATED-- " : "") + "Move an item to a team.", {
-        id: "Object's globally unique `id`.",
-        organizationId: "Team's globally unique `id`.",
-        encodedJson: "Encoded json of an array of collection ids. Can also be piped into stdin.",
-      })
+  private shareCommand(commandName: string, deprecated: boolean): Command {
+    return new Command(commandName)
+      .argument("<id>", "Object's globally unique `id`.")
+      .argument("<organizationId>", "Team's globally unique `id`.")
+      .argument(
+        "[encodedJson]",
+        "Encoded json of an array of collection ids. Can also be piped into stdin.",
+      )
+      .description((deprecated ? "--DEPRECATED-- " : "") + "Move an item to a team.")
       .on("--help", () => {
         writeLn("\n  Examples:");
         writeLn("");
@@ -388,14 +384,12 @@ export class VaultProgram extends Program {
       });
   }
 
-  private confirmCommand(): program.Command {
+  private confirmCommand(): Command {
     const confirmObjects = ["org-member"];
-    return new program.Command("confirm")
-      .arguments("<object> <id>")
-      .description("Confirm an object to the team.", {
-        object: "Valid objects are: " + confirmObjects.join(", "),
-        id: "Object's globally unique `id`.",
-      })
+    return new Command("confirm")
+      .argument("<object>", "Valid objects are: " + confirmObjects.join(", "))
+      .argument("<id>", "Object's globally unique `id`.")
+      .description("Confirm an object to the team.")
       .option("--organizationid <organizationid>", "Team id for a team object.")
       .on("--help", () => {
         writeLn("\n  Examples:");
@@ -422,13 +416,11 @@ export class VaultProgram extends Program {
       });
   }
 
-  private importCommand(): program.Command {
-    return new program.Command("import")
-      .arguments("[format] [input]")
-      .description("Import vault data from a file.", {
-        format: "The format of [input]",
-        input: "Filepath to data to import",
-      })
+  private importCommand(): Command {
+    return new Command("import")
+      .argument("[format]", "The format of [input]")
+      .argument("[input]", "Filepath to data to import")
+      .description("Import vault data from a file.")
       .option("--formats", "List formats")
       .option("--organizationid <organizationid>", "ID of the team to import to.")
       .on("--help", () => {
@@ -453,9 +445,9 @@ export class VaultProgram extends Program {
       });
   }
 
-  private exportCommand(): program.Command {
-    return new program.Command("export")
-      .description("Export safe data to a CSV or JSON file.", {})
+  private exportCommand(): Command {
+    return new Command("export")
+      .description("Export safe data to a CSV or JSON file.")
       .option("--output <output>", "Output directory or filename.")
       .option("--format <format>", "Export file format.")
       .option(

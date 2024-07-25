@@ -1,9 +1,14 @@
-<app-navbar></app-navbar>
-<div class="container page-content">
-  <div class="page-header d-flex">
-    <h1>{{ "providers" | i18n }}</h1>
-  </div>
-  <p *ngIf="!loaded" class="text-muted">
+<!--
+<app-header></app-header>
+
+<bit-container>
+-->
+  <app-navbar></app-navbar>
+  <div class="container page-content">
+    <div class="page-header d-flex">
+      <h1>{{ "providers" | i18n }}</h1>
+    </div>
+    <p *ngIf="!loaded" class="text-muted">
     <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
     <span class="sr-only">{{ "loading" | i18n }}</span>
   </p>
@@ -29,6 +34,9 @@
       </tbody>
     </table>
   </ng-container>
+<!--
+</bit-container>
+-->
 </div>
 <div class="vertical-spacer"></div>
 <app-footer></app-footer>

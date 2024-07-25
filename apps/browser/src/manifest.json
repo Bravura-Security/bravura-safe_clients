@@ -17,25 +17,26 @@
   },
   "content_scripts": [
     {
-      "all_frames": true,
-      "js": [
-        "content/trigger-autofill-script-injection.js",
-        "content/fido2/trigger-fido2-content-script-injection.js"
-      ],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "all_frames": false,
+      "js": ["content/content-message-handler.js"],
+      "matches": ["*://*/*", "file:///*"],
+      "exclude_matches": ["*://*/*.xml*", "file:///*.xml*"],
       "run_at": "document_start"
     },
     {
-      "all_frames": false,
-      "js": ["content/bootstrap-content-message-handler.js"],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "all_frames": true,
+      "js": ["content/fido2/trigger-fido2-content-script-injection.js"],
+      "matches": ["https://*/*"],
+      "exclude_matches": ["https://*/*.xml*"],
       "run_at": "document_start"
     },
     {
       "all_frames": true,
       "css": ["content/autofill.css"],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
-      "run_at": "document_end"
+      "js": ["content/trigger-autofill-script-injection.js"],
+      "matches": ["*://*/*", "file:///*"],
+      "exclude_matches": ["*://*/*.xml*", "file:///*.xml*"],
+      "run_at": "document_start"
     },
     {
       "all_frames": false,
@@ -58,6 +59,7 @@
   },
   "permissions": [
     "<all_urls>",
+    "*://*/*",
     "tabs",
     "contextMenus",
     "storage",
@@ -65,8 +67,6 @@
     "clipboardRead",
     "clipboardWrite",
     "idle",
-    "http://*/*",
-    "https://*/*",
     "webRequest",
     "webRequestBlocking"
   ],
@@ -109,6 +109,7 @@
   },
   "web_accessible_resources": [
     "content/fido2/page-script.js",
+    "content/lp-suppress-import-download.js",
     "notification/bar.html",
     "images/icon38.png",
     "images/icon38_locked.png",

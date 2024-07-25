@@ -1,10 +1,16 @@
 import { Component, Inject } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { SsoComponent as BaseSsoComponent } from "@bitwarden/angular/auth/components/sso.component";
 import { WINDOW } from "@bitwarden/angular/services/injection-tokens";
+import {
+  LoginStrategyServiceAbstraction,
+  UserDecryptionOptionsServiceAbstraction,
+} from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -24,7 +30,8 @@ import { BrowserApi } from "../../platform/browser/browser-api";
 })
 export class SsoComponent extends BaseSsoComponent {
   constructor(
-    authService: AuthService,
+    ssoLoginService: SsoLoginServiceAbstraction,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     i18nService: I18nService,
     route: ActivatedRoute,
@@ -36,11 +43,14 @@ export class SsoComponent extends BaseSsoComponent {
     syncService: SyncService,
     environmentService: EnvironmentService,
     logService: LogService,
+    userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     configService: ConfigServiceAbstraction,
+    protected authService: AuthService,
     @Inject(WINDOW) private win: Window,
   ) {
     super(
-      authService,
+      ssoLoginService,
+      loginStrategyService,
       router,
       i18nService,
       route,
@@ -51,15 +61,18 @@ export class SsoComponent extends BaseSsoComponent {
       environmentService,
       passwordGenerationService,
       logService,
+      userDecryptionOptionsService,
       configService,
     );
 
-    const url = this.environmentService.getWebVaultUrl();
-
-    this.redirectUri = url + "/sso-connector.html";
+    environmentService.environment$.pipe(takeUntilDestroyed()).subscribe((env) => {
+      this.redirectUri = env.getWebVaultUrl() + "/sso-connector.html";
+    });
     this.clientId = "browser";
 
     super.onSuccessfulLogin = async () => {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       syncService.fullSync(true);
 
       // If the vault is unlocked then this will clear keys from memory, which we don't want to do
@@ -71,6 +84,8 @@ export class SsoComponent extends BaseSsoComponent {
     };
 
     super.onSuccessfulLoginTde = async () => {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       syncService.fullSync(true);
     };
 

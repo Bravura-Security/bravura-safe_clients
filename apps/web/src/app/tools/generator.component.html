@@ -1,3 +1,8 @@
+<!--
+<app-header></app-header>
+
+<bit-container>
+-->
 <div class="page-header">
   <h1>{{ "generator" | i18n }}</h1>
 </div>
@@ -253,7 +258,7 @@
         class="ml-auto"
         href="https://bravurasecuritydocs.com/safe/#/home/31914/10/11"
         target="_blank"
-        rel="noopener"
+          rel="noreferrer"
         appA11yTitle="{{ 'learnMore' | i18n }}"
       >
         <i class="fa fa-question-circle-o" aria-hidden="true"></i>
@@ -444,7 +449,9 @@
             (change)="saveUsernameOptions()"
             [(ngModel)]="usernameOptions.wordCapitalize"
           />
-          <label for="capitalizeUsername" class="form-check-label">{{ "capitalize" | i18n }}</label>
+            <label for="capitalizeUsername" class="form-check-label">{{
+              "capitalize" | i18n
+            }}</label>
         </div>
         <div class="form-check">
           <input
@@ -476,3 +483,6 @@
   </div>
 </ng-container>
 <ng-template #historyTemplate></ng-template>
+<!--
+</bit-container>
+-->

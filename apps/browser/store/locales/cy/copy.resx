@@ -130,19 +130,19 @@
     <value>Rheolydd diogel a rhad ac am ddim ar gyfer eich holl ddyfeisiau</value>
   </data>
   <data name="ScreenshotSync" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Gallwch gael mynediad at, a chysoni, eich cell o sawl dyfais</value>
   </data>
   <data name="ScreenshotVault" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Rheolwch eich holl fanylion mewngofnodi a chyfrineiriau o gell ddiogel</value>
   </data>
   <data name="ScreenshotAutofill" xml:space="preserve">
-    <value>Quickly auto-fill your login credentials into any website that you visit</value>
+    <value>Llenwch eich manylion mewngofnodi yn awtomatig ar unrhyw wefan</value>
   </data>
   <data name="ScreenshotMenu" xml:space="preserve">
-    <value>Your vault is also conveniently accessible from the right-click menu</value>
+    <value>Gallwch hefyd gael hyd at eich cell o'r ddewislen cyd-destun</value>
   </data>
   <data name="ScreenshotPassword" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Crëwch gyfrineiriau cryf a diogel yn awtomatig</value>
   </data>
   <data name="ScreenshotEdit" xml:space="preserve">
     <value>Mae eich gwybodaeth yn cael ei reoli'n ddiogel gan ddefnyddio manyleb amgryptio AES 256 did</value>
