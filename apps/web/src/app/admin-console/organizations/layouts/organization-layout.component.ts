@@ -30,6 +30,7 @@ import { AdminConsoleLogo } from "../../icons/admin-console-logo";
 @Component({
   selector: "app-organization-layout",
   templateUrl: "organization-layout.component.html",
+  /*
   standalone: true,
   imports: [
     CommonModule,
@@ -42,6 +43,7 @@ import { AdminConsoleLogo } from "../../icons/admin-console-logo";
     BannerModule,
     PaymentMethodWarningsModule,
   ],
+  */
 })
 export class OrganizationLayoutComponent implements OnInit, OnDestroy {
   protected readonly logo = AdminConsoleLogo;
