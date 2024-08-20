@@ -24,7 +24,55 @@ export class NativeMessagingMain {
     private windowMain: WindowMain,
     private userPath: string,
     private exePath: string,
-  ) {}
+  ) {
+    ipcMain.handle(
+      "nativeMessaging.manifests",
+      async (_event: any, options: { create: boolean }) => {
+        if (options.create) {
+          this.listen();
+          try {
+            await this.generateManifests();
+          } catch (e) {
+            this.logService.error("Error generating manifests: " + e);
+            return e;
+          }
+        } else {
+          this.stop();
+          try {
+            await this.removeManifests();
+          } catch (e) {
+            this.logService.error("Error removing manifests: " + e);
+            return e;
+          }
+        }
+        return null;
+      },
+    );
+
+    ipcMain.handle(
+      "nativeMessaging.ddgManifests",
+      async (_event: any, options: { create: boolean }) => {
+        if (options.create) {
+          this.listen();
+          try {
+            await this.generateDdgManifests();
+          } catch (e) {
+            this.logService.error("Error generating duckduckgo manifests: " + e);
+            return e;
+          }
+        } else {
+          this.stop();
+          try {
+            await this.removeDdgManifests();
+          } catch (e) {
+            this.logService.error("Error removing duckduckgo manifests: " + e);
+            return e;
+          }
+        }
+        return null;
+      },
+    );
+  }
 
   listen() {
     ipc.config.id = "bitwarden";
@@ -86,6 +134,10 @@ export class NativeMessagingMain {
       type: "stdio",
     };
 
+    if (!existsSync(baseJson.path)) {
+      throw new Error(`Unable to find binary: ${baseJson.path}`);
+    }
+
     const firefoxJson = {
       ...baseJson,
       ...{ allowed_extensions: ["{717ad7ea-6868-4be1-b6d4-31c3fbdddd91}"] },
@@ -94,8 +146,13 @@ export class NativeMessagingMain {
       ...baseJson,
       ...{
         allowed_origins: [
+          // Chrome extension
           "chrome-extension://cjidmfgdjckibjdfnglfdgohkaballnn/", // Chrome
+          // Chrome beta extension
+          ////"chrome-extension://hccnnhgbibccigepcmlgppchkpfdophk/",
+          // Edge extension
           "chrome-extension://lgjgabmkhcjfpcmflkhmhjgmnnpfgmnc/", // Edge
+          // Opera extension
           "chrome-extension://ccnckbpmaceehanjmeomladnmlffdjgn/", // Opera
           "chrome-extension://cppacmfcpednmbnghfhnajlgpgjjpdgm/",
         ],
@@ -111,47 +168,20 @@ export class NativeMessagingMain {
         }
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.writeManifest(path.join(destination, this.firefoxJsonFilename), firefoxJson);
+        await this.writeManifest(path.join(destination, this.firefoxJsonFilename), firefoxJson);
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.writeManifest(path.join(destination, this.chromeJsonFilename), chromeJson);
+        await this.writeManifest(path.join(destination, this.chromeJsonFilename), chromeJson);
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.createWindowsRegistry(
-          "HKLM\\SOFTWARE\\Mozilla\\Firefox",
-          "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.firefoxJsonFilename),
-        );
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.createWindowsRegistry(
-          "HKCU\\SOFTWARE\\Mozilla\\Firefox",
-          "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.firefoxJsonFilename)
-        );
-        // check if Chrome is installed for Local Machine and Current User, but only create in Current User
-        this.createWindowsRegistry(
-          "HKLM\\SOFTWARE\\Google\\Chrome",
-          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.chromeJsonFilename)
-        );
-        this.createWindowsRegistry(
-          "HKCU\\SOFTWARE\\Google\\Chrome",
-          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.chromeJsonFilename),
-        );
-        // check if Edge is installed for Local Machine and Current User, but only create in Current User (Edge) re-uses the chrome registry location
-        this.createWindowsRegistry(
-          "HKLM\\SOFTWARE\\Microsoft\\Edge",
-          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.chromeJsonFilename)
-        );
-        this.createWindowsRegistry(
-          "HKCU\\SOFTWARE\\Microsoft\\Edge",
-          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
-          path.join(destination, this.chromeJsonFilename)
-        );
+        const nmhs = this.getWindowsNMHS();
+        for (const [key, value] of Object.entries(nmhs)) {
+          let manifestPath = path.join(destination, "chrome.json");
+          if (key === "Firefox") {
+            manifestPath = path.join(destination, "firefox.json");
+          }
+          await this.createWindowsRegistry(value, manifestPath);
+        }
+
         break;
       }
       case "darwin": {
@@ -165,38 +195,30 @@ export class NativeMessagingMain {
               manifest = firefoxJson;
             }
 
-            this.writeManifest(p, manifest).catch((e) =>
-              this.logService.error(`Error writing manifest for ${key}. ${e}`),
-            );
+            await this.writeManifest(p, manifest);
           } else {
-            this.logService.warning(`${key} not found skipping.`);
+            this.logService.warning(`${key} not found, skipping.`);
           }
         }
         break;
       }
       case "linux":
         if (existsSync(`${this.homedir()}/.mozilla/`)) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.writeManifest(
+          await this.writeManifest(
             `${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`,
             firefoxJson,
           );
         }
 
         if (existsSync(`${this.homedir()}/.config/google-chrome/`)) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.writeManifest(
+          await this.writeManifest(
             `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
             chromeJson,
           );
         }
 
         if (existsSync(`${this.homedir()}/.config/microsoft-edge/`)) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.writeManifest(
+          await this.writeManifest(
             `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
             chromeJson,
           );
@@ -207,20 +229,23 @@ export class NativeMessagingMain {
     }
   }
 
-  generateDdgManifests() {
+  async generateDdgManifests() {
     const manifest = {
       name: "com.hitachiid.safe",
       description: "Bravura Safe desktop <-> DuckDuckGo bridge",
       path: this.binaryPath(),
       type: "stdio",
     };
+
+    if (!existsSync(manifest.path)) {
+      throw new Error(`Unable to find binary: ${manifest.path}`);
+    }
+
     switch (process.platform) {
       case "darwin": {
         /* eslint-disable-next-line no-useless-escape */
         const path = `${this.homedir()}/Library/Containers/com.duckduckgo.macos.browser/Data/Library/Application\ Support/NativeMessagingHosts/com.hitachiid.safe.json`;
-        this.writeManifest(path, manifest).catch((e) =>
-          this.logService.error(`Error writing manifest for DuckDuckGo. ${e}`),
-        );
+        await this.writeManifest(path, manifest);
         break;
       }
       default:
@@ -228,91 +253,65 @@ export class NativeMessagingMain {
     }
   }
 
-  removeManifests() {
+  async removeManifests() {
     switch (process.platform) {
-      case "win32":
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        fs.unlink(path.join(this.userPath, "browsers", this.firefoxJsonFilename));
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        fs.unlink(path.join(this.userPath, "browsers", this.chromeJsonFilename));
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.deleteWindowsRegistry(
-          "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe"
-        );
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.deleteWindowsRegistry(
-          "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
-        );
+      case "win32": {
+        await this.removeIfExists(path.join(this.userPath, "browsers", "firefox.json"));
+        await this.removeIfExists(path.join(this.userPath, "browsers", "chrome.json"));
+
+        const nmhs = this.getWindowsNMHS();
+        for (const [, value] of Object.entries(nmhs)) {
+          await this.deleteWindowsRegistry(value);
+        }
         break;
+      }
       case "darwin": {
         const nmhs = this.getDarwinNMHS();
         for (const [, value] of Object.entries(nmhs)) {
-          const p = path.join(value, "NativeMessagingHosts", "com.hitachiid.safe.json");
-          if (existsSync(p)) {
-            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            fs.unlink(p);
+          await this.removeIfExists(
+            path.join(value, "NativeMessagingHosts", "com.hitachiid.safe.json"),
+          );
           }
-        }
         break;
       }
-      case "linux":
-        if (
-          existsSync(`${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`)
-        ) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          fs.unlink(`${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`);
-        }
-
-        if (
-          existsSync(
-            `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
-          )
-        ) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          fs.unlink(
+      case "linux": {
+        await this.removeIfExists(
+          `${this.homedir()}/.mozilla/native-messaging-hosts/com.hitachiid.safe.json`,
+        );
+        await this.removeIfExists(
             `${this.homedir()}/.config/google-chrome/NativeMessagingHosts/com.hitachiid.safe.json`,
           );
-        }
-
-        if (
-          existsSync(
-            `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
-          )
-        ) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          fs.unlink(
+        await this.removeIfExists(
             `${this.homedir()}/.config/microsoft-edge/NativeMessagingHosts/com.hitachiid.safe.json`,
           );
-        }
         break;
+        }
       default:
         break;
     }
   }
 
-  removeDdgManifests() {
+  async removeDdgManifests() {
     switch (process.platform) {
       case "darwin": {
         /* eslint-disable-next-line no-useless-escape */
         const path = `${this.homedir()}/Library/Containers/com.duckduckgo.macos.browser/Data/Library/Application\ Support/NativeMessagingHosts/com.hitachiid.safe.json`;
-        if (existsSync(path)) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          fs.unlink(path);
-        }
+        await this.removeIfExists(path);
         break;
       }
       default:
         break;
     }
+  }
+
+  private getWindowsNMHS() {
+    return {
+      Firefox: "HKCU\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\com.hitachiid.safe",
+      Chrome: "HKCU\\SOFTWARE\\Google\\Chrome\\NativeMessagingHosts\\com.hitachiid.safe",
+      Chromium: "HKCU\\SOFTWARE\\Chromium\\NativeMessagingHosts\\com.hitachiid.safe",
+      // Edge uses the same registry key as Chrome as a fallback, but it's has its own separate key as well.
+      "Microsoft Edge": "HKCU\\SOFTWARE\\Microsoft\\Edge\\NativeMessagingHosts\\com.hitachiid.safe",
+    };
   }
 
   private getDarwinNMHS() {
@@ -334,10 +333,13 @@ export class NativeMessagingMain {
   }
 
   private async writeManifest(destination: string, manifest: object) {
+    this.logService.debug(`Writing manifest: ${destination}`);
+
     if (!existsSync(path.dirname(destination))) {
       await fs.mkdir(path.dirname(destination));
     }
-    fs.writeFile(destination, JSON.stringify(manifest, null, 2)).catch(this.logService.error);
+
+    await fs.writeFile(destination, JSON.stringify(manifest, null, 2));
   }
 
   private binaryPath() {
@@ -356,24 +358,14 @@ export class NativeMessagingMain {
     return regedit;
   }
 
-  private async createWindowsRegistry(check: string, location: string, jsonFile: string) {
+  private async createWindowsRegistry(location: string, jsonFile: string) {
     const regedit = this.getRegeditInstance();
 
-    const list = util.promisify(regedit.list);
     const createKey = util.promisify(regedit.createKey);
     const putValue = util.promisify(regedit.putValue);
 
     this.logService.debug(`Adding registry: ${location}`);
 
-    // Check installed
-    try {
-      await list(check);
-    } catch {
-      this.logService.warning(`Not finding registry ${check} skipping.`);
-      return;
-    }
-
-    try {
       await createKey(location);
 
       // Insert path to manifest
@@ -386,10 +378,7 @@ export class NativeMessagingMain {
       };
 
       return putValue(obj);
-    } catch (error) {
-      this.logService.error(error);
     }
-  }
 
   private async deleteWindowsRegistry(key: string) {
     const regedit = this.getRegeditInstance();
@@ -413,5 +402,11 @@ export class NativeMessagingMain {
     } else {
       return homedir();
     }
+  }
+
+  private async removeIfExists(path: string) {
+    if (existsSync(path)) {
+      await fs.unlink(path);
+}
   }
 }

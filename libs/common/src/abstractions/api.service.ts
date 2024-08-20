@@ -4,8 +4,6 @@ import { OrganizationSponsorshipRedeemRequest } from "../admin-console/models/re
 import { OrganizationConnectionRequest } from "../admin-console/models/request/organization-connection.request";
 import { ProviderAddOrganizationRequest } from "../admin-console/models/request/provider/provider-add-organization.request";
 import { ProviderOrganizationCreateRequest } from "../admin-console/models/request/provider/provider-organization-create.request";
-import { ProviderSetupRequest } from "../admin-console/models/request/provider/provider-setup.request";
-import { ProviderUpdateRequest } from "../admin-console/models/request/provider/provider-update.request";
 import { ProviderUserAcceptRequest } from "../admin-console/models/request/provider/provider-user-accept.request";
 import { ProviderUserBulkConfirmRequest } from "../admin-console/models/request/provider/provider-user-bulk-confirm.request";
 import { ProviderUserBulkRequest } from "../admin-console/models/request/provider/provider-user-bulk.request";
@@ -29,7 +27,6 @@ import {
   ProviderUserResponse,
   ProviderUserUserDetailsResponse,
 } from "../admin-console/models/response/provider/provider-user.response";
-import { ProviderResponse } from "../admin-console/models/response/provider/provider.response";
 import { SelectionReadOnlyResponse } from "../admin-console/models/response/selection-read-only.response";
 import { CreateAuthRequest } from "../auth/models/request/create-auth.request";
 import { DeviceVerificationRequest } from "../auth/models/request/device-verification.request";
@@ -65,7 +62,6 @@ import { IdentityCaptchaResponse } from "../auth/models/response/identity-captch
 import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { MasterPasswordPolicyResponse } from "../auth/models/response/master-password-policy.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
@@ -109,6 +105,8 @@ import { EventResponse } from "../models/response/event.response";
 import { ListResponse } from "../models/response/list.response";
 import { ProfileResponse } from "../models/response/profile.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
+import { SyncResponse } from "../platform/sync";
+import { UserId } from "../types/guid";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
 import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
@@ -128,7 +126,7 @@ import {
   CollectionDetailsResponse,
   CollectionResponse,
 } from "../vault/models/response/collection.response";
-import { SyncResponse } from "../vault/models/response/sync.response";
+import { OptionalCipherResponse } from "../vault/models/response/optional-cipher.response";
 import { HyprAuthenticationRequestModel } from "../vault/models/request/hyprAuthenticationRequestModel";
 import { TwoFactorHyprAuthGetMagicLink } from "../auth/models/response/two-factor-hypr-auth-get-magic-link.response";
 import { TwoFactorProviderType } from "../auth/enums/two-factor-provider-type";
@@ -182,9 +180,6 @@ export abstract class ApiService {
   postAccountKeys: (request: KeysRequest) => Promise<any>;
   postAccountVerifyEmail: () => Promise<any>;
   postAccountVerifyEmailToken: (request: VerifyEmailRequest) => Promise<any>;
-  postAccountVerifyPassword: (
-    request: SecretVerificationRequest,
-  ) => Promise<MasterPasswordPolicyResponse>;
   postAccountRecoverDelete: (request: DeleteRecoverRequest) => Promise<any>;
   postAccountRecoverDeleteToken: (request: VerifyDeleteRecoverRequest) => Promise<any>;
   postAccountKdf: (request: KdfRequest) => Promise<any>;
@@ -226,7 +221,10 @@ export abstract class ApiService {
   putMoveCiphers: (request: CipherBulkMoveRequest) => Promise<any>;
   putShareCipher: (id: string, request: CipherShareRequest) => Promise<CipherResponse>;
   putShareCiphers: (request: CipherBulkShareRequest) => Promise<any>;
-  putCipherCollections: (id: string, request: CipherCollectionsRequest) => Promise<any>;
+  putCipherCollections: (
+    id: string,
+    request: CipherCollectionsRequest,
+  ) => Promise<OptionalCipherResponse>;
   putCipherCollectionsAdmin: (id: string, request: CipherCollectionsRequest) => Promise<any>;
   postPurgeCiphers: (request: SecretVerificationRequest, organizationId?: string) => Promise<any>;
   putDeleteCipher: (id: string) => Promise<any>;
@@ -303,7 +301,6 @@ export abstract class ApiService {
   ) => Promise<any>;
 
   getGroupUsers: (organizationId: string, id: string) => Promise<string[]>;
-  putGroupUsers: (organizationId: string, id: string, request: string[]) => Promise<any>;
   deleteGroupUser: (organizationId: string, id: string, organizationUserId: string) => Promise<any>;
 
   getSync: () => Promise<SyncResponse>;
@@ -400,10 +397,6 @@ export abstract class ApiService {
   getPlans: () => Promise<ListResponse<PlanResponse>>;
   getTaxRates: () => Promise<ListResponse<TaxRateResponse>>;
 
-  postProviderSetup: (id: string, request: ProviderSetupRequest) => Promise<ProviderResponse>;
-  getProvider: (id: string) => Promise<ProviderResponse>;
-  putProvider: (id: string, request: ProviderUpdateRequest) => Promise<ProviderResponse>;
-
   getProviderUsers: (providerId: string) => Promise<ListResponse<ProviderUserUserDetailsResponse>>;
   getProviderUser: (providerId: string, id: string) => Promise<ProviderUserResponse>;
   postProviderUserInvite: (providerId: string, request: ProviderUserInviteRequest) => Promise<any>;
@@ -486,7 +479,13 @@ export abstract class ApiService {
     end: string,
     token: string,
   ) => Promise<ListResponse<EventResponse>>;
-  postEventsCollect: (request: EventRequest[]) => Promise<any>;
+
+  /**
+   * Posts events for a user
+   * @param request The array of events to upload
+   * @param userId The optional user id the events belong to. If no user id is provided the active user id is used.
+   */
+  postEventsCollect: (request: EventRequest[], userId?: UserId) => Promise<any>;
 
   deleteSsoUser: (organizationId: string) => Promise<void>;
   getSsoUserIdentifier: () => Promise<string>;

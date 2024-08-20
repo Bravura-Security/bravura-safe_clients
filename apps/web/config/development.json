@@ -11,9 +11,8 @@
     }
   ],
   "flags": {
-    "secretsManager": false,
     "showPasswordless": true,
-    "enableCipherKeyEncryption": false
+    "enableCipherKeyEncryption": true
   },
   "devFlags": {}
 }

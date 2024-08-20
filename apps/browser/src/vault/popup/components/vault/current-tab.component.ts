@@ -1,18 +1,21 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject, firstValueFrom } from "rxjs";
-import { debounceTime, takeUntil } from "rxjs/operators";
+import { Subject, firstValueFrom, from, Subscription } from "rxjs";
+import { debounceTime, switchMap, takeUntil } from "rxjs/operators";
 
+import { UnassignedItemsBannerService } from "@bitwarden/angular/services/unassigned-items-banner.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -48,11 +51,16 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   autofillCalloutText: string;
   protected search$ = new Subject<void>();
   private destroy$ = new Subject<void>();
+  private collectPageDetailsSubscription: Subscription;
 
   private totpCode: string;
   private totpTimeout: number;
   private loadedTimeout: number;
   private searchTimeout: number;
+
+  protected unassignedItemsBannerEnabled$ = this.configService.getFeatureFlag$(
+    FeatureFlag.UnassignedItemsBanner,
+  );
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
@@ -70,6 +78,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private organizationService: OrganizationService,
     private vaultFilterService: VaultFilterService,
     private vaultSettingsService: VaultSettingsService,
+    private configService: ConfigService,
+    protected unassignedItemsBannerService: UnassignedItemsBannerService,
   ) {}
 
   async ngOnInit() {
@@ -88,15 +98,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 this.load();
               }, 500);
-            }
-            break;
-          case "collectPageDetailsResponse":
-            if (message.sender === BroadcasterSubscriptionId) {
-              this.pageDetails.push({
-                frameId: message.webExtSender.frameId,
-                tab: message.tab,
-                details: message.details,
-              });
             }
             break;
           default:
@@ -120,8 +121,14 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }
 
     this.search$
-      .pipe(debounceTime(500), takeUntil(this.destroy$))
-      .subscribe(() => this.searchVault());
+      .pipe(
+        debounceTime(500),
+        switchMap(() => {
+          return from(this.searchVault());
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
 
     const autofillOnPageLoadOrgPolicy = await firstValueFrom(
       this.autofillSettingsService.activateAutofillOnPageLoadFromPolicy$,
@@ -232,14 +239,12 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }
   }
 
-  searchVault() {
-    if (!this.searchService.isSearchable(this.searchText)) {
+  async searchVault() {
+    if (!(await this.searchService.isSearchable(this.searchText))) {
       return;
     }
 
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.router.navigate(["/tabs/vault"], { queryParams: { searchText: this.searchText } });
+    await this.router.navigate(["/tabs/vault"], { queryParams: { searchText: this.searchText } });
   }
 
   closeOnEsc(e: KeyboardEvent) {
@@ -252,6 +257,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   protected async load() {
     this.isLoading = false;
     this.tab = await BrowserApi.getTabFromCurrentWindow();
+
     if (this.tab != null) {
       this.url = this.tab.url;
     } else {
@@ -260,8 +266,14 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.hostname = Utils.getHostname(this.url);
     this.pageDetails = [];
+    this.collectPageDetailsSubscription?.unsubscribe();
+    this.collectPageDetailsSubscription = this.autofillService
+      .collectPageDetailsFromTab$(this.tab)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((pageDetails) => (this.pageDetails = pageDetails));
+
+    this.hostname = Utils.getHostname(this.url);
     const otherTypes: CipherType[] = [];
     const dontShowCards = !(await firstValueFrom(this.vaultSettingsService.showCardsCurrentTab$));
     const dontShowIdentities = !(await firstValueFrom(
@@ -303,12 +315,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     });
 
     if (this.loginCiphers.length) {
-      void BrowserApi.tabSendMessage(this.tab, {
-        command: "collectPageDetails",
-        tab: this.tab,
-        sender: BroadcasterSubscriptionId,
-      });
-
       this.loginCiphers = this.loginCiphers.sort((a, b) =>
         this.cipherService.sortCiphersByLastUsedThenName(a, b),
       );

@@ -3,10 +3,17 @@ import { CryptoService } from "../../../../platform/abstractions/crypto.service"
 import { EncryptService } from "../../../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../../../platform/abstractions/i18n.service";
 import { StateProvider } from "../../../../platform/state";
-import { ADDY_IO_FORWARDER } from "../../key-definitions";
+import { ADDY_IO_FORWARDER, ADDY_IO_BUFFER } from "../../key-definitions";
 import { ForwarderGeneratorStrategy } from "../forwarder-generator-strategy";
 import { Forwarders } from "../options/constants";
 import { EmailDomainOptions, SelfHostedApiOptions } from "../options/forwarder-options";
+
+export const DefaultAddyIoOptions: SelfHostedApiOptions & EmailDomainOptions = Object.freeze({
+  website: null,
+  baseUrl: "https://app.addy.io",
+  token: "",
+  domain: "",
+});
 
 /** Generates a forwarding address for addy.io (formerly anon addy) */
 export class AddyIoForwarder extends ForwarderGeneratorStrategy<
@@ -26,15 +33,14 @@ export class AddyIoForwarder extends ForwarderGeneratorStrategy<
     keyService: CryptoService,
     stateProvider: StateProvider,
   ) {
-    super(encryptService, keyService, stateProvider);
+    super(encryptService, keyService, stateProvider, DefaultAddyIoOptions);
   }
 
-  /** {@link ForwarderGeneratorStrategy.key} */
-  get key() {
-    return ADDY_IO_FORWARDER;
-  }
+  // configuration
+  readonly key = ADDY_IO_FORWARDER;
+  readonly rolloverKey = ADDY_IO_BUFFER;
 
-  /** {@link ForwarderGeneratorStrategy.generate} */
+  // request
   generate = async (options: SelfHostedApiOptions & EmailDomainOptions) => {
     if (!options.token || options.token === "") {
       const error = this.i18nService.t("forwaderInvalidToken", Forwarders.AddyIo.name);
@@ -91,3 +97,10 @@ export class AddyIoForwarder extends ForwarderGeneratorStrategy<
     }
   };
 }
+
+export const DefaultOptions = Object.freeze({
+  website: null,
+  baseUrl: "https://app.addy.io",
+  domain: "",
+  token: "",
+});

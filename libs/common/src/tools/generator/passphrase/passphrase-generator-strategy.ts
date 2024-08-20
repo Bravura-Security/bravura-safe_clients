@@ -1,68 +1,70 @@
 import { GeneratorStrategy } from "..";
 import { PolicyType } from "../../../admin-console/enums";
-// FIXME: use index.ts imports once policy abstractions and models
-// implement ADR-0002
-import { Policy } from "../../../admin-console/models/domain/policy";
+import { EFFLongWordList } from "../../../platform/misc/wordlist";
 import { StateProvider } from "../../../platform/state";
-import { UserId } from "../../../types/guid";
+import { Randomizer } from "../abstractions/randomizer";
 import { PASSPHRASE_SETTINGS } from "../key-definitions";
-import { PasswordGenerationServiceAbstraction } from "../password/password-generation.service.abstraction";
+import { Policies } from "../policies";
+import { mapPolicyToEvaluator } from "../rx-operators";
+import { clone$PerUserId, sharedStateByUserId } from "../util";
 
-import { PassphraseGenerationOptions } from "./passphrase-generation-options";
-import { PassphraseGeneratorOptionsEvaluator } from "./passphrase-generator-options-evaluator";
 import {
-  DisabledPassphraseGeneratorPolicy,
-  PassphraseGeneratorPolicy,
-} from "./passphrase-generator-policy";
+  PassphraseGenerationOptions,
+  DefaultPassphraseGenerationOptions,
+} from "./passphrase-generation-options";
+import { PassphraseGeneratorPolicy } from "./passphrase-generator-policy";
 
-const ONE_MINUTE = 60 * 1000;
-
-/** {@link GeneratorStrategy} */
+/** Generates passphrases composed of random words */
 export class PassphraseGeneratorStrategy
   implements GeneratorStrategy<PassphraseGenerationOptions, PassphraseGeneratorPolicy>
 {
   /** instantiates the password generator strategy.
    *  @param legacy generates the passphrase
+   *  @param stateProvider provides durable state
    */
   constructor(
-    private legacy: PasswordGenerationServiceAbstraction,
+    private randomizer: Randomizer,
     private stateProvider: StateProvider,
   ) {}
 
-  /** {@link GeneratorStrategy.durableState} */
-  durableState(id: UserId) {
-    return this.stateProvider.getUser(id, PASSPHRASE_SETTINGS);
+  // configuration
+  durableState = sharedStateByUserId(PASSPHRASE_SETTINGS, this.stateProvider);
+  defaults$ = clone$PerUserId(DefaultPassphraseGenerationOptions);
+  readonly policy = PolicyType.PasswordGenerator;
+  toEvaluator() {
+    return mapPolicyToEvaluator(Policies.Passphrase);
   }
 
-  /** {@link GeneratorStrategy.policy} */
-  get policy() {
-    return PolicyType.PasswordGenerator;
-  }
-
-  get cache_ms() {
-    return ONE_MINUTE;
-  }
-
-  /** {@link GeneratorStrategy.evaluator} */
-  evaluator(policy: Policy): PassphraseGeneratorOptionsEvaluator {
-    if (!policy) {
-      return new PassphraseGeneratorOptionsEvaluator(DisabledPassphraseGeneratorPolicy);
+  // algorithm
+  async generate(options: PassphraseGenerationOptions): Promise<string> {
+    const o = { ...DefaultPassphraseGenerationOptions, ...options };
+    if (o.numWords == null || o.numWords <= 2) {
+      o.numWords = DefaultPassphraseGenerationOptions.numWords;
+    }
+    if (o.capitalize == null) {
+      o.capitalize = false;
+    }
+    if (o.includeNumber == null) {
+      o.includeNumber = false;
     }
 
-    if (policy.type !== this.policy) {
-      const details = `Expected: ${this.policy}. Received: ${policy.type}`;
-      throw Error("Mismatched policy type. " + details);
+    // select which word gets the number, if any
+    let luckyNumber = -1;
+    if (o.includeNumber) {
+      luckyNumber = await this.randomizer.uniform(0, o.numWords - 1);
     }
 
-    return new PassphraseGeneratorOptionsEvaluator({
-      minNumberWords: policy.data.minNumberWords,
-      capitalize: policy.data.capitalize,
-      includeNumber: policy.data.includeNumber,
-    });
-  }
+    // generate the passphrase
+    const wordList = new Array(o.numWords);
+    for (let i = 0; i < o.numWords; i++) {
+      const word = await this.randomizer.pickWord(EFFLongWordList, {
+        titleCase: o.capitalize,
+        number: i === luckyNumber,
+      });
 
-  /** {@link GeneratorStrategy.generate} */
-  generate(options: PassphraseGenerationOptions): Promise<string> {
-    return this.legacy.generatePassphrase({ ...options, type: "passphrase" });
+      wordList[i] = word;
+    }
+
+    return wordList.join(o.wordSeparator);
   }
 }

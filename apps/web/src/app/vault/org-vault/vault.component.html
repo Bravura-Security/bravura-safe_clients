@@ -4,42 +4,43 @@
   [loading]="refreshing"
   [organization]="organization"
   [collection]="selectedCollection"
+  [searchText]="currentSearchText$ | async"
   (onAddCipher)="addCipher()"
   (onAddCollection)="addCollection()"
-  (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
+  (onEditCollection)="editCollection(selectedCollection.node, $event.tab, $event.readonly)"
   (onDeleteCollection)="deleteCollection(selectedCollection.node)"
+  (searchTextChanged)="filterSearchText($event)"
 ></app-org-vault-header>
 
 -->
 <div class="container page-content">
   <div class="row">
-    <div class="col-3">
+  <div class="col-3" *ngIf="!hideVaultFilters">
           <app-organization-vault-filter
-            #vaultFilter
             [organization]="organization"
             [activeFilter]="activeFilter"
             [searchText]="currentSearchText$ | async"
             (searchTextChanged)="filterSearchText($event)"
           ></app-organization-vault-filter>
         </div>
-    <div class="col-9">
-      <app-org-vault-header
-        [filter]="filter"
-        [loading]="refreshing"
-        [organization]="organization"
-        [collection]="selectedCollection"
-        (onAddCipher)="addCipher()"
-        (onAddCollection)="addCollection()"
-        (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
-        (onDeleteCollection)="deleteCollection(selectedCollection.node)"
-      ></app-org-vault-header>
-      <app-callout
-        type="warning"
-        *ngIf="activeFilter.isDeleted"
-        icon="fa fa-exclamation-triangle"
-      >
+  <div [class]="hideVaultFilters ? 'col-12' : 'col-9'">
+    <bit-toggle-group
+      *ngIf="showAddAccessToggle && activeFilter.selectedCollectionNode"
+      [selected]="addAccessStatus$ | async"
+      (selectedChange)="addAccessToggle($event)"
+      [attr.aria-label]="'addAccessFilter' | i18n"
+    >
+      <bit-toggle [value]="0">
+        {{ "all" | i18n }}
+      </bit-toggle>
+
+      <bit-toggle [value]="1">
+        {{ "addAccess" | i18n }}
+      </bit-toggle>
+    </bit-toggle-group>
+    <bit-callout type="warning" *ngIf="activeFilter.isDeleted">
         {{ trashCleanupWarning }}
-      </app-callout>
+    </bit-callout>
       <app-vault-items
         [ciphers]="ciphers"
         [collections]="collections"
@@ -58,16 +59,17 @@
         [showPremiumFeatures]="organization?.useTotp"
         [showBulkMove]="false"
         [showBulkTrashOptions]="filter.type === 'trash'"
-        [useEvents]="organization?.useEvents"
-        [cloneableOrganizationCiphers]="true"
+      [useEvents]="organization?.canAccessEventLogs"
         [showAdminActions]="true"
         (onEvent)="onVaultItemsEvent($event)"
-      [showBulkEditCollectionAccess]="
-        (showBulkEditCollectionAccess$ | async) && organization?.flexibleCollections
-      "
-      [showBulkAddToCollections]="organization?.flexibleCollections"
+      [showBulkEditCollectionAccess]="true"
+      [showBulkAddToCollections]="true"
         [viewingOrgVault]="true"
         [showHeaderCheckboxMenu]="true"
+      [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled"
+      [addAccessStatus]="addAccessStatus$ | async"
+      [addAccessToggle]="showAddAccessToggle"
+      [restrictProviderAccess]="restrictProviderAccessEnabled"
       >
       </app-vault-items>
     <ng-container *ngIf="!flexibleCollectionsV1Enabled">
@@ -107,13 +109,23 @@
           type="button"
           *ngIf="filter.type !== 'trash' && filter.collectionId !== Unassigned"
         >
-          <i aria-hidden="true" class="bwi bwi-plus"></i> {{ "newItem" | i18n }}
+          <i aria-hidden="true" class="fa fa-plus"></i> {{ "newItem" | i18n }}
         </button>
       </bit-no-items>
       <collection-access-restricted
         *ngIf="showCollectionAccessRestricted"
-        [canEdit]="selectedCollection != null && selectedCollection.node.canEdit(organization)"
-        (editInfoClicked)="editCollection(selectedCollection.node, CollectionDialogTabType.Info)"
+        [canEditCollection]="
+          selectedCollection?.node?.canEdit(organization, flexibleCollectionsV1Enabled)
+        "
+        [canViewCollectionInfo]="
+          selectedCollection?.node?.canViewCollectionInfo(
+            organization,
+            flexibleCollectionsV1Enabled
+          )
+        "
+        (viewCollectionClicked)="
+          editCollection(selectedCollection.node, $event.tab, $event.readonly)
+        "
       >
       </collection-access-restricted>
     </ng-container>

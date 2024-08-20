@@ -4,10 +4,8 @@
 
 <!-- new bitwarden layout
 <bit-layout>
-  <nav slot="sidebar">
-    <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'passwordManager' | i18n">
-      <bit-icon [icon]="logo"></bit-icon>
-    </a>
+  <bit-side-nav>
+    <bit-nav-logo [openIcon]="logo" route="." [label]="'passwordManager' | i18n"></bit-nav-logo>
 
     <bit-nav-item icon="fa-cube" [text]="'vaults' | i18n" route="vault"></bit-nav-item>
     <bit-nav-item icon="fa-paper-plane" [text]="'send' | i18n" route="sends"></bit-nav-item>
@@ -24,7 +22,7 @@
       <bit-nav-item
         [text]="'subscription' | i18n"
         route="settings/subscription"
-        *ngIf="!hideSubscription"
+        *ngIf="showSubscription$ | async"
       ></bit-nav-item>
       <bit-nav-item [text]="'domainRules' | i18n" route="settings/domain-rules"></bit-nav-item>
       <bit-nav-item
@@ -34,10 +32,16 @@
       <bit-nav-item
         [text]="'sponsoredFamilies' | i18n"
         route="settings/sponsored-families"
-        *ngIf="hasFamilySponsorshipAvailable"
+        *ngIf="hasFamilySponsorshipAvailable$ | async"
       ></bit-nav-item>
     </bit-nav-group>
-  </nav>
+
+    <ng-container slot="footer">
+      <navigation-product-switcher></navigation-product-switcher>
+      <app-toggle-width></app-toggle-width>
+    </ng-container>
+  </bit-side-nav>
+
   <app-payment-method-warnings
     *ngIf="showPaymentMethodWarningBanners$ | async"
   ></app-payment-method-warnings>

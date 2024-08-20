@@ -1,7 +1,7 @@
 <!--
 <app-header></app-header>
 
-<div class="tw-mb-4">
+<div class="tw-mb-4" [formGroup]="eventsForm">
 -->
 <div class="page-header tw-mb-4">
   <h1>{{ "eventLogs" | i18n }}</h1>
@@ -12,7 +12,7 @@
         bitInput
         type="datetime-local"
         placeholder="{{ 'startDate' | i18n }}"
-        [(ngModel)]="start"
+        formControlName="start"
         (change)="dirtyDates = true"
       />
     </bit-form-field>
@@ -23,51 +23,44 @@
         bitInput
         type="datetime-local"
         placeholder="{{ 'endDate' | i18n }}"
-        [(ngModel)]="end"
+        formControlName="end"
         (change)="dirtyDates = true"
       />
     </bit-form-field>
-    <form #refreshForm [appApiAction]="refreshPromise">
+    <form>
       <button
         class="btn btn-sm btn-outline-primary ml-3"
         type="button"
         bitButton
-
-        (click)="loadEvents(true)"
-        [disabled]="loaded && refreshForm.loading"
+        bitFormButton
+        buttonType="primary"
+        [bitAction]="refreshEvents"
       >
         {{ "update" | i18n }}
       </button>
     </form>
-    <form #exportForm [appApiAction]="exportPromise">
+    <form>
       <button
         type="button"
         class="btn btn-sm btn-outline-primary btn-submit manual ml-3"
         bitButton
-        [ngClass]="{ loading: exportForm.loading }"
-        (click)="exportEvents()"
-        [disabled]="(loaded && exportForm.loading) || dirtyDates"
+        bitFormButton
+        [bitAction]="exportEvents"
+        [disabled]="dirtyDates"
       >
         <span>{{ "export" | i18n }}</span>
-        <i
-          class="fa fa-fw"
-          aria-hidden="true"
-          [ngClass]="{
-            'fa-sign-in': !exportForm.loading,
-            'fa-spinner fa-spin': exportForm.loading
-          }"
-        ></i>
+        <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
       </button>
     </form>
   </div>
 </div>
 <ng-container *ngIf="!loaded">
   <i
-    class="fa fa-spinner fa-spin text-muted"
+    class="fa fa-spinner fa-spin tw-text-muted"
     title="{{ 'loading' | i18n }}"
     aria-hidden="true"
   ></i>
-  <span class="sr-only">{{ "loading" | i18n }}</span>
+  <span class="tw-sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
 <ng-container *ngIf="loaded">
   <p *ngIf="!events || !events.length">{{ "noEventsInList" | i18n }}</p>
@@ -94,21 +87,12 @@
     </ng-template>
   </bit-table>
   <button
-    #moreBtn
-    [appApiAction]="morePromise"
     type="button"
     bitButton
     buttonType="primary"
-    (click)="loadEvents(false)"
-    [disabled]="loaded && $any(moreBtn).loading"
+    [bitAction]="loadMoreEvents"
     *ngIf="continuationToken"
   >
-    <i
-      class="fa fa-spinner fa-spin"
-      title="{{ 'loading' | i18n }}"
-      aria-hidden="true"
-      *ngIf="moreBtn.loading"
-    ></i>
-    <span>{{ "loadMore" | i18n }}</span>
+    {{ "loadMore" | i18n }}
   </button>
 </ng-container>

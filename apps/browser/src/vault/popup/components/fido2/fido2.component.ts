@@ -34,6 +34,7 @@ import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
 } from "../../../fido2/browser-fido2-user-interface.service";
+import { Fido2UserVerificationService } from "../../../services/fido2-user-verification.service";
 import { VaultPopoutType } from "../../utils/vault-popout-window";
 
 interface ViewData {
@@ -71,13 +72,14 @@ export class Fido2Component implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private cipherService: CipherService,
-    private passwordRepromptService: PasswordRepromptService,
     private platformUtilsService: PlatformUtilsService,
     private domainSettingsService: DomainSettingsService,
     private searchService: SearchService,
     private logService: LogService,
     private dialogService: DialogService,
     private browserMessagingApi: ZonedMessageListenerService,
+    private passwordRepromptService: PasswordRepromptService,
+    private fido2UserVerificationService: Fido2UserVerificationService,
   ) {}
 
   ngOnInit() {
@@ -210,6 +212,8 @@ export class Fido2Component implements OnInit, OnDestroy {
   protected async submit() {
     const data = this.message$.value;
     if (data?.type === "PickCredentialRequest") {
+      // TODO: Revert to use fido2 user verification service once user verification for passkeys is approved for production.
+      // PM-4577 - https://github.com/bitwarden/clients/pull/8746
       const userVerified = await this.handleUserVerification(data.userVerification, this.cipher);
 
       this.send({
@@ -231,6 +235,8 @@ export class Fido2Component implements OnInit, OnDestroy {
         }
       }
 
+      // TODO: Revert to use fido2 user verification service once user verification for passkeys is approved for production.
+      // PM-4577 - https://github.com/bitwarden/clients/pull/8746
       const userVerified = await this.handleUserVerification(data.userVerification, this.cipher);
 
       this.send({
@@ -248,9 +254,11 @@ export class Fido2Component implements OnInit, OnDestroy {
     const data = this.message$.value;
     if (data?.type === "ConfirmNewCredentialRequest") {
       const name = data.credentialName || data.rpId;
+      // TODO: Revert to check for user verification once user verification for passkeys is approved for production.
+      // PM-4577 - https://github.com/bitwarden/clients/pull/8746
       await this.createNewCipher(name);
 
-      // We are bypassing user verification pending implementation of PIN and biometric support.
+      // We are bypassing user verification pending approval.
       this.send({
         sessionId: this.sessionId,
         cipherId: this.cipher?.id,
@@ -311,7 +319,7 @@ export class Fido2Component implements OnInit, OnDestroy {
   }
 
   protected async search() {
-    this.hasSearched = this.searchService.isSearchable(this.searchText);
+    this.hasSearched = await this.searchService.isSearchable(this.searchText);
     this.searchPending = true;
     if (this.hasSearched) {
       this.displayedCiphers = await this.searchService.searchCiphers(
@@ -374,6 +382,7 @@ export class Fido2Component implements OnInit, OnDestroy {
     }
   }
 
+  // TODO: Remove and use fido2 user verification service once user verification for passkeys is approved for production.
   private async handleUserVerification(
     userVerificationRequested: boolean,
     cipher: CipherView,
@@ -384,7 +393,6 @@ export class Fido2Component implements OnInit, OnDestroy {
       return await this.passwordRepromptService.showPasswordPrompt();
     }
 
-    // We are bypassing user verification pending implementation of PIN and biometric support.
     return userVerificationRequested;
   }
 

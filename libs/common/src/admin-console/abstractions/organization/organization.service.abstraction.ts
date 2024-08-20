@@ -86,10 +86,7 @@ export function canAccessImportExport(i18nService: I18nService) {
 export function canAccessImport(i18nService: I18nService) {
   return map<Organization[], Organization[]>((orgs) =>
     orgs
-      .filter(
-        (org) =>
-          org.canAccessImportExport || (org.canCreateNewCollections && org.flexibleCollections),
-      )
+      .filter((org) => org.canAccessImportExport || org.canCreateNewCollections)
       .sort(Utils.getSortFunction(i18nService, "name")),
   );
 }
@@ -125,12 +122,19 @@ export abstract class OrganizationService {
    * https://bitwarden.atlassian.net/browse/AC-2252.
    */
   getFromState: (id: string) => Promise<Organization>;
-  canManageSponsorships: () => Promise<boolean>;
+  canManageSponsorships$: Observable<boolean>;
   hasOrganizations: () => Promise<boolean>;
   get$: (id: string) => Observable<Organization | undefined>;
   get: (id: string) => Promise<Organization>;
+  /**
+   * @deprecated This method is only used in key connector and will be removed soon as part of https://bitwarden.atlassian.net/browse/AC-2252.
+   */
   getAll: (userId?: string) => Promise<Organization[]>;
-  //
+
+  /**
+   * Publishes state for all organizations for the given user id or the active user.
+   */
+  getAll$: (userId?: UserId) => Observable<Organization[]>;
 }
 
 /**

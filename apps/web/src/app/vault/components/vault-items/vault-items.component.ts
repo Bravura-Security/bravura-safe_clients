@@ -32,12 +32,11 @@ export class VaultItemsComponent {
   @Input() showCollections: boolean;
   @Input() showGroups: boolean;
   @Input() useEvents: boolean;
-  @Input() cloneableOrganizationCiphers: boolean;
   @Input() showPremiumFeatures: boolean;
   @Input() showBulkMove: boolean;
   @Input() showBulkTrashOptions: boolean;
   // Encompasses functionality only available from the organization vault context
-  @Input() showAdminActions: boolean;
+  @Input() showAdminActions = false;
   @Input() allOrganizations: Organization[] = [];
   @Input() allCollections: CollectionView[] = [];
   @Input() allGroups: GroupView[] = [];
@@ -46,6 +45,10 @@ export class VaultItemsComponent {
   @Input() showHeaderCheckboxMenu: boolean;
   @Input() showPermissionsColumn = false;
   @Input() viewingOrgVault: boolean;
+  @Input({ required: true }) flexibleCollectionsV1Enabled = false;
+  @Input() addAccessStatus: number;
+  @Input() addAccessToggle: boolean;
+  @Input() restrictProviderAccess: boolean;
 
   private _ciphers?: CipherView[] = [];
   @Input() get ciphers(): CipherView[] {
@@ -92,7 +95,7 @@ export class VaultItemsComponent {
   }
 
   get bulkAssignToCollectionsAllowed() {
-    return this.ciphers.length > 0;
+    return this.showBulkAddToCollections && this.ciphers.length > 0;
   }
 
   protected canEditCollection(collection: CollectionView): boolean {
@@ -102,7 +105,8 @@ export class VaultItemsComponent {
     }
 
     const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
-    return collection.canEdit(organization);
+
+    return collection.canEdit(organization, this.flexibleCollectionsV1Enabled);
   }
 
   protected canDeleteCollection(collection: CollectionView): boolean {
@@ -112,7 +116,13 @@ export class VaultItemsComponent {
     }
 
     const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
-    return collection.canDelete(organization);
+
+    return collection.canDelete(organization, this.flexibleCollectionsV1Enabled);
+  }
+
+  protected canViewCollectionInfo(collection: CollectionView) {
+    const organization = this.allOrganizations.find((o) => o.id === collection.organizationId);
+    return collection.canViewCollectionInfo(organization, this.flexibleCollectionsV1Enabled);
   }
 
   protected toggleAll() {
@@ -160,10 +170,27 @@ export class VaultItemsComponent {
   }
 
   protected canClone(vaultItem: VaultItem) {
-    return (
-      (vaultItem.cipher.organizationId && this.cloneableOrganizationCiphers) ||
-      vaultItem.cipher.organizationId == null
-    );
+    if (vaultItem.cipher.organizationId == null) {
+      return true;
+    }
+
+    const org = this.allOrganizations.find((o) => o.id === vaultItem.cipher.organizationId);
+
+    // Admins and custom users can always clone in the Org Vault
+    if (this.viewingOrgVault && (org.isAdmin || org.permissions.editAnyCollection)) {
+      return true;
+    }
+
+    // Check if the cipher belongs to a collection with canManage permission
+    const orgCollections = this.allCollections.filter((c) => c.organizationId === org.id);
+
+    for (const collection of orgCollections) {
+      if (vaultItem.cipher.collectionIds.includes(collection.id) && collection.manage) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private refreshItems() {
@@ -172,11 +199,23 @@ export class VaultItemsComponent {
     const items: VaultItem[] = [].concat(collections).concat(ciphers);
 
     this.selection.clear();
-    this.editableItems = items.filter(
-      (item) =>
-        item.cipher !== undefined ||
-        (item.collection !== undefined && this.canDeleteCollection(item.collection)),
-    );
+
+    if (this.flexibleCollectionsV1Enabled) {
+      // Every item except for the Unassigned collection is selectable, individual bulk actions check the user's permission
+      this.editableItems = items.filter(
+        (item) =>
+          item.cipher !== undefined ||
+          (item.collection !== undefined && item.collection.id !== Unassigned),
+      );
+    } else {
+      // only collections the user can delete are selectable
+      this.editableItems = items.filter(
+        (item) =>
+          item.cipher !== undefined ||
+          (item.collection !== undefined && this.canDeleteCollection(item.collection)),
+      );
+    }
+
     this.dataSource.data = items;
   }
 

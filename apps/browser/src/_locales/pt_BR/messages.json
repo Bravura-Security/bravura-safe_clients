@@ -7,14 +7,20 @@
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Um gerenciador de senhas seguro e gratuito para todos os seus dispositivos.",
-    "description": "Extension description"
+    "message": "Em qual lugar for, o Bravura Safe protege suas senhas, chaves de acesso, e informações confidenciais",
+    "description": "Extension description, MUST be less than 112 characters (Safari restriction)"
   },
   "loginOrCreateNewAccount": {
     "message": "Inicie a sessão ou crie uma nova conta para acessar seu cofre seguro."
   },
   "createAccount": {
     "message": "Criar Conta"
+  },
+  "setAStrongPassword": {
+    "message": "Defina uma senha forte"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Termine de criar a sua conta definindo uma senha"
   },
   "login": {
     "message": "Iniciar Sessão"
@@ -166,11 +172,29 @@
   "confirmIdentity": {
     "message": "Confirme a sua identidade para continuar."
   },
-  "account": {
-    "message": "Conta"
-  },
   "changeMasterPassword": {
     "message": "Alterar Senha Mestra"
+  },
+  "continueToWebApp": {
+    "message": "Continuar no aplicativo web?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Explore mais recursos da sua conta no Bravura Safe no aplicativo web."
+  },
+  "continueToHelpCenter": {
+    "message": "Continuar no Centro de Ajuda?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Saiba mais sobre como usar o Bravura Safe no Centro de Ajuda."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Continuar na extensão da loja do navegador?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Ajude outros a descobrir se o Bravura Safe está certo para eles. Visite a loja de extensões do seu navegador e deixe uma classificação agora."
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Você pode alterar a sua senha mestra no aplicativo web Bravura Safe."
   },
   "fingerprintPhrase": {
     "message": "Frase Biométrica",
@@ -186,8 +210,44 @@
   "logOut": {
     "message": "Encerrar Sessão"
   },
+  "aboutBitwarden": {
+    "message": "Sobre o Bravura Safe"
+  },
   "about": {
     "message": "Sobre"
+  },
+  "moreFromBitwarden": {
+    "message": "Mais do Bravura Safe"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Continuar para https://www.bravurasecurity.com/products/bravura-safe?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bravura Safe para Negócios"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Autenticador Bravura Safe"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "O Autenticador Bravura Safe permite que você armazene as chaves do autenticador e gere códigos TOTP para fluxos de verificação de 2 etapas. Saiba mais no site https://www.bravurasecurity.com/products/bravura-safe"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Gerenciador de Segredos Bravura Safe"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Armazene, gerencie e compartilhe segredos de desenvolvedor com o Gerenciador de segredos do Bravura Safe. Saiba mais no site https://www.bravurasecurity.com/products/bravura-safe."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Crie experiências de login suaves e seguras, livres de senhas tradicionais com Passwordless.dev. Saiba mais no site https://www.bravurasecurity.com/products/bravura-safe."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Famílias do Bravura Safe Grátis"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Você é elegível para as Famílias do Bravura Safe Grátis. Resgate esta oferta hoje no aplicativo web."
   },
   "version": {
     "message": "Versão"
@@ -247,7 +307,7 @@
   "passGenInfo": {
     "message": "Gere automaticamente senhas fortes e únicas para as suas credenciais."
   },
-  "bitWebVault": {
+  "bitWebVaultApp": {
     "message": "Cofre Web do Bravura Safe"
   },
   "importItems": {
@@ -335,6 +395,15 @@
   "favorite": {
     "message": "Favorito"
   },
+  "unfavorite": {
+    "message": "Desfavoritar"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item adicionado aos favoritos"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removido dos favoritos"
+  },
   "notes": {
     "message": "Notas"
   },
@@ -356,6 +425,9 @@
   "launch": {
     "message": "Abrir"
   },
+  "launchWebsite": {
+    "message": "Abrir site"
+  },
   "website": {
     "message": "Site"
   },
@@ -368,11 +440,20 @@
   "other": {
     "message": "Outros"
   },
+  "unlockMethods": {
+    "message": "Opções de desbloqueio"
+  },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
     "message": "Configure um método de desbloqueio para alterar o tempo limite do cofre."
   },
   "unlockMethodNeeded": {
     "message": "Configure um método de desbloqueio nas Configurações"
+  },
+  "sessionTimeoutHeader": {
+    "message": "Tempo limite da sessão"
+  },
+  "otherOptions": {
+    "message": "Outras opções"
   },
   "rateExtension": {
     "message": "Avaliar a Extensão"
@@ -493,6 +574,12 @@
   "newAccountCreated": {
     "message": "A sua nova conta foi criada! Agora você pode iniciar a sessão."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "Você logou na sua conta com sucesso"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Você pode fechar esta janela"
+  },
   "masterPassSent": {
     "message": "Enviamos um e-mail com a dica da sua senha mestra."
   },
@@ -530,6 +617,9 @@
   "loggedOut": {
     "message": "Sessão encerrada"
   },
+  "loggedOutDesc": {
+    "message": "Você foi desconectado de sua conta."
+  },
   "loginExpired": {
     "message": "A sua sessão expirou."
   },
@@ -550,12 +640,6 @@
   },
   "addedFolder": {
     "message": "Pasta adicionada"
-  },
-  "changeMasterPass": {
-    "message": "Alterar Senha Mestra"
-  },
-  "changeMasterPasswordConfirmation": {
-    "message": "Você pode alterar a sua senha mestra no cofre web em Bravura Safe. Você deseja visitar o site agora?"
   },
   "twoStepLoginConfirmation": {
     "message": "O login de duas etapas torna a sua conta mais segura ao exigir que digite um código de segurança de um aplicativo de autenticação quando for iniciar a sessão. O login de duas etapas pode ser ativado no cofre web Bravura Safe. Deseja visitar o site agora?"
@@ -682,10 +766,10 @@
     "message": "Pedir para atualizar a senha de uma credencial quando uma alteração for detectada em um site. Aplica-se a todas as contas conectadas."
   },
   "enableUsePasskeys": {
-    "message": "Pedir para salvar e usar as senhas"
+    "message": "Pedir para salvar e usar chaves de acesso"
   },
   "usePasskeysDesc": {
-    "message": "Pedir para salvar novas senhas ou entrar com as senhas armazenadas no seu cofre. Aplica-se a todas as contas conectadas."
+    "message": "Pedir para salvar novas chaves de acesso ou entrar com as mesmas armazenadas no seu cofre. Aplica-se a todas as contas conectadas."
   },
   "notificationChangeDesc": {
     "message": "Você quer atualizar esta senha no Bravura Safe?"
@@ -698,6 +782,9 @@
   },
   "notificationUnlock": {
     "message": "Desbloquear"
+  },
+  "additionalOptions": {
+    "message": "Opções adicionais"
   },
   "enableContextMenuItem": {
     "message": "Mostrar opções de menu de contexto"
@@ -736,11 +823,38 @@
     "message": "Solarized (escuro)",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportar de"
+  },
   "exportVault": {
     "message": "Exportar Cofre"
   },
   "fileFormat": {
     "message": "Formato de arquivo"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Esta arquivo de exportação será protegido por senha e precisará da mesma para ser descriptografado."
+  },
+  "filePassword": {
+    "message": "Senha do arquivo"
+  },
+  "exportPasswordDescription": {
+    "message": "Esta senha será usada para exportar e importar este arquivo"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Use sua chave criptográfica da conta, derivada do nome de usuário e Senha Mestra da sua conta, para criptografar a exportação e restringir importação para apenas a conta atual do Bravura Safe."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Defina uma senha de arquivo para criptografar a exportação e importá-la para qualquer conta do Bravura Safe usando a senha para descriptografia."
+  },
+  "exportTypeHeading": {
+    "message": "Tipo da exportação"
+  },
+  "accountRestricted": {
+    "message": "Conta restrita"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Senha do arquivo\" e \"Confirmação de senha\" não correspondem."
   },
   "warning": {
     "message": "AVISO",
@@ -764,11 +878,8 @@
   "shared": {
     "message": "Compartilhado"
   },
-  "learnOrg": {
-    "message": "Aprenda mais sobre as Organizações"
-  },
-  "learnOrgConfirmation": {
-    "message": "O Bravura Safe permite compartilhar os seus itens do cofre com outros ao utilizar uma organização. Gostaria de visitar o site Bravura Safe website para saber mais?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "O Bravura Safe para Business permite que você compartilhe os itens do seu cofre com outras pessoas usando uma organização. Saiba mais no site https://www.bravurasecurity.com/products/bravura-safe."
   },
   "moveToOrganization": {
     "message": "Mover para a Organização"
@@ -1041,6 +1152,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Especifique a URL de base da sua instalação local do Bravura Safe."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Especifique a URL de base da sua instalação local do Bravura Safe. Exemplo: https://bravurasafe.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Para usuários avançados. Você pode especificar a URL de base de cada serviço independentemente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Você deve adicionar um URL do servidor de base ou pelo menos um ambiente personalizado."
+  },
   "customEnvironment": {
     "message": "Ambiente Personalizado"
   },
@@ -1137,9 +1257,6 @@
   },
   "commandLockVaultDesc": {
     "message": "Bloquear o cofre"
-  },
-  "privateModeWarning": {
-    "message": "O suporte para modo privado é experimental e alguns recursos são limitados."
   },
   "customFields": {
     "message": "Campos Personalizados"
@@ -1347,6 +1464,24 @@
   "typeIdentity": {
     "message": "Identidade"
   },
+  "newItemHeader": {
+    "message": "Nova $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Editar $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Histórico de Senha"
   },
@@ -1355,6 +1490,15 @@
   },
   "collections": {
     "message": "Coleções"
+  },
+  "nCollections": {
+    "message": "Coleções $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Favoritos"
@@ -1521,7 +1665,7 @@
     "message": "Código PIN inválido."
   },
   "tooManyInvalidPinEntryAttemptsLoggingOut": {
-    "message": "Too many invalid PIN entry attempts. Logging out."
+    "message": "Muitas tentativas de entrada de PIN inválidas. Desconectando."
   },
   "unlockWithBiometrics": {
     "message": "Desbloquear com a biometria"
@@ -1576,6 +1720,9 @@
   "restoredItem": {
     "message": "Item Restaurado"
   },
+  "alreadyHaveAccount": {
+    "message": "Já tem uma conta?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Sair irá remover todo o acesso ao seu cofre e requer autenticação online após o período de tempo limite. Tem certeza de que deseja usar esta configuração?"
   },
@@ -1584,6 +1731,9 @@
   },
   "autoFillAndSave": {
     "message": "Autopreencher e Salvar"
+  },
+  "fillAndSave": {
+    "message": "Preencher e salvar"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Item Auto-Preenchido e URL Salvo"
@@ -1663,6 +1813,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "A sua nova senha mestra não cumpre aos requisitos da política."
   },
+  "receiveMarketingEmails": {
+    "message": "Obtenha e-mails do Bravura Safe para anúncios, conselhos e oportunidades de pesquisa."
+  },
+  "unsubscribe": {
+    "message": "Cancelar subscrição"
+  },
+  "atAnyTime": {
+    "message": "a qualquer momento."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ao continuar, você concorda com os"
+  },
+  "and": {
+    "message": "e"
+  },
   "acceptPolicies": {
     "message": "Ao marcar esta caixa, você concorda com o seguinte:"
   },
@@ -1680,6 +1845,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Erro ao Atualizar Token"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nenhum token de atualização ou chave de API foi encontrado. Tente sair e entrar novamente."
   },
   "desktopSyncVerificationTitle": {
     "message": "Verificação de sincronização do Desktop"
@@ -1728,6 +1899,12 @@
   },
   "biometricsNotSupportedDesc": {
     "message": "A biometria com o navegador não é suportada neste dispositivo."
+  },
+  "biometricsNotUnlockedTitle": {
+    "message": "Usuário bloqueado ou desconectado"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Por favor, desbloqueie esse usuário no aplicativo da área de trabalho e tente novamente."
   },
   "biometricsFailedTitle": {
     "message": "Biometria falhou"
@@ -2025,6 +2202,10 @@
   "selectFolder": {
     "message": "Selecionar pasta..."
   },
+  "noFoldersFound": {
+    "message": "Nenhuma pasta encontrada",
+    "description": "Used as a message within the notification bar when no folders are found"
+  },
   "orgPermissionsUpdatedMustSetPassword": {
     "message": "As permissões da sua organização foram atualizadas, exigindo que você defina uma senha mestra.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
@@ -2032,6 +2213,10 @@
   "orgRequiresYouToSetPassword": {
     "message": "Sua organização requer que você defina uma senha mestra.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Verificação necessária",
+    "description": "Default title for the user verification dialog."
   },
   "hours": {
     "message": "Horas"
@@ -2138,6 +2323,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exportando cofre da organização"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Apenas o cofre da organização associado com $ORGANIZATION$ será exportado. Itens do cofre pessoal e itens de outras organizações não serão incluídos.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Erro"
   },
@@ -2186,6 +2383,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Gere um apelido de e-mail com um serviço de encaminhamento externo."
+  },
+  "forwarderError": {
+    "message": "Erro $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Gerado pelo Bravura Safe.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Site: $WEBSITE$. Gerado pelo Bravura Safe.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Token de API $SERVICENAME$ inválido",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Token de API $SERVICENAME$ inválido: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Não foi possível obter a máscara do ID da conta de email $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Domínio $SERVICENAME$ inválido.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "URL $SERVICENAME$ inválida.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Ocorreu um erro $SERVICENAME$ desconhecido.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Encaminhador desconhecido: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Nome do host",
@@ -2406,6 +2705,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Identificador SSO da organização é necessário."
+  },
+  "creatingAccountOn": {
+    "message": "Criando conta em"
+  },
+  "checkYourEmail": {
+    "message": "Verifique seu e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Siga o link no e-mail enviado para"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "e continue criando a sua conta."
+  },
+  "noEmail": {
+    "message": "Sem e-mail?"
+  },
+  "goBack": {
+    "message": "Voltar"
+  },
+  "toEditYourEmailAddress": {
+    "message": "para editar o seu endereço de e-mail."
   },
   "eu": {
     "message": "Europa",
@@ -2682,6 +3002,42 @@
       }
     }
   },
+  "tryAgain": {
+    "message": "Tentar novamente"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Verificação necessária para esta ação. Defina um PIN para continuar."
+  },
+  "setPin": {
+    "message": "Definir PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verificiar com biometria"
+  },
+  "awaitingConfirmation": {
+    "message": "Aguardando confirmação"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Não foi possível completar a biometria."
+  },
+  "needADifferentMethod": {
+    "message": "Precisa de um método diferente?"
+  },
+  "useMasterPassword": {
+    "message": "Usar a senha mestra"
+  },
+  "usePin": {
+    "message": "Usar PIN"
+  },
+  "useBiometrics": {
+    "message": "Usar biometria"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Digite o código de verificação que foi enviado para o seu e-mail."
+  },
+  "resendCode": {
+    "message": "Reenviar código"
+  },
   "total": {
     "message": "Total"
   },
@@ -2693,6 +3049,21 @@
         "example": "My Org Name"
       }
     }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Inicie o Duo e siga os passos para finalizar o login."
+  },
+  "duoRequiredForAccount": {
+    "message": "A autenticação em duas etapas do Duo é necessária para sua conta."
+  },
+  "popoutTheExtensionToCompleteLogin": {
+    "message": "Abra a extensão para concluir o login."
+  },
+  "popoutExtension": {
+    "message": "Extensão pop-out"
+  },
+  "launchDuo": {
+    "message": "Abrir o Duo"
   },
   "importFormatError": {
     "message": "Os dados não estão formatados corretamente. Por favor, verifique o seu arquivo de importação e tente novamente."
@@ -2769,22 +3140,22 @@
     "message": "Chave de acesso"
   },
   "passkeyNotCopied": {
-    "message": "A senha não será copiada"
+    "message": "A chave de acesso não será copiada"
   },
   "passkeyNotCopiedAlert": {
-    "message": "A senha não será copiada para o item clonado. Deseja continuar clonando este item?"
+    "message": "A chave de acesso não será copiada para o item clonado. Deseja continuar clonando este item?"
   },
   "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword": {
-    "message": "Verificação exigida pelo site inicial. Esse recurso ainda não está implementado para contas sem senha mestra."
+    "message": "Verificação requerida pelo site que a iniciou. Esse recurso ainda não está implementado para contas sem senha mestra."
   },
   "logInWithPasskey": {
-    "message": "Fazer login com a senha?"
+    "message": "Fazer login com chave de acesso?"
   },
   "passkeyAlreadyExists": {
-    "message": "Uma senha já existe para este aplicativo."
+    "message": "Uma chave de acesso já existe para este aplicativo."
   },
   "noPasskeysFoundForThisApplication": {
-    "message": "Nenhuma senha encontrada para este aplicativo."
+    "message": "Nenhuma chave de acesso encontrada para este aplicativo."
   },
   "noMatchingPasskeyLogin": {
     "message": "Você não tem um login correspondente para este site."
@@ -2793,22 +3164,22 @@
     "message": "Confirmar"
   },
   "savePasskey": {
-    "message": "Salvar senha"
+    "message": "Salvar chave de acesso"
   },
   "savePasskeyNewLogin": {
-    "message": "Salvar senha como novo login"
+    "message": "Salvar chave de acesso como um novo login"
   },
   "choosePasskey": {
     "message": "Escolha um login para salvar esta chave de acesso"
   },
   "passkeyItem": {
-    "message": "Passkey Item"
+    "message": "Item de chave de acesso"
   },
   "overwritePasskey": {
-    "message": "Sobrescrever senha?"
+    "message": "Sobrescrever chave de acesso?"
   },
   "overwritePasskeyAlert": {
-    "message": "Este item já contém uma senha. Tem certeza que deseja substituir a senha de acesso atual?"
+    "message": "Este item já contém uma chave de acesso. Tem certeza que deseja substituir a atual?"
   },
   "featureNotSupported": {
     "message": "Recurso ainda não suportado"
@@ -2824,6 +3195,15 @@
   },
   "incorrectUsernameOrPassword": {
     "message": "Nome de usuário ou senha incorretos"
+  },
+  "incorrectPassword": {
+    "message": "Senha incorreta"
+  },
+  "incorrectCode": {
+    "message": "Código incorreto"
+  },
+  "incorrectPin": {
+    "message": "PIN incorreto"
   },
   "multifactorAuthenticationFailed": {
     "message": "Falha na autenticação de múltiplos fatores"
@@ -2934,5 +3314,214 @@
   "commonImportFormats": {
     "message": "Formatos comuns",
     "description": "Label indicating the most common import formats"
+  },
+  "overrideDefaultBrowserAutofillTitle": {
+    "message": "Tornar o Bravura Safe seu gerenciador de senhas padrão?",
+    "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
+  },
+  "overrideDefaultBrowserAutofillDescription": {
+    "message": "Ignorar esta opção pode causar conflitos entre o menu de autopreenchimento do Bravura Safe e o do seu navegador.",
+    "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
+  },
+  "overrideDefaultBrowserAutoFillSettings": {
+    "message": "Faça do Bravura Safe seu gerenciador de senhas padrão",
+    "description": "Label for the setting that allows overriding the default browser autofill settings"
+  },
+  "privacyPermissionAdditionNotGrantedTitle": {
+    "message": "Não é possível definir o Bravura Safe como o gerenciador de senhas padrão",
+    "description": "Title for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+  },
+  "privacyPermissionAdditionNotGrantedDescription": {
+    "message": "Você deve conceder permissões de privacidade do navegador ao Bravura Safe para defini-lo como o Gerenciador de Senhas padrão.",
+    "description": "Description for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+  },
+  "makeDefault": {
+    "message": "Tornar padrão",
+    "description": "Button text for the setting that allows overriding the default browser autofill settings"
+  },
+  "saveCipherAttemptSuccess": {
+    "message": "Credenciais salvas com sucesso!",
+    "description": "Notification message for when saving credentials has succeeded."
+  },
+  "updateCipherAttemptSuccess": {
+    "message": "Credenciais atualizadas com sucesso!",
+    "description": "Notification message for when updating credentials has succeeded."
+  },
+  "saveCipherAttemptFailed": {
+    "message": "Erro ao salvar credenciais. Verifique o console para detalhes.",
+    "description": "Notification message for when saving credentials has failed."
+  },
+  "success": {
+    "message": "Sucesso"
+  },
+  "removePasskey": {
+    "message": "Remover chave de acesso"
+  },
+  "passkeyRemoved": {
+    "message": "Chave de acesso removida"
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Aviso: Itens da organização não atribuídos não estão mais visíveis na visualização Todos os Cofres e só são acessíveis por meio do painel de administração."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Aviso: Em 16 de maio, 2024, itens da organização não serão mais visíveis na visualização Todos os Cofres e só serão acessíveis por meio do painel de administração."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Atribua estes itens a uma coleção da",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "para torná-los visíveis.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "autofillSuggestions": {
+    "message": "Sugestões de autopreenchimento"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Salvar um item de login para este site autopreenchimento"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Seu cofre está vazio"
+  },
+  "noItemsMatchSearch": {
+    "message": "Nenhum item corresponde à sua pesquisa"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Limpar filtros ou tentar outro termo de pesquisa"
+  },
+  "copyInfoTitle": {
+    "message": "Copiar informação - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+  }
+}
+  },
+  "copyNoteTitle": {
+    "message": "Copiar Nota - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
+    "message": "Mais opções, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptionsTitle": {
+    "message": "Mais opções - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Visualizar item - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Auto-preenchimento - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Não há valores para copiar"
+  },
+  "assignCollections": {
+    "message": "Aplicar coleção"
+  },
+  "copyEmail": {
+    "message": "Copiar e-mail"
+  },
+  "copyPhone": {
+    "message": "Copiar telefone"
+  },
+  "copyAddress": {
+    "message": "Copiar endereço"
+  },
+  "adminConsole": {
+    "message": "Painel de administração"
+  },
+  "accountSecurity": {
+    "message": "Segurança da conta"
+  },
+  "notifications": {
+    "message": "Notificações"
+  },
+  "appearance": {
+    "message": "Aparência"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Erro ao atribuir coleção de destino."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Erro ao atribuir pasta de destino."
+  },
+  "viewItemsIn": {
+    "message": "Visualizar itens em $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Voltar para $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "new": {
+    "message": "Novo"
+  },
+  "removeItem": {
+    "message": "Remover $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "itemsWithNoFolder": {
+    "message": "Itens sem pasta"
+  },
+  "organizationIsDeactivated": {
+    "message": "A organização está desativada"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Itens em organizações desativadas não podem ser acessados. Entre em contato com o proprietário da sua organização para obter assistência."
   }
 }

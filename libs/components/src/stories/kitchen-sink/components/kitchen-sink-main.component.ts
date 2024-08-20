@@ -111,7 +111,7 @@ export class KitchenSinkMainComponent {
   }
 
   navItems = [
-    { icon: "bwi-collection", name: "Password Managers", route: "/" },
-    { icon: "bwi-collection", name: "Favorites", route: "/" },
+    { icon: "fa-cube", name: "Password Managers", route: "/" },
+    { icon: "fa-cube", name: "Favorites", route: "/" },
   ];
 }

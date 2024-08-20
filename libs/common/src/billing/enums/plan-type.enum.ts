@@ -13,9 +13,16 @@ export enum PlanType {
   EnterpriseAnnually2020 = 11,
   BravuraTeams = 12,
   BravuraEnterprise = 13,
-  TeamsMonthly = 14,
-  TeamsAnnually = 15,
-  EnterpriseMonthly = 16,
-  EnterpriseAnnually = 17,
-  TeamsStarter = 18,
+
+
+  TeamsMonthly2023 = 14,
+  TeamsAnnually2023 = 15,
+  EnterpriseMonthly2023 = 16,
+  EnterpriseAnnually2023 = 17,
+  TeamsStarter2023 = 18,
+  TeamsMonthly = 19,
+  TeamsAnnually = 20,
+  EnterpriseMonthly = 21,
+  EnterpriseAnnually = 22,
+  TeamsStarter = 23,
 }

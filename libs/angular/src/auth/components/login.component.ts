@@ -4,14 +4,19 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, firstValueFrom } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 
-import { LoginStrategyServiceAbstraction, PasswordLoginCredentials } from "@bitwarden/auth/common";
+import {
+  LoginStrategyServiceAbstraction,
+  LoginEmailServiceAbstraction,
+  PasswordLoginCredentials,
+} from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -53,6 +58,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
+  // TODO: remove when email verification flag is removed
+  protected registerRoute = "/register";
   protected forcePasswordResetRoute = "update-temp-password";
 
   protected destroy$ = new Subject<void>();
@@ -77,14 +84,24 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     protected formBuilder: FormBuilder,
     protected formValidationErrorService: FormValidationErrorsService,
     protected route: ActivatedRoute,
-    protected loginService: LoginService,
+    protected loginEmailService: LoginEmailServiceAbstraction,
     protected ssoLoginService: SsoLoginServiceAbstraction,
     protected webAuthnLoginService: WebAuthnLoginServiceAbstraction,
+    protected configService: ConfigService,
   ) {
     super(environmentService, i18nService, platformUtilsService);
   }
 
   async ngOnInit() {
+    // TODO: remove when email verification flag is removed
+    const emailVerification = await this.configService.getFeatureFlag(
+      FeatureFlag.EmailVerification,
+    );
+
+    if (emailVerification) {
+      this.registerRoute = "/signup";
+    }
+
     this.route?.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (!params) {
         return;
@@ -93,25 +110,23 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
       const queryParamsEmail = params.email;
 
       if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
-        this.formGroup.get("email").setValue(queryParamsEmail);
-        this.loginService.setEmail(queryParamsEmail);
+        this.formGroup.controls.email.setValue(queryParamsEmail);
         this.paramEmailSet = true;
       }
     });
-    let email = this.loginService.getEmail();
-
-    if (email == null || email === "") {
-      email = await this.stateService.getRememberedEmail();
-    }
 
     if (!this.paramEmailSet) {
-      this.formGroup.get("email")?.setValue(email ?? "");
+      const storedEmail = await firstValueFrom(this.loginEmailService.storedEmail$);
+      this.formGroup.controls.email.setValue(storedEmail ?? "");
     }
-    let rememberEmail = this.loginService.getRememberEmail();
+
+    let rememberEmail = this.loginEmailService.getRememberEmail();
+
     if (rememberEmail == null) {
-      rememberEmail = (await this.stateService.getRememberedEmail()) != null;
+      rememberEmail = (await firstValueFrom(this.loginEmailService.storedEmail$)) != null;
     }
-    this.formGroup.get("rememberEmail")?.setValue(rememberEmail);
+
+    this.formGroup.controls.rememberEmail.setValue(rememberEmail);
   }
 
   ngOnDestroy() {
@@ -148,11 +163,13 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
 
       this.formPromise = this.loginStrategyService.logIn(credentials);
       const response = await this.formPromise;
-      this.setFormValues();
-      await this.loginService.saveEmailSettings();
+
+      this.setLoginEmailValues();
+      await this.loginEmailService.saveEmailSettings();
+
       if (this.handleCaptchaRequired(response)) {
         return;
-      } else if (this.handleMigrateEncryptionKey(response)) {
+      } else if (await this.handleMigrateEncryptionKey(response)) {
         return;
       } else if (response.requiresTwoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
@@ -214,10 +231,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
       return;
     }
 
-    this.setFormValues();
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.router.navigate(["/login-with-device"]);
+    this.setLoginEmailValues();
+    await this.router.navigate(["/login-with-device"]);
   }
 
   async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
@@ -292,14 +307,14 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     }
   }
 
-  setFormValues() {
-    this.loginService.setEmail(this.formGroup.value.email);
-    this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
+  setLoginEmailValues() {
+    this.loginEmailService.setEmail(this.formGroup.value.email);
+    this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
   }
 
   async saveEmailSettings() {
-    this.setFormValues();
-    await this.loginService.saveEmailSettings();
+    this.setLoginEmailValues();
+    await this.loginEmailService.saveEmailSettings();
 
     // Save off email for SSO
     await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
@@ -307,7 +322,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
 
   // Legacy accounts used the master key to encrypt data. Migration is required
   // but only performed on web
-  protected handleMigrateEncryptionKey(result: AuthResult): boolean {
+  protected async handleMigrateEncryptionKey(result: AuthResult): Promise<boolean> {
     if (!result.requiresEncryptionKeyMigration) {
       return false;
     }

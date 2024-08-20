@@ -39,7 +39,7 @@ const Template: Story = (args) => ({
   template: `
     <app-onboarding title="Get started">
       <app-onboarding-task
-        [title]="'createServiceAccount' | i18n"
+        [title]="'createMachineAccount' | i18n"
         icon="fa-cli"
         [completed]="createServiceAccount"
       >
@@ -49,7 +49,7 @@ const Template: Story = (args) => ({
       </app-onboarding-task>
       <app-onboarding-task
         [title]="'createProject' | i18n"
-        icon="fa-collection"
+        icon="fa-cube"
         [completed]="createProject"
       ></app-onboarding-task>
       <app-onboarding-task

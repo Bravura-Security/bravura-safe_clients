@@ -1,16 +1,13 @@
 import { PolicyType } from "../../../admin-console/enums";
-import { Policy } from "../../../admin-console/models/domain/policy";
 import { StateProvider } from "../../../platform/state";
-import { UserId } from "../../../types/guid";
 import { GeneratorStrategy } from "../abstractions";
-import { DefaultPolicyEvaluator } from "../default-policy-evaluator";
+import { Randomizer } from "../abstractions/randomizer";
 import { CATCHALL_SETTINGS } from "../key-definitions";
 import { NoPolicy } from "../no-policy";
+import { newDefaultEvaluator } from "../rx-operators";
+import { clone$PerUserId, sharedStateByUserId } from "../util";
 
-import { CatchallGenerationOptions } from "./catchall-generator-options";
-import { UsernameGenerationServiceAbstraction } from "./username-generation.service.abstraction";
-
-const ONE_MINUTE = 60 * 1000;
+import { CatchallGenerationOptions, DefaultCatchallOptions } from "./catchall-generator-options";
 
 /** Strategy for creating usernames using a catchall email address */
 export class CatchallGeneratorStrategy
@@ -20,46 +17,34 @@ export class CatchallGeneratorStrategy
    *  @param usernameService generates a catchall address for a domain
    */
   constructor(
-    private usernameService: UsernameGenerationServiceAbstraction,
+    private random: Randomizer,
     private stateProvider: StateProvider,
+    private defaultOptions: CatchallGenerationOptions = DefaultCatchallOptions,
   ) {}
 
-  /** {@link GeneratorStrategy.durableState} */
-  durableState(id: UserId) {
-    return this.stateProvider.getUser(id, CATCHALL_SETTINGS);
-  }
+  // configuration
+  durableState = sharedStateByUserId(CATCHALL_SETTINGS, this.stateProvider);
+  defaults$ = clone$PerUserId(this.defaultOptions);
+  toEvaluator = newDefaultEvaluator<CatchallGenerationOptions>();
+  readonly policy = PolicyType.PasswordGenerator;
 
-  /** {@link GeneratorStrategy.policy} */
-  get policy() {
-    // Uses password generator since there aren't policies
-    // specific to usernames.
-    return PolicyType.PasswordGenerator;
-  }
+  // algorithm
+  async generate(options: CatchallGenerationOptions) {
+    const o = Object.assign({}, DefaultCatchallOptions, options);
 
-  /** {@link GeneratorStrategy.cache_ms} */
-  get cache_ms() {
-    return ONE_MINUTE;
-  }
-
-  /** {@link GeneratorStrategy.evaluator} */
-  evaluator(policy: Policy) {
-    if (!policy) {
-      return new DefaultPolicyEvaluator<CatchallGenerationOptions>();
+    if (o.catchallDomain == null || o.catchallDomain === "") {
+      return null;
+    }
+    if (o.catchallType == null) {
+      o.catchallType = "random";
     }
 
-    if (policy.type !== this.policy) {
-      const details = `Expected: ${this.policy}. Received: ${policy.type}`;
-      throw Error("Mismatched policy type. " + details);
+    let startString = "";
+    if (o.catchallType === "random") {
+      startString = await this.random.chars(8);
+    } else if (o.catchallType === "website-name") {
+      startString = o.website;
     }
-
-    return new DefaultPolicyEvaluator<CatchallGenerationOptions>();
-  }
-
-  /** {@link GeneratorStrategy.generate} */
-  generate(options: CatchallGenerationOptions) {
-    return this.usernameService.generateCatchall({
-      catchallDomain: options.domain,
-      catchallType: options.type,
-    });
+    return startString + "@" + o.catchallDomain;
   }
 }

@@ -1,7 +1,38 @@
+import { Observable } from "rxjs";
+
+import { AdminAuthRequestStorable } from "@bitwarden/common/auth/models/domain/admin-auth-req-storable";
 import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
+import { AuthRequestPushNotification } from "@bitwarden/common/models/response/notification.response";
+import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey, MasterKey } from "@bitwarden/common/types/key";
 
 export abstract class AuthRequestServiceAbstraction {
+  /** Emits an auth request id when an auth request has been approved. */
+  authRequestPushNotification$: Observable<string>;
+
+  /**
+   * Returns an admin auth request for the given user if it exists.
+   * @param userId The user id.
+   * @throws If `userId` is not provided.
+   */
+  abstract getAdminAuthRequest: (userId: UserId) => Promise<AdminAuthRequestStorable | null>;
+  /**
+   * Sets an admin auth request for the given user.
+   * Note: use {@link clearAdminAuthRequest} to clear the request.
+   * @param authRequest The admin auth request.
+   * @param userId The user id.
+   * @throws If `authRequest` or `userId` is not provided.
+   */
+  abstract setAdminAuthRequest: (
+    authRequest: AdminAuthRequestStorable,
+    userId: UserId,
+  ) => Promise<void>;
+  /**
+   * Clears an admin auth request for the given user.
+   * @param userId The user id.
+   * @throws If `userId` is not provided.
+   */
+  abstract clearAdminAuthRequest: (userId: UserId) => Promise<void>;
   /**
    * Approve or deny an auth request.
    * @param approve True to approve, false to deny.
@@ -54,4 +85,11 @@ export abstract class AuthRequestServiceAbstraction {
     pubKeyEncryptedMasterKeyHash: string,
     privateKey: ArrayBuffer,
   ) => Promise<{ masterKey: MasterKey; masterKeyHash: string }>;
+
+  /**
+   * Handles incoming auth request push notifications.
+   * @param notification push notification.
+   * @remark We should only be receiving approved push notifications to prevent enumeration.
+   */
+  abstract sendAuthRequestPushNotification: (notification: AuthRequestPushNotification) => void;
 }

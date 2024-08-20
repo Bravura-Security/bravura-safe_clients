@@ -3,17 +3,19 @@ import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
-import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/auth/components/login.component";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { LoginStrategyServiceAbstraction } from "@bitwarden/auth/common";
+import {
+  LoginStrategyServiceAbstraction,
+  LoginEmailServiceAbstraction,
+} from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -35,8 +37,6 @@ const BroadcasterSubscriptionId = "LoginComponent";
 export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   @ViewChild("environment", { read: ViewContainerRef, static: true })
   environmentModal: ViewContainerRef;
-  @ViewChild("environmentSelector", { read: ViewContainerRef, static: true })
-  environmentSelector: EnvironmentSelectorComponent;
 
   protected componentDestroyed$: Subject<void> = new Subject();
   webVaultHostname = "";
@@ -69,9 +69,10 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
     route: ActivatedRoute,
-    loginService: LoginService,
+    loginEmailService: LoginEmailServiceAbstraction,
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
+    configService: ConfigService,
   ) {
     super(
       devicesApiService,
@@ -89,9 +90,10 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       formBuilder,
       formValidationErrorService,
       route,
-      loginService,
+      loginEmailService,
       ssoLoginService,
       webAuthnLoginService,
+      configService,
     );
     super.onSuccessfulLogin = () => {
       return syncService.fullSync(true);

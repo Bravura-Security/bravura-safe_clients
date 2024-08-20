@@ -1,14 +1,15 @@
 import { firstValueFrom } from "rxjs";
 
+import { LogoutReason } from "@bitwarden/auth/common";
+
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
+import { VaultTimeoutSettingsService } from "../abstractions/vault-timeout/vault-timeout-settings.service";
 import { OrganizationConnectionType } from "../admin-console/enums";
 import { OrganizationSponsorshipCreateRequest } from "../admin-console/models/request/organization/organization-sponsorship-create.request";
 import { OrganizationSponsorshipRedeemRequest } from "../admin-console/models/request/organization/organization-sponsorship-redeem.request";
 import { OrganizationConnectionRequest } from "../admin-console/models/request/organization-connection.request";
 import { ProviderAddOrganizationRequest } from "../admin-console/models/request/provider/provider-add-organization.request";
 import { ProviderOrganizationCreateRequest } from "../admin-console/models/request/provider/provider-organization-create.request";
-import { ProviderSetupRequest } from "../admin-console/models/request/provider/provider-setup.request";
-import { ProviderUpdateRequest } from "../admin-console/models/request/provider/provider-update.request";
 import { ProviderUserAcceptRequest } from "../admin-console/models/request/provider/provider-user-accept.request";
 import { ProviderUserBulkConfirmRequest } from "../admin-console/models/request/provider/provider-user-bulk-confirm.request";
 import { ProviderUserBulkRequest } from "../admin-console/models/request/provider/provider-user-bulk.request";
@@ -32,7 +33,6 @@ import {
   ProviderUserResponse,
   ProviderUserUserDetailsResponse,
 } from "../admin-console/models/response/provider/provider-user.response";
-import { ProviderResponse } from "../admin-console/models/response/provider/provider.response";
 import { SelectionReadOnlyResponse } from "../admin-console/models/response/selection-read-only.response";
 import { TokenService } from "../auth/abstractions/token.service";
 import { CreateAuthRequest } from "../auth/models/request/create-auth.request";
@@ -71,7 +71,6 @@ import { IdentityCaptchaResponse } from "../auth/models/response/identity-captch
 import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { MasterPasswordPolicyResponse } from "../auth/models/response/master-password-policy.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
@@ -122,9 +121,11 @@ import { ProfileResponse } from "../models/response/profile.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { AppIdService } from "../platform/abstractions/app-id.service";
 import { EnvironmentService } from "../platform/abstractions/environment.service";
+import { LogService } from "../platform/abstractions/log.service";
 import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
-import { StateService } from "../platform/abstractions/state.service";
 import { Utils } from "../platform/misc/utils";
+import { SyncResponse } from "../platform/sync";
+import { UserId } from "../types/guid";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
 import { CipherBulkMoveRequest } from "../vault/models/request/cipher-bulk-move.request";
@@ -144,7 +145,7 @@ import {
   CollectionDetailsResponse,
   CollectionResponse,
 } from "../vault/models/response/collection.response";
-import { SyncResponse } from "../vault/models/response/sync.response";
+import { OptionalCipherResponse } from "../vault/models/response/optional-cipher.response";
 import { HyprAuthenticationRequestModel } from "../vault/models/request/hyprAuthenticationRequestModel";
 import { TwoFactorHyprAuthGetMagicLink } from "../auth/models/response/two-factor-hypr-auth-get-magic-link.response";
 
@@ -164,8 +165,10 @@ export class ApiService implements ApiServiceAbstraction {
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
     private appIdService: AppIdService,
-    private stateService: StateService,
-    private logoutCallback: (expired: boolean) => Promise<void>,
+    private refreshAccessTokenErrorCallback: () => void,
+    private logService: LogService,
+    private logoutCallback: (logoutReason: LogoutReason) => Promise<void>,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private customUserAgent: string = null,
   ) {
     this.device = platformUtilsService.getDevice();
@@ -252,9 +255,10 @@ export class ApiService implements ApiServiceAbstraction {
 
   async refreshIdentityToken(): Promise<any> {
     try {
-      await this.doAuthRefresh();
+      await this.refreshToken();
     } catch (e) {
-      return Promise.reject(null);
+      this.logService.error("Error refreshing access token: ", e);
+      throw e;
     }
   }
 
@@ -425,12 +429,6 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("POST", "/accounts/verify-email-token", request, false, false);
   }
 
-  postAccountVerifyPassword(
-    request: SecretVerificationRequest,
-  ): Promise<MasterPasswordPolicyResponse> {
-    return this.send("POST", "/accounts/verify-password", request, true, true);
-  }
-
   postAccountRecoverDelete(request: DeleteRecoverRequest): Promise<any> {
     return this.send("POST", "/accounts/delete-recover", request, false, false);
   }
@@ -571,8 +569,18 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("PUT", "/ciphers/share", request, true, false);
   }
 
-  putCipherCollections(id: string, request: CipherCollectionsRequest): Promise<any> {
-    return this.send("PUT", "/ciphers/" + id + "/collections", request, true, false);
+  async putCipherCollections(
+    id: string,
+    request: CipherCollectionsRequest,
+  ): Promise<OptionalCipherResponse> {
+    const response = await this.send(
+      "PUT",
+      "/ciphers/" + id + "/collections_v2",
+      request,
+      true,
+      true,
+    );
+    return new OptionalCipherResponse(response);
   }
 
   putCipherCollectionsAdmin(id: string, request: CipherCollectionsRequest): Promise<any> {
@@ -866,16 +874,6 @@ export class ApiService implements ApiServiceAbstraction {
       true,
     );
     return r;
-  }
-
-  async putGroupUsers(organizationId: string, id: string, request: string[]): Promise<any> {
-    await this.send(
-      "PUT",
-      "/organizations/" + organizationId + "/groups/" + id + "/users",
-      request,
-      true,
-      false,
-    );
   }
 
   deleteGroupUser(organizationId: string, id: string, organizationUserId: string): Promise<any> {
@@ -1254,23 +1252,6 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("DELETE", "/organizations/connections/" + id, null, true, false);
   }
 
-  // Provider APIs
-
-  async postProviderSetup(id: string, request: ProviderSetupRequest) {
-    const r = await this.send("POST", "/providers/" + id + "/setup", request, true, true);
-    return new ProviderResponse(r);
-  }
-
-  async getProvider(id: string) {
-    const r = await this.send("GET", "/providers/" + id, null, true, true);
-    return new ProviderResponse(r);
-  }
-
-  async putProvider(id: string, request: ProviderUpdateRequest) {
-    const r = await this.send("PUT", "/providers/" + id, request, true, true);
-    return new ProviderResponse(r);
-  }
-
   // Provider User APIs
 
   async getProviderUsers(
@@ -1546,8 +1527,8 @@ export class ApiService implements ApiServiceAbstraction {
     return new ListResponse(r, EventResponse);
   }
 
-  async postEventsCollect(request: EventRequest[]): Promise<any> {
-    const authHeader = await this.getActiveBearerToken();
+  async postEventsCollect(request: EventRequest[], userId?: UserId): Promise<any> {
+    const authHeader = await this.tokenService.getAccessToken(userId);
     const headers = new Headers({
       "Device-Type": this.deviceType,
       Authorization: "Bearer " + authHeader,
@@ -1682,8 +1663,7 @@ export class ApiService implements ApiServiceAbstraction {
   async getActiveBearerToken(): Promise<string> {
     let accessToken = await this.tokenService.getAccessToken();
     if (await this.tokenService.tokenNeedsRefresh()) {
-      await this.doAuthRefresh();
-      accessToken = await this.tokenService.getAccessToken();
+      accessToken = await this.refreshToken();
     }
     return accessToken;
   }
@@ -1823,22 +1803,24 @@ export class ApiService implements ApiServiceAbstraction {
     );
   }
 
-  protected async doAuthRefresh(): Promise<void> {
+  protected async refreshToken(): Promise<string> {
     const refreshToken = await this.tokenService.getRefreshToken();
     if (refreshToken != null && refreshToken !== "") {
-      return this.doRefreshToken();
+      return this.refreshAccessToken();
     }
 
     const clientId = await this.tokenService.getClientId();
     const clientSecret = await this.tokenService.getClientSecret();
     if (!Utils.isNullOrWhitespace(clientId) && !Utils.isNullOrWhitespace(clientSecret)) {
-      return this.doApiTokenRefresh();
+      return this.refreshApiToken();
     }
 
-    throw new Error("Cannot refresh token, no refresh token or api keys are stored");
+    this.refreshAccessTokenErrorCallback();
+
+    throw new Error("Cannot refresh access token, no refresh token or api keys are stored.");
   }
 
-  protected async doRefreshToken(): Promise<void> {
+  protected async refreshAccessToken(): Promise<string> {
     const refreshToken = await this.tokenService.getRefreshToken();
     if (refreshToken == null || refreshToken === "") {
       throw new Error();
@@ -1872,22 +1854,32 @@ export class ApiService implements ApiServiceAbstraction {
       const responseJson = await response.json();
       const tokenResponse = new IdentityTokenResponse(responseJson);
 
-      const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
-      const vaultTimeout = await this.stateService.getVaultTimeout();
-
-      await this.tokenService.setTokens(
+      const newDecodedAccessToken = await this.tokenService.decodeAccessToken(
         tokenResponse.accessToken,
-        tokenResponse.refreshToken,
+      );
+      const userId = newDecodedAccessToken.sub;
+
+      const vaultTimeoutAction = await firstValueFrom(
+        this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+      );
+      const vaultTimeout = await firstValueFrom(
+        this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+      );
+
+      const refreshedTokens = await this.tokenService.setTokens(
+        tokenResponse.accessToken,
         vaultTimeoutAction as VaultTimeoutAction,
         vaultTimeout,
+        tokenResponse.refreshToken,
       );
+      return refreshedTokens.accessToken;
     } else {
       const error = await this.handleError(response, true, true);
       return Promise.reject(error);
     }
   }
 
-  protected async doApiTokenRefresh(): Promise<void> {
+  protected async refreshApiToken(): Promise<string> {
     const clientId = await this.tokenService.getClientId();
     const clientSecret = await this.tokenService.getClientSecret();
 
@@ -1905,14 +1897,22 @@ export class ApiService implements ApiServiceAbstraction {
       throw new Error("Invalid response received when refreshing api token");
     }
 
-    const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
-    const vaultTimeout = await this.stateService.getVaultTimeout();
+    const newDecodedAccessToken = await this.tokenService.decodeAccessToken(response.accessToken);
+    const userId = newDecodedAccessToken.sub;
 
-    await this.tokenService.setAccessToken(
+    const vaultTimeoutAction = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+    );
+    const vaultTimeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
+
+    const refreshedToken = await this.tokenService.setAccessToken(
       response.accessToken,
       vaultTimeoutAction as VaultTimeoutAction,
       vaultTimeout,
     );
+    return refreshedToken;
   }
 
   async send(
@@ -1974,9 +1974,12 @@ export class ApiService implements ApiServiceAbstraction {
 
     const responseType = response.headers.get("content-type");
     const responseIsJson = responseType != null && responseType.indexOf("application/json") !== -1;
+    const responseIsCsv = responseType != null && responseType.indexOf("text/csv") !== -1;
     if (hasResponse && response.status === 200 && responseIsJson) {
       const responseJson = await response.json();
       return responseJson;
+    } else if (hasResponse && response.status === 200 && responseIsCsv) {
+      return await response.text();
     } else if (response.status !== 200) {
       const error = await this.handleError(response, false, authed);
       return Promise.reject(error);
@@ -2004,7 +2007,7 @@ export class ApiService implements ApiServiceAbstraction {
           responseJson != null &&
           responseJson.error === "invalid_grant")
       ) {
-        await this.logoutCallback(true);
+        await this.logoutCallback("invalidGrantError");
         return null;
       }
     }

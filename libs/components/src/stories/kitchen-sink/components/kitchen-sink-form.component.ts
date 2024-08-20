@@ -77,7 +77,7 @@ import { KitchenSinkSharedModule } from "../kitchen-sink-shared.module";
             [bitPopoverTriggerFor]="myPopover"
             #triggerRef="popoverTrigger"
           >
-            <i class="bwi bwi-question-circle"></i>
+            <i class="fa fa-question-circle"></i>
           </button>
         </bit-label>
         <input bitInput type="password" formControlName="password" />

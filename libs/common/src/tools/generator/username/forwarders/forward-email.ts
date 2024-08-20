@@ -4,10 +4,16 @@ import { EncryptService } from "../../../../platform/abstractions/encrypt.servic
 import { I18nService } from "../../../../platform/abstractions/i18n.service";
 import { Utils } from "../../../../platform/misc/utils";
 import { StateProvider } from "../../../../platform/state";
-import { FORWARD_EMAIL_FORWARDER } from "../../key-definitions";
+import { FORWARD_EMAIL_FORWARDER, FORWARD_EMAIL_BUFFER } from "../../key-definitions";
 import { ForwarderGeneratorStrategy } from "../forwarder-generator-strategy";
 import { Forwarders } from "../options/constants";
 import { EmailDomainOptions, ApiOptions } from "../options/forwarder-options";
+
+export const DefaultForwardEmailOptions: ApiOptions & EmailDomainOptions = Object.freeze({
+  website: null,
+  token: "",
+  domain: "",
+});
 
 /** Generates a forwarding address for Forward Email */
 export class ForwardEmailForwarder extends ForwarderGeneratorStrategy<
@@ -27,15 +33,14 @@ export class ForwardEmailForwarder extends ForwarderGeneratorStrategy<
     keyService: CryptoService,
     stateProvider: StateProvider,
   ) {
-    super(encryptService, keyService, stateProvider);
+    super(encryptService, keyService, stateProvider, DefaultForwardEmailOptions);
   }
 
-  /** {@link ForwarderGeneratorStrategy.key} */
-  get key() {
-    return FORWARD_EMAIL_FORWARDER;
-  }
+  // configuration
+  readonly key = FORWARD_EMAIL_FORWARDER;
+  readonly rolloverKey = FORWARD_EMAIL_BUFFER;
 
-  /** {@link ForwarderGeneratorStrategy.generate} */
+  // request
   generate = async (options: ApiOptions & EmailDomainOptions) => {
     if (!options.token || options.token === "") {
       const error = this.i18nService.t("forwaderInvalidToken", Forwarders.ForwardEmail.name);
@@ -96,3 +101,9 @@ export class ForwardEmailForwarder extends ForwarderGeneratorStrategy<
     }
   };
 }
+
+export const DefaultOptions = Object.freeze({
+  website: null,
+  token: "",
+  domain: "",
+});

@@ -25,7 +25,7 @@
     "**/node_modules/argon2/package.json",
     "**/node_modules/argon2/lib/binding/napi-v3/argon2.node"
   ],
-  "electronVersion": "28.2.8",
+  "electronVersion": "30.1.1",
   "generateUpdatesFilesForAllChannels": true,
   "publish": {
     "provider": "generic",
@@ -103,7 +103,7 @@
     "entitlementsLoginHelper": "resources/entitlements.mas.loginhelper.plist",
     "hardenedRuntime": false,
     "extendInfo": {
-      "LSMinimumSystemVersion": "10.15.0",
+      "LSMinimumSystemVersion": "12",
       "ElectronTeamID": "LTZ2PFU5D6"
     }
   },
@@ -179,7 +179,7 @@
       "si",
       "sk",
       "sl",
-      "sr",
+      "sr-cyrl",
       "sv",
       "te",
       "th",
@@ -204,6 +204,8 @@
     "artifactName": "${productName}-${version}-${arch}.${ext}"
   },
   "snap": {
+    "summary": "Bitwarden is a secure and free password manager for all of your devices.",
+    "description": "**Installation**\nBitwarden requires access to the `password-manager-service`. Please enable it through permissions or by running `sudo snap connect bitwarden:password-manager-service` after installation. See https://btwrdn.com/install-snap for details.",
     "autoStart": true,
     "base": "core22",
     "confinement": "strict",

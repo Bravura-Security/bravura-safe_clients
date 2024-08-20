@@ -4,6 +4,7 @@ import * as path from "path";
 import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { SelectionReadOnlyRequest } from "@bitwarden/common/admin-console/models/request/selection-read-only.request";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
@@ -32,6 +33,7 @@ export class CreateCommand {
     private apiService: ApiService,
     private folderApiService: FolderApiServiceAbstraction,
     private accountProfileService: BillingAccountProfileStateService,
+    private organizationService: OrganizationService,
   ) {}
 
   async run(
@@ -80,8 +82,7 @@ export class CreateCommand {
   private async createCipher(req: CipherExport) {
     const cipher = await this.cipherService.encrypt(CipherExport.toView(req));
     try {
-      await this.cipherService.createWithServer(cipher);
-      const newCipher = await this.cipherService.get(cipher.id);
+      const newCipher = await this.cipherService.createWithServer(cipher);
       const decCipher = await newCipher.decrypt(
         await this.cipherService.getKeyForCipherKeyDecryption(newCipher),
       );
@@ -142,12 +143,11 @@ export class CreateCommand {
     }
 
     try {
-      await this.cipherService.saveAttachmentRawWithServer(
+      const updatedCipher = await this.cipherService.saveAttachmentRawWithServer(
         cipher,
         fileName,
         new Uint8Array(fileBuf).buffer,
       );
-      const updatedCipher = await this.cipherService.get(cipher.id);
       const decCipher = await updatedCipher.decrypt(
         await this.cipherService.getKeyForCipherKeyDecryption(updatedCipher),
       );
@@ -185,6 +185,8 @@ export class CreateCommand {
       if (orgKey == null) {
         throw new Error("No encryption key for this team.");
       }
+      const organization = await this.organizationService.get(req.organizationId);
+      const currentOrgUserId = organization.organizationUserId;
 
       const groups =
         req.groups == null
@@ -192,10 +194,17 @@ export class CreateCommand {
           : req.groups.map(
               (g) => new SelectionReadOnlyRequest(g.id, g.readOnly, g.hidePasswords, g.manage),
             );
+      const users =
+        req.users == null
+          ? [new SelectionReadOnlyRequest(currentOrgUserId, false, false, true)]
+          : req.users.map(
+              (u) => new SelectionReadOnlyRequest(u.id, u.readOnly, u.hidePasswords, u.manage),
+            );
       const request = new CollectionRequest();
       request.name = (await this.cryptoService.encrypt(req.name, orgKey)).encryptedString;
       request.externalId = req.externalId;
       request.groups = groups;
+      request.users = users;
       const response = await this.apiService.postCollection(req.organizationId, request);
       const view = CollectionExport.toView(req);
       view.id = response.id;

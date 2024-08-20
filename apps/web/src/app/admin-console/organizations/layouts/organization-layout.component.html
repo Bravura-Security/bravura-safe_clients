@@ -1,14 +1,12 @@
 <!--
-<bit-layout variant="secondary">
-  <nav slot="sidebar" *ngIf="organization$ | async as organization">
-    <a routerLink="." class="tw-m-5 tw-mt-7 tw-block position-sticky" [appA11yTitle]="'adminConsole' | i18n">
-      <bit-icon [icon]="logo"></bit-icon>
-    </a>
-    <org-switcher [filter]="orgFilter"></org-switcher>
+<bit-layout>
+  <bit-side-nav variant="secondary" *ngIf="organization$ | async as organization">
+    <bit-nav-logo [openIcon]="logo" route="." [label]="'adminConsole' | i18n"></bit-nav-logo>
+    <org-switcher [filter]="orgFilter" [hideNewButton]="hideNewOrgButton$ | async"></org-switcher>
 
     <bit-nav-item
       icon="fa-book"
-      [text]="(organization.flexibleCollections ? 'collections' : 'vault') | i18n"
+      [text]="'collections' | i18n"
           route="vault"
       *ngIf="canShowVaultTab(organization)"
         >
@@ -50,7 +48,7 @@
       *ngIf="canShowBillingTab(organization)"
     >
       <bit-nav-item [text]="'subscription' | i18n" route="billing/subscription"></bit-nav-item>
-      <ng-container *ngIf="showPaymentAndHistory$ | async">
+      <ng-container *ngIf="(showPaymentAndHistory$ | async) && (organizationIsUnmanaged$ | async)">
         <bit-nav-item [text]="'paymentMethod' | i18n" route="billing/payment-method"></bit-nav-item>
         <bit-nav-item [text]="'billingHistory' | i18n" route="billing/history"></bit-nav-item>
       </ng-container>
@@ -115,7 +113,12 @@
         *ngIf="canShowOptionsTab(organization)">
       </bit-nav-item>
     </bit-nav-group>
-  </nav>
+
+    <ng-container slot="footer">
+      <navigation-product-switcher></navigation-product-switcher>
+      <app-toggle-width></app-toggle-width>
+    </ng-container>
+  </bit-side-nav>
 
   <ng-container *ngIf="organization$ | async as organization">
     <bit-banner
