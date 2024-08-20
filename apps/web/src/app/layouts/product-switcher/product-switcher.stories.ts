@@ -88,7 +88,7 @@ export default {
           provide: I18nService,
           useFactory: () => {
             return new I18nMockService({
-              moreFromBitwarden: "More from Bitwarden",
+              moreFromBitwarden: "More from Bravura Safe",
               switchProducts: "Switch Products",
               secureYourInfrastructure: "Secure your infrastructure",
               protectYourFamilyOrBusiness: "Protect your family or business",

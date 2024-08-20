@@ -136,7 +136,7 @@ export class ProductSwitcherService {
           name: "Password Manager",
           icon: "fa-lock",
           appRoute: "/vault",
-          marketingRoute: "https://bitwarden.com/products/personal/",
+          //marketingRoute: "https://bitwarden.com/products/personal/",
           isActive:
             !this.router.url.includes("/sm/") &&
             !this.router.url.includes("/organizations/") &&

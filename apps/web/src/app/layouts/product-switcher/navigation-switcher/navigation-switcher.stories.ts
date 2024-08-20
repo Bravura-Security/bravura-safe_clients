@@ -65,7 +65,7 @@ class StoryLayoutComponent {}
 class StoryContentComponent {}
 
 const translations: Record<string, string> = {
-  moreFromBitwarden: "More from Bitwarden",
+  moreFromBitwarden: "More from Bravura Safe",
   secureYourInfrastructure: "Secure your infrastructure",
   protectYourFamilyOrBusiness: "Protect your family or business",
   skipToContent: "Skip to content",
