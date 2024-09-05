@@ -34,7 +34,8 @@ import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
-import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
+//import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
+import { PlatformUtilsService as BrowserPlatformUtilsService} from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { AutofillService } from "../services/abstractions/autofill.service";
 import {
   createAutofillPageDetailsMock,
@@ -69,8 +70,8 @@ describe("OverlayBackground", () => {
   environmentService.environment$ = new BehaviorSubject(
     new CloudEnvironment({
       key: Region.US,
-      domain: "bitwarden.com",
-      urls: { icons: "https://icons.bitwarden.com/" },
+      domain: "bravurasecurity.com",
+      urls: { icons: "https://icons.bravurasecurity.com/" },
     }),
   );
   const stateService = mock<DefaultBrowserStateService>();

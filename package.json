@@ -228,13 +228,5 @@
   "engines": {
     "node": "~20",
     "npm": "~10"
-  },
-  "browserslist": [
-    "Chrome >=60",
-    "Firefox >=80",
-    "Edge >=79",
-    "Safari >=12",
-    "iOS >=12",
-    ">0.2%"
-  ]
+  }
   }

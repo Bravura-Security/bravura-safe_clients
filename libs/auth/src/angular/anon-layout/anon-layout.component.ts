@@ -31,6 +31,7 @@ export class AnonLayoutComponent {
   protected version: string;
 
   protected showYearAndVersion = true;
+  internalVersion: string;
 
   constructor(
     private environmentService: EnvironmentService,
@@ -44,5 +45,6 @@ export class AnonLayoutComponent {
   async ngOnInit() {
     this.hostname = (await firstValueFrom(this.environmentService.environment$)).getHostname();
     this.version = await this.platformUtilsService.getApplicationVersion();
+    this.internalVersion = await this.platformUtilsService.getInternalApplicationVersion();
   }
 }

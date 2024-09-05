@@ -33,7 +33,7 @@ export class MainContextMenuHandler {
   private initContextMenuItems: InitContextMenuItems[] = [
     {
       id: ROOT_ID,
-      title: "Bitwarden",
+      title: "Bravura Safe",
     },
     {
       id: AUTOFILL_ID,

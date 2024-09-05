@@ -530,8 +530,10 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     }
   }
 
-  authHypr() {
-    const providerData = this.twoFactorService.getProviders().get(this.selectedProviderType);
+  async authHypr() {
+    const providerData = await this.twoFactorService.getProviders().then((providers) => {
+      return providers.get(this.selectedProviderType);
+    });
 
     if (!this.hypr == null) {
       return;

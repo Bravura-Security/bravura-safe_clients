@@ -14,7 +14,7 @@ describe("Messenger", () => {
     window.MessageChannel = MockMessageChannel as any;
     Object.defineProperty(window, "location", {
       value: {
-        origin: "https://bitwarden.com",
+        origin: "https://bravurasecurity.com",
       },
       writable: true,
     });
@@ -217,7 +217,7 @@ class MockMessagePort<T> {
       new MessageEvent("message", {
         data: message,
         ports: port ? [port] : [],
-        origin: "https://bitwarden.com",
+        origin: "https://bravurasecurity.com",
       }),
     );
   }

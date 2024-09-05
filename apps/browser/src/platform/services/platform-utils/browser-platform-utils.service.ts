@@ -185,6 +185,10 @@ export abstract class BrowserPlatformUtilsService implements PlatformUtilsServic
     return Promise.resolve(manifest.version_name ?? manifest.version);
   }
 
+  getInternalApplicationVersion(): Promise<string> {
+    return Promise.resolve(BrowserApi.getInternalApplicationVersion());
+  }
+
   getApplicationVersionNumber(): Promise<string> {
     const manifest = chrome.runtime.getManifest();
     return Promise.resolve(manifest.version.split(RegExp("[+|-]"))[0].trim());

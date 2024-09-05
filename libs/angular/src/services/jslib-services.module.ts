@@ -696,37 +696,7 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
       provide: VaultTimeoutService,
-      useFactory: (
-        cipherService: CipherServiceAbstraction,
-        folderService: FolderServiceAbstraction,
-        collectionService: CollectionServiceAbstraction,
-        cryptoService: CryptoServiceAbstraction,
-        platformUtilsService: PlatformUtilsServiceAbstraction,
-        messagingService: MessagingServiceAbstraction,
-        searchService: SearchServiceAbstraction,
-        stateService: StateServiceAbstraction,
-        authService: AuthServiceAbstraction,
-        vaultTimeoutSettingsService: VaultTimeoutSettingsServiceAbstraction,
-        stateEventRunnerService: StateEventRunnerService,
-        lockedCallback: (userId?: string) => Promise<void>,
-        logoutCallback: (expired: boolean, userId?: string) => Promise<void>
-      ) => {
-        return new VaultTimeoutService(
-          cipherService,
-          folderService,
-          collectionService,
-          cryptoService,
-          platformUtilsService,
-          messagingService,
-          searchService,
-          stateService,
-          authService,
-          vaultTimeoutSettingsService,
-          stateEventRunnerService,
-          lockedCallback,
-          logoutCallback
-        );
-      },
+      useClass: VaultTimeoutService,
       deps: [
       AccountServiceAbstraction,
       InternalMasterPasswordServiceAbstraction,

@@ -30,6 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // TODO: remove when email verification flag is removed
   registerRoute = "/register";
+  hasBaseUrlSet = false;
+  baseUrl = "";
 
   constructor(
     protected platformUtilsService: PlatformUtilsService,
@@ -63,6 +65,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (storedEmail != null) {
         this.formGroup.patchValue({ email: storedEmail, rememberEmail: true });
       }
+    }
+
+    const env = await firstValueFrom(this.environmentService.environment$);
+    this.hasBaseUrlSet = env.hasBaseUrl();
+    if (this.hasBaseUrlSet) {
+      this.baseUrl = env.getWebVaultUrl();
     }
 
     this.environmentSelector.onOpenSelfHostedSettings

@@ -51,7 +51,7 @@ export class AboutPageComponent {
       acceptButtonText: { key: "continue" },
     });
     if (confirmed) {
-      await BrowserApi.createNewTab("https://bitwarden.com/help/");
+      await BrowserApi.createNewTab("https://bravurasecuritydocs.com/safe/#/index/10/11");
     }
   }
 

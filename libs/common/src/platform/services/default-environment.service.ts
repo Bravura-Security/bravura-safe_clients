@@ -81,6 +81,7 @@ export const USER_CLOUD_REGION_KEY = new UserKeyDefinition<CloudRegion>(
  * In the future we desire to load these urls from the config endpoint.
  */
 export const PRODUCTION_REGIONS: RegionConfig[] = [
+  /*
   {
     key: Region.US,
     domain: "bitwarden.com",
@@ -109,6 +110,7 @@ export const PRODUCTION_REGIONS: RegionConfig[] = [
       scim: "https://scim.bitwarden.eu",
     },
   },
+  */
 ];
 
 /**

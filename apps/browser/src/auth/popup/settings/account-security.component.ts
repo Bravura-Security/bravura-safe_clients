@@ -16,6 +16,7 @@ import {
   takeUntil,
 } from "rxjs";
 
+import { DeviceType } from "@bitwarden/common/enums";
 import { FingerprintDialogComponent } from "@bitwarden/auth/angular";
 import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";

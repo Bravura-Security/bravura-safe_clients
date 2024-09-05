@@ -64,7 +64,7 @@ import AutofillService from "./autofill.service";
 
 const mockEquivalentDomains = [
   ["example.com", "exampleapp.com", "example.co.uk", "ejemplo.es"],
-  ["bitwarden.com", "bitwarden.co.uk", "sm-bitwarden.com"],
+  ["bravurasecurity.com"],
   ["example.co.uk", "exampleapp.co.uk"],
 ];
 

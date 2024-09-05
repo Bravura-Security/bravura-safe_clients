@@ -49,7 +49,7 @@ const initEventCount = Object.freeze(
 
 let confirmSpy: jest.SpyInstance<boolean, [message?: string]>;
 let windowLocationSpy: jest.SpyInstance<any>;
-let savedURLs: string[] | null = ["https://bitwarden.com"];
+let savedURLs: string[] | null = ["https://bravurasecurity.com"];
 function setMockWindowLocation({
   protocol,
   hostname,
@@ -93,7 +93,7 @@ describe("InsertAutofillContentService", () => {
       },
       metadata: {},
       autosubmit: null,
-      savedUrls: ["https://bitwarden.com"],
+      savedUrls: ["https://bravurasecurity.com"],
       untrustedIframe: false,
       itemType: "login",
     };
@@ -270,7 +270,7 @@ describe("InsertAutofillContentService", () => {
   });
 
   describe("userCancelledInsecureUrlAutofill", () => {
-    const currentHostname = "bitwarden.com";
+    const currentHostname = "bravurasecurity.com";
 
     beforeEach(() => {
       savedURLs = [`https://${currentHostname}`];
@@ -296,7 +296,7 @@ describe("InsertAutofillContentService", () => {
       });
 
       it("on http page and saved URLs contain no https values", () => {
-        savedURLs = ["http://bitwarden.com"];
+        savedURLs = ["http://bravurasecurity.com"];
         setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
 
         const userCancelledInsecureUrlAutofill =
@@ -359,7 +359,7 @@ describe("InsertAutofillContentService", () => {
 
     it("returns false if the vault item contains uris with both secure and insecure uris, but a insecure uri is being used on a insecure web page", () => {
       setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
-      savedURLs = ["http://bitwarden.com", "https://some-other-uri.com"];
+      savedURLs = ["http://bravurasecurity.com", "https://some-other-uri.com"];
 
       const userCancelledInsecureUrlAutofill =
         insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
