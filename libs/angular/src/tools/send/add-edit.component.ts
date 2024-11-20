@@ -78,6 +78,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   emailVerified = true;
   alertShown = false;
   showOptions = false;
+  selectedFileSize: string = null;
 
   protected componentName = "";
   private sendLinkBaseUrl: string;
@@ -307,7 +308,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
 
       file = files[0];
-      if (files[0].size > 1887500000) {
+      const MAX_FILE_SIZE = 1887500000;
+      if (files[0].size > MAX_FILE_SIZE) {
         // 2 GB hard limit to allow some buffer; language texts will 1.8 GB limit
         this.platformUtilsService.showToast(
           "error",
@@ -316,10 +318,19 @@ export class AddEditComponent implements OnInit, OnDestroy {
         );
         return;
       }
+      this.selectedFileSize = Utils.ReadableBytesSize(file.size);
     }
 
     if (Utils.isNullOrWhitespace(this.send.password)) {
       this.send.password = null;
+    }
+
+    if (file){
+      this.platformUtilsService.showToast(
+        "warning",
+        null,
+        this.i18nService.t("fileUploadTime")
+      );
     }
 
     this.formPromise = this.encryptSend(file).then(async (encSend) => {

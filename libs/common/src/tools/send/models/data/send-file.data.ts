@@ -5,6 +5,7 @@ export class SendFileData {
   fileName: string;
   size: string;
   sizeName: string;
+  validated: boolean;
 
   constructor(data?: SendFileApi) {
     if (data == null) {
@@ -15,5 +16,6 @@ export class SendFileData {
     this.fileName = data.fileName;
     this.size = data.size;
     this.sizeName = data.sizeName;
+    this.validated = data.validated;
   }
 }

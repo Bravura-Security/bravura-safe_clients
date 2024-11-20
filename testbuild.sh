@@ -129,6 +129,21 @@ then
             popd
         ;;
 
+    "cli")
+            pushd .
+
+		npm install
+		# npm audit fix
+		npm run prepare
+
+		cd apps
+		cd cli
+
+		npm run dist
+
+            popd
+        ;;
+
 	"web")
 	    echo "building web"
 

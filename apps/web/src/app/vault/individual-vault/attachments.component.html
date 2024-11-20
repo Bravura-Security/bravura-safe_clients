@@ -17,6 +17,7 @@
           class="close"
           data-dismiss="modal"
           appA11yTitle="{{ 'close' | i18n }}"
+          [disabled]="form.loading"
         >
           <span aria-hidden="true">&times;</span>
         </button>
@@ -24,7 +25,8 @@
       <div class="modal-body">
         <table class="table table-hover table-list" *ngIf="cipher && cipher.hasAttachments">
           <tbody>
-            <tr *ngFor="let a of cipher.attachments">
+          <ng-template ngFor let-a [ngForOf]="cipher.attachments">
+            <tr *ngIf="a.validated">
               <td class="table-list-icon">
                 <i
                   class="fa fa-fw fa-lg fa-file-o"
@@ -80,6 +82,7 @@
                 </button>
               </td>
             </tr>
+          </ng-template>
           </tbody>
         </table>
         <div *ngIf="!viewOnly">
@@ -87,9 +90,11 @@
           <label for="file" class="sr-only">{{ "file" | i18n }}</label>
           <input type="file" id="file" class="form-control-file" name="file" required />
           <small class="form-text text-muted">{{ "maxFileSize" | i18n }}</small>
+          <div *ngIf="form.loading">
+            <small class="form-text text-muted"> {{ "fileSize" | i18n : fileSize }}</small>
+            <small class="tw-text-danger">{{ "fileUploadTime" | i18n }}</small>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
         <button
           type="submit"
           class="btn btn-primary btn-submit"
@@ -97,9 +102,13 @@
           *ngIf="!viewOnly"
         >
           <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
-          <span>{{ "save" | i18n }}</span>
+          <span>{{ "add" | i18n }}</span>
         </button>
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+          [disabled]="form.loading"
+        >
           {{ "close" | i18n }}
         </button>
       </div>

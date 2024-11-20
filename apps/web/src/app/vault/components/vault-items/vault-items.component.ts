@@ -45,7 +45,7 @@ export class VaultItemsComponent {
   @Input() showBulkAddToCollections = false;
   @Input() showHeaderCheckboxMenu: boolean;
   @Input() showPermissionsColumn = false;
-  @Input() viewingOrgVault: boolean;
+  @Input() viewingOrgVault = false;
 
   private _ciphers?: CipherView[] = [];
   @Input() get ciphers(): CipherView[] {

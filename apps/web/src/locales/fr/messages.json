@@ -3854,6 +3854,9 @@
   "fourHours": {
     "message": "4 heures"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "Au rechargement de la page"
   },
@@ -5254,6 +5257,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "Le délai d'expiration personnalisé minimum est de 1 minute."
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "Le délai de mise en veille du coffre n'est pas dans l'intervalle de temps autorisé."
@@ -7812,6 +7821,18 @@
     "message": "Formats communs",
     "description": "Label indicating the most common import formats"
   },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser window until file is fully uploaded."
+  },
   "maintainYourSubscription": {
     "message": "Afin de maintenir votre abonnement pour $ORG$, ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'",
@@ -7819,8 +7840,8 @@
       "org": {
         "content": "$1",
         "example": "Example Inc."
-  }
-}
+      }
+    }
   },
   "addAPaymentMethod": {
     "message": "ajouter un moyen de paiement",

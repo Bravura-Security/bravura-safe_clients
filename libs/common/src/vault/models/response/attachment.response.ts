@@ -7,6 +7,7 @@ export class AttachmentResponse extends BaseResponse {
   key: string;
   size: string;
   sizeName: string;
+  validated: boolean;
 
   constructor(response: any) {
     super(response);
@@ -16,5 +17,6 @@ export class AttachmentResponse extends BaseResponse {
     this.key = this.getResponseProperty("Key");
     this.size = this.getResponseProperty("Size");
     this.sizeName = this.getResponseProperty("SizeName");
+    this.validated = this.getResponseProperty("validated") ?? false;
   }
 }

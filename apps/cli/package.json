@@ -2,7 +2,7 @@
   "name": "@bitwarden/cli",
   "description": "A secure password manager for all of your devices.",
   "version": "2024.3.1",
-  "internalVersion": "2024-1.0",
+  "internalVersion": "2024-3.0",
   "keywords": [
     "Bravura Safe",
     "password",

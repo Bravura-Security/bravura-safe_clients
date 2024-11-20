@@ -198,6 +198,7 @@ export class EmergencyAccessComponent implements OnInit {
       } else {
         this.removeGrantor(details);
       }
+      this.load();
     } catch (e) {
       this.logService.error(e);
     }

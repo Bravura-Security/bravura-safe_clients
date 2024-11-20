@@ -82,14 +82,6 @@
       </bit-form-field>
     </div>
 
-    <div class="tw-mb-3">
-      <bit-form-field>
-        <bit-label>{{ "masterPassHintLabel" | i18n }}</bit-label>
-        <input id="register-form_input_hint" bitInput type="text" formControlName="hint" />
-        <bit-hint>{{ "masterPassHintDesc" | i18n }}</bit-hint>
-      </bit-form-field>
-    </div>
-
     <div [hidden]="!showCaptcha()">
       <iframe id="hcaptcha_iframe" height="80" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>

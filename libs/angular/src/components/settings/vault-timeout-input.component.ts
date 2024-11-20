@@ -37,8 +37,22 @@ export class VaultTimeoutInputComponent
     );
   }
 
+  get timeoutInRange(): boolean {
+    if (!this.showCustom) {
+      return true;
+    }
+
+    const customTime = this.customTimeInMinutes();
+    return (
+      customTime >= VaultTimeoutInputComponent.MIN_CUSTOM_RANGE_MINUTES &&
+      customTime <= VaultTimeoutInputComponent.MAX_CUSTOM_RANGE_MINUTES
+    );
+  }
+
   static CUSTOM_VALUE = -100;
   static MIN_CUSTOM_MINUTES = 0;
+  static MIN_CUSTOM_RANGE_MINUTES = 5;
+  static MAX_CUSTOM_RANGE_MINUTES = 480;
 
   form = this.formBuilder.group({
     vaultTimeout: [null],
@@ -96,7 +110,10 @@ export class VaultTimeoutInputComponent
         takeUntil(this.destroy$),
       )
       .subscribe((value) => {
-        const current = Math.max(value, 0);
+        let current = Math.max(value, 0);
+        if(current < VaultTimeoutInputComponent.MIN_CUSTOM_RANGE_MINUTES){
+          current = VaultTimeoutInputComponent.MIN_CUSTOM_RANGE_MINUTES;
+        }
 
         // This cannot emit an event b/c it would cause form.valueChanges to fire again
         // and we are already handling that above so just silently update
@@ -115,6 +132,19 @@ export class VaultTimeoutInputComponent
     this.canLockVault$ = this.vaultTimeoutSettingsService
       .availableVaultTimeoutActions$()
       .pipe(map((actions) => actions.includes(VaultTimeoutAction.Lock)));
+
+    // "Never" option
+    if( this.form.get("vaultTimeout").value === null ){
+      this.form.patchValue(
+        {
+          custom: {
+            hours: 0,
+            minutes: VaultTimeoutInputComponent.MIN_CUSTOM_RANGE_MINUTES,
+          },
+        },
+        { emitEvent: false },
+      );
+    }
   }
 
   ngOnDestroy() {
@@ -179,8 +209,8 @@ export class VaultTimeoutInputComponent
       return { policyError: true };
     }
 
-    if (!this.exceedsMinimumTimout) {
-      return { minTimeoutError: true };
+    if (!this.timeoutInRange) {
+      return { rangeTimeoutError: true };
     }
 
     return null;

@@ -612,6 +612,41 @@ export class Utils {
 
     return null;
   }
+
+  // From server: src/Core/Utilities/CoreHelpers.cs
+  static ReadableBytesSize(size: number): string {
+    // Get absolute value
+    let absoluteSize = (size < 0 ? -size : size);
+
+    // Determine the suffix and readable value
+    let suffix = "";
+    let readable = 0;
+    if (absoluteSize >= parseInt("0x40000000", 16) )// 1 Gigabyte
+    {
+      suffix = "GB";
+      readable = (size / 1048576);
+    }
+    else if (absoluteSize >= parseInt("0x100000", 16) ) // 1 Megabyte
+    {
+      suffix = "MB";
+      readable = (size / 1024);
+    }
+    else if (absoluteSize >= parseInt("0x400", 16) ) // 1 Kilobyte
+    {
+      suffix = "KB";
+      readable = size;
+    }
+    else
+    {
+      return "0 Bytes"; // Byte
+    }
+
+    // Divide by 1024 to get fractional value
+    readable = (readable / 1024);
+
+    // Return formatted number with suffix
+    return (Math.round(readable * 100) / 100).toFixed(2) + " " + suffix;
+    }
 }
 
 Utils.init();

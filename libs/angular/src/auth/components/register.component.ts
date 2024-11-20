@@ -41,6 +41,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   showErrorSummary = false;
   passwordStrengthResult: any;
   characterMinimumMessage: string;
+  maximumNameLength = 128;
   minimumLength = Utils.minimumPasswordLength;
   color: string;
   text: string;
@@ -48,7 +49,7 @@ export class RegisterComponent extends CaptchaProtectedComponent implements OnIn
   formGroup = this.formBuilder.group(
     {
       email: ["", [Validators.required, Validators.email]],
-      name: [""],
+      name: ["", [Validators.maxLength(this.maximumNameLength)]],
       masterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
       confirmMasterPassword: ["", [Validators.required, Validators.minLength(this.minimumLength)]],
       hint: [

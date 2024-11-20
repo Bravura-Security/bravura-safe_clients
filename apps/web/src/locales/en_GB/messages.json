@@ -3854,6 +3854,9 @@
   "fourHours": {
     "message": "4 hours"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "On browser refresh"
   },
@@ -5260,6 +5263,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "Minimum custom timeout is 1 minute."
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "Vault timeout is not within allowed range."
@@ -7813,6 +7822,18 @@
     "message": "Common formats",
     "description": "Label indicating the most common import formats"
   },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser window until file is fully uploaded."
+  },
   "maintainYourSubscription": {
     "message": "To maintain your subscription for $ORG$, ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'",
@@ -7820,8 +7841,8 @@
       "org": {
         "content": "$1",
         "example": "Example Inc."
-  }
-}
+      }
+    }
   },
   "addAPaymentMethod": {
     "message": "add a payment method",

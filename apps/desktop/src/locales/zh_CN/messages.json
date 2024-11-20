@@ -2727,6 +2727,21 @@
     "message": "通用格式",
     "description": "Label indicating the most common import formats"
   },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close application until file is fully uploaded."
+  },
+  "add": {
+    "message": "Add"
+  },
   "troubleshooting": {
     "message": "故障排除"
   },

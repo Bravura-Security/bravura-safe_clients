@@ -16,6 +16,7 @@ import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { AttachmentView } from "@bitwarden/common/vault/models/view/attachment.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { DialogService } from "@bitwarden/components";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Directive()
 export class AttachmentsComponent implements OnInit {
@@ -32,6 +33,7 @@ export class AttachmentsComponent implements OnInit {
   reuploadPromises: { [id: string]: Promise<any> } = {};
   emergencyAccessId?: string = null;
   protected componentName = "";
+  fileSize: string = null;
 
   constructor(
     protected cipherService: CipherService,
@@ -63,7 +65,8 @@ export class AttachmentsComponent implements OnInit {
       return;
     }
 
-    if (files[0].size > 1887500000) {
+    const MAX_FILE_SIZE = 1887500000;
+    if (files[0].size > MAX_FILE_SIZE) {
       // 2 GB hard limit to allow some buffer; language texts will 1.8 GB limit
       this.platformUtilsService.showToast(
         "error",
@@ -72,6 +75,18 @@ export class AttachmentsComponent implements OnInit {
       );
       return;
     }
+
+    this.fileSize = Utils.ReadableBytesSize(files[0].size);
+
+    this.platformUtilsService.showToast(
+      "warning",
+      null,
+      this.i18nService.t("fileUploadTime")
+    );
+
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+    });
 
     try {
       this.formPromise = this.saveCipherAttachment(files[0]);

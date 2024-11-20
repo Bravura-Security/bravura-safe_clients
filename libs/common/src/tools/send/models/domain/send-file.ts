@@ -11,6 +11,7 @@ export class SendFile extends Domain {
   size: string;
   sizeName: string;
   fileName: EncString;
+  validated: boolean;
 
   constructor(obj?: SendFileData) {
     super();
@@ -26,8 +27,9 @@ export class SendFile extends Domain {
         id: null,
         sizeName: null,
         fileName: null,
+        validated: null,
       },
-      ["id", "sizeName"],
+      ["id", "sizeName", "validated"],
     );
   }
 

@@ -541,10 +541,11 @@
       {{ "attachments" | i18n }}
     </h2>
     <div class="box-content single-line">
+    <ng-template ngFor let-attachment [ngForOf]="cipher.attachments">
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
-        *ngFor="let attachment of cipher.attachments"
+        *ngIf="attachment.validated"
         appStopClick
         (click)="downloadAttachment(attachment)"
       >
@@ -561,6 +562,7 @@
           aria-hidden="true"
         ></i>
       </button>
+    </ng-template>
     </div>
   </div>
   <div class="box list">

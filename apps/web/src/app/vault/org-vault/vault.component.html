@@ -66,7 +66,10 @@
         (showBulkEditCollectionAccess$ | async) && organization?.flexibleCollections
       "
       [showBulkAddToCollections]="organization?.flexibleCollections"
-        [viewingOrgVault]="true"
+        [viewingOrgVault]="
+          (filter.type === undefined && filter.collectionId === undefined) ||
+            filter.collectionId !== undefined
+        "
         [showHeaderCheckboxMenu]="true"
       >
       </app-vault-items>

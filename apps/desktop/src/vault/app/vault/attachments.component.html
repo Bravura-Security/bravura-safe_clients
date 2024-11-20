@@ -7,7 +7,8 @@
             {{ "attachments" | i18n }}
           </h1>
           <div class="box-content no-hover">
-            <div class="box-content-row box-content-row-flex" *ngFor="let a of cipher.attachments">
+          <ng-template ngFor let-a [ngForOf]="cipher.attachments">
+            <div class="box-content-row box-content-row-flex" *ngIf="a.validated">
               <div class="row-main">
                 {{ a.fileName }}
               </div>
@@ -36,6 +37,7 @@
                 </button>
               </div>
             </div>
+          </ng-template>
           </div>
         </div>
         <div class="box">
@@ -46,6 +48,10 @@
             <div class="box-content-row">
               <label for="file">{{ "file" | i18n }}</label>
               <input type="file" id="file" name="file" aria-describedby="fileHelp" required />
+              <div *ngIf="form.loading">
+                <small class="form-text text-muted"> {{ "fileSize" | i18n : fileSize }}</small><br>
+                <small class="tw-text-danger">{{ "fileUploadTime" | i18n }}</small>
+              </div>
             </div>
           </div>
           <div id="fileHelp" class="box-footer">
@@ -57,7 +63,7 @@
         <button
           type="submit"
           class="primary"
-          appA11yTitle="{{ 'save' | i18n }}"
+          appA11yTitle="{{ 'add' | i18n }}"
           [disabled]="form.loading"
         >
           <i
@@ -71,7 +77,7 @@
             aria-hidden="true"
           ></i>
         </button>
-        <button type="button" data-dismiss="modal">{{ "close" | i18n }}</button>
+        <button type="button" data-dismiss="modal" [disabled]="form.loading">{{ "close" | i18n }}</button>
       </div>
     </form>
   </div>

@@ -54,12 +54,12 @@ export class PreferencesComponent implements OnInit {
     private dialogService: DialogService,
   ) {
     this.vaultTimeoutOptions = [
-      { name: i18nService.t("oneMinute"), value: 1 },
       { name: i18nService.t("fiveMinutes"), value: 5 },
       { name: i18nService.t("fifteenMinutes"), value: 15 },
       { name: i18nService.t("thirtyMinutes"), value: 30 },
       { name: i18nService.t("oneHour"), value: 60 },
       { name: i18nService.t("fourHours"), value: 240 },
+      { name: i18nService.t("eightHours"), value: 480 },
       { name: i18nService.t("onRefresh"), value: -1 },
     ];
     if (this.platformUtilsService.isDev()) {
@@ -148,7 +148,7 @@ export class PreferencesComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("vaultTimeoutRangeError"),
+        this.i18nService.t("vaultCustomTimeoutRangeError"),
       );
       return;
     }

@@ -3854,6 +3854,9 @@
   "fourHours": {
     "message": "4 Stunden"
   },
+  "eightHours": {
+    "message": "8 hours"
+  },
   "onRefresh": {
     "message": "Bei Browser-Aktualisierung"
   },
@@ -5260,6 +5263,12 @@
   },
   "vaultCustomTimeoutMinimum": {
     "message": "Minimales benutzerdefiniertes Timeout beträgt 1 Minute."
+  },
+  "vaultCustomTimeoutRange": {
+    "message": "Minimum custom timeout is 5 minutes, maximum is 8 hours."
+  },
+  "vaultCustomTimeoutRangeError": {
+    "message": "Vault custom timeout is not within allowed range."
   },
   "vaultTimeoutRangeError": {
     "message": "Tresor-Timeout ist außerhalb des zulässigen Bereichs."
@@ -7825,12 +7834,24 @@
       "org": {
         "content": "$1",
         "example": "Example Inc."
-  }
-}
+      }
+    }
   },
   "addAPaymentMethod": {
     "message": "füge eine Zahlungsmethode hinzu",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
+  },
+  "fileSize": {
+    "message": "File size: $SIZE$",
+    "placeholders": {
+      "size": {
+        "content": "$1",
+        "example": "20 MB"
+      }
+    }
+  },
+  "fileUploadTime": {
+    "message": "File upload can take a long time, do not close browser window until file is fully uploaded."
   },
   "collectionEnhancementsDesc": {
     "message": "Füge neue Einstellungen und Berechtigungen für zusätzliche Flexibilität hinzu. Ersetze die Rolle des Managers durch die Berechtigung \"kann verwalten\" und führe Optionen ein, die es Benutzern ermöglichen, Sammlungen zu erstellen sowie den administrativen Zugriff auf Sammlungen zu beschränken.",
