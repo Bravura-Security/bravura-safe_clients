@@ -37,5 +37,7 @@
 	<array>
 		<string>com.hitachiid.desktop.safari</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
