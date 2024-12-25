@@ -55,7 +55,7 @@ const RateUrls = {
     "https://addons.opera.com/en/extensions/details/***/#feedback-container",
   [DeviceType.EdgeExtension]: "https://microsoftedge.microsoft.com/addons/detail/bravura-safe/lgjgabmkhcjfpcmflkhmhjgmnnpfgmnc",
   [DeviceType.VivaldiExtension]: "https://chromewebstore.google.com/detail/bravura-safe/cjidmfgdjckibjdfnglfdgohkaballnn/reviews",
-  [DeviceType.SafariExtension]: "https://apps.apple.com/app/***/***",
+  [DeviceType.SafariExtension]: "https://apps.apple.com/us/app/bravura-safe/id1635873468",
 };
 
 @Component({

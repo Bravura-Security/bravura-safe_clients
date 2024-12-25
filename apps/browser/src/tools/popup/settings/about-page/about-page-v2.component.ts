@@ -17,16 +17,16 @@ import { AboutDialogComponent } from "../about-dialog/about-dialog.component";
 
 const RateUrls = {
   [DeviceType.ChromeExtension]:
-    "https://chromewebstore.google.com/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb/reviews",
+    "https://chromewebstore.google.com/detail/bravura-safe/cjidmfgdjckibjdfnglfdgohkaballnn/reviews",
   [DeviceType.FirefoxExtension]:
-    "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/#reviews",
+    "https://addons.mozilla.org/en-US/firefox/addon/***/#reviews",
   [DeviceType.OperaExtension]:
-    "https://addons.opera.com/en/extensions/details/bitwarden-free-password-manager/#feedback-container",
+    "https://addons.opera.com/en/extensions/details/***/#feedback-container",
   [DeviceType.EdgeExtension]:
-    "https://microsoftedge.microsoft.com/addons/detail/jbkfoedolllekgbhcbcoahefnbanhhlh",
+    "https://microsoftedge.microsoft.com/addons/detail/bravura-safe/lgjgabmkhcjfpcmflkhmhjgmnnpfgmnc",
   [DeviceType.VivaldiExtension]:
-    "https://chromewebstore.google.com/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb/reviews",
-  [DeviceType.SafariExtension]: "https://apps.apple.com/app/bitwarden/id1352778147",
+    "https://chromewebstore.google.com/detail/bravura-safe/cjidmfgdjckibjdfnglfdgohkaballnn/reviews",
+  [DeviceType.SafariExtension]: "https://apps.apple.com/us/app/bravura-safe/id1635873468",
 };
 
 @Component({
