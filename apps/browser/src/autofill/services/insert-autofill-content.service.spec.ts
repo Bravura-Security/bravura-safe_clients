@@ -1,6 +1,7 @@
 import { EVENTS } from "@bitwarden/common/autofill/constants";
 
 import AutofillScript, { FillScript, FillScriptActions } from "../models/autofill-script";
+import { mockQuerySelectorAllDefinedCall } from "../spec/testing-utils";
 import { FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
 
 import AutofillOverlayContentService from "./autofill-overlay-content.service";
@@ -47,8 +48,8 @@ const initEventCount = Object.freeze(
 );
 
 let confirmSpy: jest.SpyInstance<boolean, [message?: string]>;
-let windowSpy: jest.SpyInstance<any>;
-let savedURLs: string[] | null = ["https://bitwarden.com"];
+let windowLocationSpy: jest.SpyInstance<any>;
+let savedURLs: string[] | null = ["https://bravurasecurity.com"];
 function setMockWindowLocation({
   protocol,
   hostname,
@@ -56,11 +57,9 @@ function setMockWindowLocation({
   protocol: "http:" | "https:";
   hostname: string;
 }) {
-  windowSpy.mockImplementation(() => ({
-    location: {
-      protocol,
-      hostname,
-    },
+  windowLocationSpy.mockImplementation(() => ({
+    protocol,
+    hostname,
   }));
 }
 
@@ -73,11 +72,12 @@ describe("InsertAutofillContentService", () => {
   );
   let insertAutofillContentService: InsertAutofillContentService;
   let fillScript: AutofillScript;
+  const mockQuerySelectorAll = mockQuerySelectorAllDefinedCall();
 
   beforeEach(() => {
     document.body.innerHTML = mockLoginForm;
-    confirmSpy = jest.spyOn(window, "confirm");
-    windowSpy = jest.spyOn(window, "window", "get");
+    confirmSpy = jest.spyOn(globalThis, "confirm");
+    windowLocationSpy = jest.spyOn(globalThis, "location", "get");
     insertAutofillContentService = new InsertAutofillContentService(
       domElementVisibilityService,
       collectAutofillContentService,
@@ -93,17 +93,22 @@ describe("InsertAutofillContentService", () => {
       },
       metadata: {},
       autosubmit: null,
-      savedUrls: ["https://bitwarden.com"],
+      savedUrls: ["https://bravurasecurity.com"],
       untrustedIframe: false,
       itemType: "login",
     };
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    windowSpy.mockRestore();
+    jest.restoreAllMocks();
+    jest.clearAllTimers();
+    windowLocationSpy.mockRestore();
     confirmSpy.mockRestore();
     document.body.innerHTML = "";
+  });
+
+  afterAll(() => {
+    mockQuerySelectorAll.mockRestore();
   });
 
   describe("fillForm", () => {
@@ -245,8 +250,8 @@ describe("InsertAutofillContentService", () => {
     });
 
     it("returns true if the frameElement has a sandbox attribute", () => {
-      Object.defineProperty(globalThis, "window", {
-        value: { frameElement: { hasAttribute: jest.fn(() => true) } },
+      Object.defineProperty(globalThis, "frameElement", {
+        value: { hasAttribute: jest.fn(() => true) },
         writable: true,
       });
 
@@ -265,7 +270,7 @@ describe("InsertAutofillContentService", () => {
   });
 
   describe("userCancelledInsecureUrlAutofill", () => {
-    const currentHostname = "bitwarden.com";
+    const currentHostname = "bravurasecurity.com";
 
     beforeEach(() => {
       savedURLs = [`https://${currentHostname}`];
@@ -291,7 +296,7 @@ describe("InsertAutofillContentService", () => {
       });
 
       it("on http page and saved URLs contain no https values", () => {
-        savedURLs = ["http://bitwarden.com"];
+        savedURLs = ["http://bravurasecurity.com"];
         setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
 
         const userCancelledInsecureUrlAutofill =
@@ -354,7 +359,7 @@ describe("InsertAutofillContentService", () => {
 
     it("returns false if the vault item contains uris with both secure and insecure uris, but a insecure uri is being used on a insecure web page", () => {
       setMockWindowLocation({ protocol: "http:", hostname: currentHostname });
-      savedURLs = ["http://bitwarden.com", "https://some-other-uri.com"];
+      savedURLs = ["http://bravurasecurity.com", "https://some-other-uri.com"];
 
       const userCancelledInsecureUrlAutofill =
         insertAutofillContentService["userCancelledInsecureUrlAutofill"](savedURLs);
@@ -991,11 +996,11 @@ describe("InsertAutofillContentService", () => {
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       inputElement.value = "test";
       jest.spyOn(inputElement, "focus");
-      jest.spyOn(window, "String");
+      jest.spyOn(globalThis, "String");
 
       insertAutofillContentService["triggerFocusOnElement"](inputElement, true);
 
-      expect(window.String).toHaveBeenCalledWith(value);
+      expect(globalThis.String).toHaveBeenCalledWith(value);
       expect(inputElement.focus).toHaveBeenCalled();
       expect(inputElement.value).toEqual(value);
     });
@@ -1005,11 +1010,11 @@ describe("InsertAutofillContentService", () => {
       const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
       inputElement.value = "test";
       jest.spyOn(inputElement, "focus");
-      jest.spyOn(window, "String");
+      jest.spyOn(globalThis, "String");
 
       insertAutofillContentService["triggerFocusOnElement"](inputElement, false);
 
-      expect(window.String).not.toHaveBeenCalledWith();
+      expect(globalThis.String).not.toHaveBeenCalledWith();
       expect(inputElement.focus).toHaveBeenCalled();
       expect(inputElement.value).toEqual(value);
     });

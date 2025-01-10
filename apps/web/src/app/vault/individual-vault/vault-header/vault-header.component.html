@@ -1,7 +1,3 @@
-<!--
-<app-header [title]="title" [icon]="icon">
-  <bit-breadcrumbs *ngIf="showBreadcrumbs" slot="breadcrumbs">
--->
 <div class="tw-mb-4 tw-flex tw-items-start tw-justify-between page-header">
   <div>
     <bit-breadcrumbs *ngIf="showBreadcrumbs">
@@ -16,7 +12,7 @@
       <ng-container>
         <bit-breadcrumb
           *ngFor="let collection of collections"
-          icon="fa-collection"
+          icon="fa-cube"
           [route]="[]"
           [queryParams]="{ collectionId: collection.id }"
           queryParamsHandling="merge"
@@ -25,11 +21,6 @@
         </bit-breadcrumb>
       </ng-container>
     </bit-breadcrumbs>
-  <!--
-
-  <ng-container slot="title-suffix">
-    <ng-container *ngIf="collection != null && (canEditCollection || canDeleteCollection)">
-  -->
     <h1 class="tw-mb-0 tw-mt-1 tw-flex tw-items-center tw-space-x-2">
       <i
         *ngIf="filter.collectionId && filter.collectionId !== All"
@@ -80,9 +71,6 @@
       ></i>
         <span class="tw-sr-only">{{ "loading" | i18n }}</span>
       </small>
-  <!--
-  </ng-container>
-  -->
     </h1>
   </div>
 
@@ -114,7 +102,4 @@
       </bit-menu>
     </div>
   </div>
-<!--
-</app-header>
--->
 </div>

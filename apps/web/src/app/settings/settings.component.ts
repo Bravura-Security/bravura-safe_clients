@@ -16,7 +16,6 @@ const BroadcasterSubscriptionId = "SettingsComponent";
 export class SettingsComponent implements OnInit, OnDestroy {
   premium: boolean;
   selfHosted: boolean;
-  hasFamilySponsorshipAvailable: boolean;
   hideSubscription: boolean;
 
   constructor(
@@ -54,7 +53,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.premium = await firstValueFrom(
       this.billingAccountProfileStateServiceAbstraction.hasPremiumPersonally$,
     );
-    this.hasFamilySponsorshipAvailable = await this.organizationService.canManageSponsorships();
     const hasPremiumFromOrg = await firstValueFrom(
       this.billingAccountProfileStateServiceAbstraction.hasPremiumFromAnyOrganization$,
     );

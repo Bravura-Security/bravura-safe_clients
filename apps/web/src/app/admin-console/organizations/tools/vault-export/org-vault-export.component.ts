@@ -5,13 +5,11 @@ import { ActivatedRoute } from "@angular/router";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EventType } from "@bitwarden/common/enums";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { VaultExportServiceAbstraction } from "@bitwarden/vault-export-core";
 
 import { ExportComponent } from "../../../../tools/vault-export/export.component";
@@ -24,13 +22,12 @@ import { ExportComponent } from "../../../../tools/vault-export/export.component
 export class OrganizationVaultExportComponent extends ExportComponent {
   constructor(
     i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService,
+    toastService: ToastService,
     exportService: VaultExportServiceAbstraction,
     eventCollectionService: EventCollectionService,
     private route: ActivatedRoute,
     policyService: PolicyService,
     logService: LogService,
-    userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
     fileDownloadService: FileDownloadService,
     dialogService: DialogService,
@@ -38,12 +35,11 @@ export class OrganizationVaultExportComponent extends ExportComponent {
   ) {
     super(
       i18nService,
-      platformUtilsService,
+      toastService,
       exportService,
       eventCollectionService,
       policyService,
       logService,
-      userVerificationService,
       formBuilder,
       fileDownloadService,
       dialogService,

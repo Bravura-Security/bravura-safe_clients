@@ -1,33 +1,3 @@
-<!--
-<bit-banner
-  class="-tw-m-6 tw-flex tw-flex-col tw-pb-6"
-  (onClose)="unassignedItemsBannerService.hideBanner()"
-  *ngIf="
-    (unassignedItemsBannerEnabled$ | async) &&
-    (unassignedItemsBannerService.showBanner$ | async) &&
-    !(unassignedItemsBannerService.loading$ | async)
-  "
->
-  {{ unassignedItemsBannerService.bannerText$ | async | i18n }}
-  {{ "unassignedItemsBannerCTAPartOne" | i18n }}
-  <a
-    [href]="unassignedItemsBannerService.adminConsoleUrl$ | async"
-    bitLink
-    linkType="contrast"
-    rel="noreferrer"
-    >{{ "adminConsole" | i18n }}</a
-  >
-  {{ "unassignedItemsBannerCTAPartTwo" | i18n }}
-  <a
-    href="https://bitwarden.com/help/unassigned-vault-items-moved-to-admin-console"
-    bitLink
-    linkType="contrast"
-    target="_blank"
-    rel="noreferrer"
-    >{{ "learnMore" | i18n }}</a
-  >
-</bit-banner>
--->
 <header
   *ngIf="routeData$ | async as routeData"
   class="-tw-m-6 tw-mb-3 tw-flex tw-flex-col tw-p-6"
@@ -40,7 +10,6 @@
     <div class="tw-flex tw-min-w-0 tw-flex-1 tw-flex-col tw-gap-2">
       <ng-content select="[slot=breadcrumbs]"></ng-content>
       <h1
-        bitTypography="h1"
         noMargin
         class="tw-m-0 tw-mr-2 tw-truncate tw-leading-10"
         [title]="title || (routeData.titleId | i18n)"
@@ -60,7 +29,7 @@
             [bitMenuTriggerFor]="accountMenu"
             class="tw-border-0 tw-bg-transparent tw-p-0"
           >
-            <dynamic-avatar [id]="account.userId" [text]="account | userName"></dynamic-avatar>
+            <dynamic-avatar [id]="account.id" [text]="account | userName"></dynamic-avatar>
           </button>
 
           <bit-menu #accountMenu>
@@ -69,7 +38,7 @@
                 class="tw-flex tw-items-center tw-px-4 tw-py-1 tw-leading-tight tw-text-info"
                 appStopProp
               >
-                <dynamic-avatar [id]="account.userId" [text]="account | userName"></dynamic-avatar>
+                <dynamic-avatar [id]="account.id" [text]="account | userName"></dynamic-avatar>
                 <div class="tw-ml-2 tw-block tw-overflow-hidden tw-whitespace-nowrap">
                   <span>{{ "loggedInAs" | i18n }}</span>
                   <small class="tw-block tw-overflow-hidden tw-whitespace-nowrap tw-text-muted">
@@ -91,21 +60,6 @@
                 <i class="fa fa-fw fa-user" aria-hidden="true"></i>
                 {{ "accountSettings" | i18n }}
               </a>
-              <!--
-              <a bitMenuItem href="https://bitwarden.com/help/" target="_blank" rel="noreferrer">
-                <i class="fa fa-fw fa-question-circle" aria-hidden="true"></i>
-                {{ "getHelp" | i18n }}
-              </a>
-              <a
-                bitMenuItem
-                href="https://bitwarden.com/download/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <i class="fa fa-fw fa-download" aria-hidden="true"></i>
-                {{ "getApps" | i18n }}
-              </a>
-              -->
 
               <bit-menu-divider></bit-menu-divider>
 

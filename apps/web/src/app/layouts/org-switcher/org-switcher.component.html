@@ -2,7 +2,7 @@
   *ngIf="activeOrganization$ | async as activeOrganization"
   [text]="activeOrganization.name"
   [ariaLabel]="['organization' | i18n, activeOrganization.name].join(' ')"
-  icon="fa-business"
+  icon="fa-building"
   [route]="['../', activeOrganization.id]"
   [routerLinkActiveOptions]="{ exact: true }"
   [(open)]="open"

@@ -1,3 +1,8 @@
+<ng-container
+  *ngIf="{
+    selectedRegion: selectedRegion$ | async
+  } as data"
+>
 <div class="environment-selector-btn">
   {{ "loggingInOn" | i18n }}:
   <button
@@ -9,8 +14,8 @@
     aria-controls="cdk-overlay-container"
   >
     <span class="text-primary">
-      <ng-container *ngIf="selectedRegion$ | async as selectedRegion; else fallback">
-        {{ selectedRegion.domain }}
+        <ng-container *ngIf="data.selectedRegion; else fallback">
+          {{ data.selectedRegion.domain }}
       </ng-container>
       <ng-template #fallback>
         {{ "selfHostedServer" | i18n }}
@@ -40,40 +45,37 @@
       aria-modal="true"
     >
       <ng-container *ngFor="let region of availableRegions">
-      <button
-        type="button"
-        class="environment-selector-dialog-item"
+          <button
+            type="button"
+            class="environment-selector-dialog-item"
           (click)="toggle(region.key)"
-          [attr.aria-pressed]="selectedEnvironment === region.key ? 'true' : 'false'"
-      >
-        <i
+            [attr.aria-pressed]="data.selectedRegion === region ? 'true' : 'false'"
+          >
+            <i
           class="fa fa-fw fa-sm fa-check"
-          style="padding-bottom: 1px"
-          aria-hidden="true"
-            [style.visibility]="selectedEnvironment === region.key ? 'visible' : 'hidden'"
-        ></i>
+              style="padding-bottom: 1px"
+              aria-hidden="true"
+              [style.visibility]="data.selectedRegion === region ? 'visible' : 'hidden'"
+            ></i>
           <span>{{ region.domain }}</span>
-      </button>
-      <br />
+          </button>
+          <br />
       </ng-container>
       <button
         type="button"
         class="environment-selector-dialog-item"
         (click)="toggle(ServerEnvironmentType.SelfHosted)"
-        [attr.aria-pressed]="
-          selectedEnvironment === ServerEnvironmentType.SelfHosted ? 'true' : 'false'
-        "
+          [attr.aria-pressed]="data.selectedRegion ? 'false' : 'true'"
       >
         <i
           class="fa fa-fw fa-sm fa-check"
           style="padding-bottom: 1px"
           aria-hidden="true"
-          [style.visibility]="
-            selectedEnvironment === ServerEnvironmentType.SelfHosted ? 'visible' : 'hidden'
-          "
+            [style.visibility]="data.selectedRegion ? 'hidden' : 'visible'"
         ></i>
         <span>{{ "selfHostedServer" | i18n }}</span>
       </button>
     </div>
   </div>
 </ng-template>
+</ng-container>

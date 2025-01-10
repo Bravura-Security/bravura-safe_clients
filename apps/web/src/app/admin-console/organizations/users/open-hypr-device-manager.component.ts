@@ -1,5 +1,5 @@
 import { HyprAuthenticationRequestModel } from "@bitwarden/common/vault/models/request/hyprAuthenticationRequestModel";
-import { DIALOG_DATA, DialogRef } from "@angular/cdk/dialog";
+import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
@@ -17,17 +17,17 @@ import { TwoFactorHyprAuthGetMagicLink } from "@bitwarden/common/auth/models/res
 
 import { DialogService } from "@bitwarden/components";
 
-interface OpenHyprDeviceManagerData {
+export type OpenHyprDeviceManagerData = {
   organization: Organization;
   userId: string;
-}
+};
 
 @Component({
   selector: "app-open-hypr-device-manager",
   templateUrl: "open-hypr-device-manager.component.html",
 })
 export class OpenHyprDeviceManager {
-  protected formGroup = new FormGroup({});
+  formGroup = new FormGroup({});
   protected organization: Organization;
   protected userId: string;
 
@@ -56,7 +56,6 @@ export class OpenHyprDeviceManager {
         Team: this.organization.id
       };
       const r: TwoFactorHyprAuthGetMagicLink = await this.apiService.postGoToHyprManagement(hyprAuthenticationRequestModel);
-      //console.log(r.url);
       this.platformUtilsService.showToast("success", null, this.i18nService.t("twoFactorHyprOpeningDeviceManager"));
       this.dialogRef.close();
       setTimeout(function(url){
@@ -67,7 +66,7 @@ export class OpenHyprDeviceManager {
     }
   };
 
-  static open(dialogService: DialogService, data: OpenHyprDeviceManagerData) {
-    return dialogService.open(OpenHyprDeviceManager, { data });
+  static open(dialogService: DialogService, config: DialogConfig<OpenHyprDeviceManagerData>) {
+    return dialogService.open(OpenHyprDeviceManager, config);
   }
 }

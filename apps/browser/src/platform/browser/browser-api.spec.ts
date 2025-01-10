@@ -235,6 +235,46 @@ describe("BrowserApi", () => {
     });
   });
 
+  describe("getFrameDetails", () => {
+    it("returns the frame details of the specified frame", async () => {
+      const tabId = 1;
+      const frameId = 2;
+      const mockFrameDetails = mock<chrome.webNavigation.GetFrameResultDetails>();
+      chrome.webNavigation.getFrame = jest
+        .fn()
+        .mockImplementation((_details, callback) => callback(mockFrameDetails));
+
+      const returnFrame = await BrowserApi.getFrameDetails({ tabId, frameId });
+
+      expect(chrome.webNavigation.getFrame).toHaveBeenCalledWith(
+        { tabId, frameId },
+        expect.any(Function),
+      );
+      expect(returnFrame).toEqual(mockFrameDetails);
+    });
+  });
+
+  describe("getAllFrameDetails", () => {
+    it("returns all sub frame details of the specified tab", async () => {
+      const tabId = 1;
+      const mockFrameDetails1 = mock<chrome.webNavigation.GetAllFrameResultDetails>();
+      const mockFrameDetails2 = mock<chrome.webNavigation.GetAllFrameResultDetails>();
+      chrome.webNavigation.getAllFrames = jest
+        .fn()
+        .mockImplementation((_details, callback) =>
+          callback([mockFrameDetails1, mockFrameDetails2]),
+        );
+
+      const frames = await BrowserApi.getAllFrameDetails(tabId);
+
+      expect(chrome.webNavigation.getAllFrames).toHaveBeenCalledWith(
+        { tabId },
+        expect.any(Function),
+      );
+      expect(frames).toEqual([mockFrameDetails1, mockFrameDetails2]);
+    });
+  });
+
   describe("reloadExtension", () => {
     it("reloads the window location if the passed globalContext is for the window", () => {
       const windowMock = mock<Window>({
@@ -525,29 +565,34 @@ describe("BrowserApi", () => {
     });
   });
 
-  describe("createOffscreenDocument", () => {
-    it("creates the offscreen document with the supplied reasons and justification", async () => {
-      const reasons = [chrome.offscreen.Reason.CLIPBOARD];
-      const justification = "justification";
+  describe("registerContentScriptsMv2", () => {
+    const details: browser.contentScripts.RegisteredContentScriptOptions = {
+      matches: ["<all_urls>"],
+      js: [{ file: "content/fido2/page-script.js" }],
+    };
 
-      await BrowserApi.createOffscreenDocument(reasons, justification);
-
-      expect(chrome.offscreen.createDocument).toHaveBeenCalledWith({
-        url: "offscreen-document/index.html",
-        reasons,
-        justification,
+    it("registers content scripts through the `browser.contentScripts` API when the API is available", async () => {
+      globalThis.browser = mock<typeof browser>({
+        contentScripts: { register: jest.fn() },
       });
+
+      await BrowserApi.registerContentScriptsMv2(details);
+
+      expect(browser.contentScripts.register).toHaveBeenCalledWith(details);
     });
-  });
 
-  describe("closeOffscreenDocument", () => {
-    it("closes the offscreen document", () => {
-      const callbackMock = jest.fn();
+    it("registers content scripts through the `registerContentScriptsPolyfill` when the `browser.contentScripts.register` API is not available", async () => {
+      globalThis.browser = mock<typeof browser>({
+        contentScripts: { register: undefined },
+      });
+      jest.spyOn(BrowserApi, "addListener");
 
-      BrowserApi.closeOffscreenDocument(callbackMock);
+      await BrowserApi.registerContentScriptsMv2(details);
 
-      expect(chrome.offscreen.closeDocument).toHaveBeenCalled();
-      expect(callbackMock).toHaveBeenCalled();
+      expect(BrowserApi.addListener).toHaveBeenCalledWith(
+        chrome.webNavigation.onCommitted,
+        expect.any(Function),
+      );
     });
   });
 });

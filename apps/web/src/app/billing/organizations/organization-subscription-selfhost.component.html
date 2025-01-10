@@ -1,8 +1,3 @@
-<!--
-<app-header></app-header>
-
-<bit-container>
--->
 <div class="page-header">
   <h1>
     {{ "subscription" | i18n }}
@@ -42,7 +37,7 @@
         "subscriptionExpiration" | i18n
       }}</span>
       <a
-        href="https://bitwarden.com/help/licensing-on-premise/#update-organization-license"
+        href="https://bravurasafe.com/help/licensing-on-premise/#update-organization-license"
         target="_blank"
         [appA11yTitle]="'licensePaidFeaturesHelp' | i18n"
           rel="noreferrer"
@@ -58,7 +53,10 @@
           : subscription.expirationWithGracePeriod
         ) | date: "mediumDate"
       }}
-      <div *ngIf="subscription.hasSeparateGracePeriod" class="tw-text-muted">
+        <div
+          *ngIf="subscription.hasSeparateGracePeriod && !subscription.isInTrial"
+          class="tw-text-muted"
+        >
         {{
           "selfHostGracePeriodHelp"
             | i18n: (subscription.expirationWithGracePeriod | date: "mediumDate")
@@ -127,6 +125,3 @@
     </bit-radio-group>
   </form>
 </ng-container>
-<!--
-</bit-container>
--->

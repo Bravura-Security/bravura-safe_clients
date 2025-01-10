@@ -116,14 +116,25 @@
             </div>
             <!--Passkey-->
             <div
-              class="box-content-row text-muted"
+              class="box-content-row box-content-row-multi text-muted"
               *ngIf="cipher.login.hasFido2Credentials && !cloneMode"
               appBoxRow
               tabindex="0"
               attr.aria-label="{{ 'typePasskey' | i18n }} {{ fido2CredentialCreationDateValue }}"
             >
-              <span class="row-label">{{ "typePasskey" | i18n }}</span>
-              {{ fido2CredentialCreationDateValue }}
+              <button
+                type="button"
+                appStopClick
+                (click)="removePasskey()"
+                appA11yTitle="{{ 'removePasskey' | i18n }}"
+                *ngIf="!(!cipher.edit && editMode)"
+              >
+                <i class="fa fa-fw fa-minus-circle fa-lg" aria-hidden="true"></i>
+              </button>
+              <div class="row-main">
+                <span class="row-label">{{ "typePasskey" | i18n }}</span>
+                {{ fido2CredentialCreationDateValue }}
+              </div>
             </div>
 
             <div class="box-content-row" appBoxRow>
@@ -477,7 +488,7 @@
                 appStopClick
                 (click)="removeUri(u)"
                 appA11yTitle="{{ 'remove' | i18n }}"
-                [disabled]="!cipher.edit && editMode"
+                *ngIf="!(!cipher.edit && editMode)"
               >
                 <i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>
               </button>
@@ -489,6 +500,7 @@
                   name="Login.Uris[{{ i }}].Uri"
                   [(ngModel)]="u.uri"
                   placeholder="{{ 'ex' | i18n }} https://google.com"
+                  [readonly]="!cipher.edit && editMode"
                   appInputVerbatim
                 />
                 <label for="loginUriMatch{{ i }}" class="sr-only">
@@ -522,6 +534,7 @@
                       ($any(u).showOptions == null && u.match == null)
                     )
                   "
+                  [disabled]="!cipher.edit && editMode"
                 >
                   <i class="fa fa-lg fa-cog" aria-hidden="true"></i>
                 </button>

@@ -23,7 +23,7 @@ export class SecretsManagerContentComponent implements OnInit, OnDestroy {
   private paidCalloutHeadline = "Limited time offer";
 
   private paidCallouts = [
-    "Sign up today and receive a complimentary 12-month subscription to Bitwarden Password Manager",
+    "Sign up today and receive a complimentary 12-month subscription to Bravura Safe Password Manager",
     "Experience complete security across your organization",
     "Secure all your sensitive credentials, from user applications to machine secrets",
   ];
@@ -37,7 +37,7 @@ export class SecretsManagerContentComponent implements OnInit, OnDestroy {
   private freeCalloutHeadline = "Go beyond developer security!";
 
   private freeCallouts = [
-    "Your Bitwarden account will also grant complimentary access to Bitwarden Password Manager",
+    "Your Bravura Safe account will also grant complimentary access to Bravura Safe Password Manager",
     "Extend end-to-end encryption to your personal passwords, addresses, credit cards and notes",
   ];
 
@@ -60,7 +60,7 @@ export class SecretsManagerContentComponent implements OnInit, OnDestroy {
           this.callouts = this.paidCallouts;
           break;
         case "free":
-          this.header = "Bitwarden Secrets Manager";
+          this.header = "Bravura Safe Secrets Manager";
           this.primaryPoints = this.freePrimaryPoints;
           this.calloutHeadline = this.freeCalloutHeadline;
           this.callouts = this.freeCallouts;

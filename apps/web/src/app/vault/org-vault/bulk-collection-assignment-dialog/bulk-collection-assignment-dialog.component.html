@@ -33,13 +33,13 @@
       <ng-template body>
         <tr bitRow *ngFor="let item of selectedCollections; let i = index">
           <td bitCell>
-            <i class="bwi bwi-collection" aria-hidden="true"></i>
+            <i class="fa fa-cube" aria-hidden="true"></i>
             {{ item.labelName }}
           </td>
           <td bitCell class="tw-text-right">
             <button
               type="button"
-              bitIconButton="bwi-close"
+              bitIconButton="fa-times"
               buttonType="muted"
               appA11yTitle="{{ 'remove' | i18n }} {{ item.labelName }}"
               (click)="unselectCollection(i)"

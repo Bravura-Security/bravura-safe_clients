@@ -2,17 +2,17 @@ import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Observable } from "rxjs";
 
-//import { User } from "@bitwarden/angular/pipes/user-name.pipe";
+import { User } from "@bitwarden/angular/pipes/user-name.pipe";
 //import { UnassignedItemsBannerService } from "@bitwarden/angular/services/unassigned-items-banner.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 //import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
-import { ConfigServiceAbstraction as ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { AccountProfile } from "@bitwarden/common/platform/models/domain/account";
-
+import { UserId } from "@bitwarden/common/types/guid";
 
 @Component({
   selector: "app-header",
@@ -30,7 +30,7 @@ export class WebHeaderComponent {
   @Input() icon: string;
 
   protected routeData$: Observable<{ titleId: string }>;
-  protected account$: Observable<AccountProfile>;
+  protected account$: Observable<User & { id: UserId }>;
   protected canLock$: Observable<boolean>;
   protected selfHosted: boolean;
   protected hostname = location.hostname;

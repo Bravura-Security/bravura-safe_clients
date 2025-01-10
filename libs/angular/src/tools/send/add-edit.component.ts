@@ -5,6 +5,7 @@ import { Subject, firstValueFrom, takeUntil, map, BehaviorSubject, concatMap } f
 
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -21,7 +22,7 @@ import { SendTextView } from "@bitwarden/common/tools/send/models/view/send-text
 import { SendView } from "@bitwarden/common/tools/send/models/view/send.view";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 // Value = hours
 enum DatePreset {
@@ -119,6 +120,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
     protected dialogService: DialogService,
     protected formBuilder: FormBuilder,
     protected billingAccountProfileStateService: BillingAccountProfileStateService,
+    protected accountService: AccountService,
+    protected toastService: ToastService,
   ) {
     this.typeOptions = [
       { name: i18nService.t("sendTypeFile"), value: SendType.File, premium: true },
@@ -216,7 +219,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   async load() {
-    this.emailVerified = await this.stateService.getEmailVerified();
+    this.emailVerified = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.emailVerified ?? false)),
+    );
 
     this.type = !this.canAccessPremium || !this.emailVerified ? SendType.Text : SendType.File;
     if (this.send == null) {
@@ -266,11 +271,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     this.formGroup.markAllAsTouched();
 
     if (this.disableSend) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("sendDisabledWarning"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccurred"),
+        message: this.i18nService.t("sendDisabledWarning"),
+      });
       return false;
     }
 
@@ -286,11 +291,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     this.send.type = this.type;
 
     if (Utils.isNullOrWhitespace(this.send.name)) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("nameRequired"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccurred"),
+        message: this.i18nService.t("nameRequired"),
+      });
       return false;
     }
 
@@ -299,11 +304,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const fileEl = document.getElementById("file") as HTMLInputElement;
       const files = fileEl.files;
       if (files == null || files.length === 0) {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("errorOccurred"),
-          this.i18nService.t("selectFile"),
-        );
+        this.toastService.showToast({
+          variant: "error",
+          title: this.i18nService.t("errorOccurred"),
+          message: this.i18nService.t("selectFile"),
+        });
         return;
       }
 
@@ -311,11 +316,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const MAX_FILE_SIZE = 1887500000;
       if (files[0].size > MAX_FILE_SIZE) {
         // 2 GB hard limit to allow some buffer; language texts will 1.8 GB limit
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("errorOccurred"),
-          this.i18nService.t("maxFileSize"),
-        );
+        this.toastService.showToast({
+          variant: "error",
+          title: this.i18nService.t("errorOccurred"),
+          message: this.i18nService.t("maxFileSize"),
+        });
         return;
       }
       this.selectedFileSize = Utils.ReadableBytesSize(file.size);
@@ -347,11 +352,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
         await this.handleCopyLinkToClipboard();
         return;
       }
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
+    });
     });
     try {
       await this.formPromise;
@@ -384,7 +389,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     try {
       this.deletePromise = this.sendApiService.delete(this.send.id);
       await this.deletePromise;
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("deletedSend"));
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("deletedSend"),
+      });
       await this.load();
       this.onDeletedSend.emit(this.send);
       return true;
@@ -477,11 +486,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private async handleCopyLinkToClipboard() {
     const copySuccess = await this.copyLinkToClipboard(this.link);
     if (copySuccess ?? true) {
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
+      });
     } else {
       await this.dialogService.openSimpleDialog({
         title: "",

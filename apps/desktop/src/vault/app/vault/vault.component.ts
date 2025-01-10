@@ -22,8 +22,7 @@ import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broa
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -102,7 +101,6 @@ export class VaultComponent implements OnInit, OnDestroy {
     private eventCollectionService: EventCollectionService,
     private totpService: TotpService,
     private passwordRepromptService: PasswordRepromptService,
-    private stateService: StateService,
     private searchBarService: SearchBarService,
     private apiService: ApiService,
     private dialogService: DialogService,
@@ -224,14 +222,11 @@ export class VaultComponent implements OnInit, OnDestroy {
     this.searchBarService.setEnabled(true);
     this.searchBarService.setPlaceholderText(this.i18nService.t("searchVault"));
 
-    const approveLoginRequests = await this.stateService.getApproveLoginRequests();
-    if (approveLoginRequests) {
-      const authRequest = await this.apiService.getLastAuthRequest();
-      if (authRequest != null) {
-        this.messagingService.send("openLoginApproval", {
-          notificationId: authRequest.id,
-        });
-      }
+    const authRequest = await this.apiService.getLastAuthRequest();
+    if (authRequest != null) {
+      this.messagingService.send("openLoginApproval", {
+        notificationId: authRequest.id,
+      });
     }
   }
 

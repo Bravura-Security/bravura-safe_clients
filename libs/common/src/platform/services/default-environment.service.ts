@@ -18,6 +18,7 @@ import {
   GlobalState,
   KeyDefinition,
   StateProvider,
+  UserKeyDefinition,
 } from "../state";
 
 export class EnvironmentUrls {
@@ -40,7 +41,7 @@ class EnvironmentState {
   }
 }
 
-export const ENVIRONMENT_KEY = new KeyDefinition<EnvironmentState>(
+export const GLOBAL_ENVIRONMENT_KEY = new KeyDefinition<EnvironmentState>(
   ENVIRONMENT_DISK,
   "environment",
   {
@@ -48,9 +49,31 @@ export const ENVIRONMENT_KEY = new KeyDefinition<EnvironmentState>(
   },
 );
 
-export const CLOUD_REGION_KEY = new KeyDefinition<CloudRegion>(ENVIRONMENT_MEMORY, "cloudRegion", {
-  deserializer: (b) => b,
-});
+export const USER_ENVIRONMENT_KEY = new UserKeyDefinition<EnvironmentState>(
+  ENVIRONMENT_DISK,
+  "environment",
+  {
+    deserializer: EnvironmentState.fromJSON,
+    clearOn: ["logout"],
+  },
+);
+
+export const GLOBAL_CLOUD_REGION_KEY = new KeyDefinition<CloudRegion>(
+  ENVIRONMENT_MEMORY,
+  "cloudRegion",
+  {
+    deserializer: (b) => b,
+  },
+);
+
+export const USER_CLOUD_REGION_KEY = new UserKeyDefinition<CloudRegion>(
+  ENVIRONMENT_MEMORY,
+  "cloudRegion",
+  {
+    deserializer: (b) => b,
+    clearOn: ["logout"],
+  },
+);
 
 /**
  * The production regions available for selection.
@@ -58,6 +81,7 @@ export const CLOUD_REGION_KEY = new KeyDefinition<CloudRegion>(ENVIRONMENT_MEMOR
  * In the future we desire to load these urls from the config endpoint.
  */
 export const PRODUCTION_REGIONS: RegionConfig[] = [
+  /*
   {
     key: Region.US,
     domain: "bitwarden.com",
@@ -86,6 +110,7 @@ export const PRODUCTION_REGIONS: RegionConfig[] = [
       scim: "https://scim.bitwarden.eu",
     },
   },
+  */
 ];
 
 /**
@@ -114,8 +139,8 @@ export class DefaultEnvironmentService implements EnvironmentService {
     private stateProvider: StateProvider,
     private accountService: AccountService,
   ) {
-    this.globalState = this.stateProvider.getGlobal(ENVIRONMENT_KEY);
-    this.globalCloudRegionState = this.stateProvider.getGlobal(CLOUD_REGION_KEY);
+    this.globalState = this.stateProvider.getGlobal(GLOBAL_ENVIRONMENT_KEY);
+    this.globalCloudRegionState = this.stateProvider.getGlobal(GLOBAL_CLOUD_REGION_KEY);
 
     const account$ = this.activeAccountId$.pipe(
       // Use == here to not trigger on undefined -> null transition
@@ -125,8 +150,8 @@ export class DefaultEnvironmentService implements EnvironmentService {
     this.environment$ = account$.pipe(
       switchMap((userId) => {
         const t = userId
-          ? this.stateProvider.getUser(userId, ENVIRONMENT_KEY).state$
-          : this.stateProvider.getGlobal(ENVIRONMENT_KEY).state$;
+          ? this.stateProvider.getUser(userId, USER_ENVIRONMENT_KEY).state$
+          : this.stateProvider.getGlobal(GLOBAL_ENVIRONMENT_KEY).state$;
         return t;
       }),
       map((state) => {
@@ -136,8 +161,8 @@ export class DefaultEnvironmentService implements EnvironmentService {
     this.cloudWebVaultUrl$ = account$.pipe(
       switchMap((userId) => {
         const t = userId
-          ? this.stateProvider.getUser(userId, CLOUD_REGION_KEY).state$
-          : this.stateProvider.getGlobal(CLOUD_REGION_KEY).state$;
+          ? this.stateProvider.getUser(userId, USER_CLOUD_REGION_KEY).state$
+          : this.stateProvider.getGlobal(GLOBAL_CLOUD_REGION_KEY).state$;
         return t;
       }),
       map((region) => {
@@ -242,7 +267,7 @@ export class DefaultEnvironmentService implements EnvironmentService {
     if (userId == null) {
       await this.globalCloudRegionState.update(() => region);
     } else {
-      await this.stateProvider.getUser(userId, CLOUD_REGION_KEY).update(() => region);
+      await this.stateProvider.getUser(userId, USER_CLOUD_REGION_KEY).update(() => region);
     }
   }
 
@@ -261,13 +286,13 @@ export class DefaultEnvironmentService implements EnvironmentService {
     return activeUserId == null
       ? await firstValueFrom(this.globalState.state$)
       : await firstValueFrom(
-          this.stateProvider.getUser(userId ?? activeUserId, ENVIRONMENT_KEY).state$,
+          this.stateProvider.getUser(userId ?? activeUserId, USER_ENVIRONMENT_KEY).state$,
         );
   }
 
   async seedUserEnvironment(userId: UserId) {
     const global = await firstValueFrom(this.globalState.state$);
-    await this.stateProvider.getUser(userId, ENVIRONMENT_KEY).update(() => global);
+    await this.stateProvider.getUser(userId, USER_ENVIRONMENT_KEY).update(() => global);
   }
 }
 

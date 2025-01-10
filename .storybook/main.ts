@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 
 const config: StorybookConfig = {
   stories: [
+    "../libs/auth/src/**/*.mdx",
     "../libs/auth/src/**/*.stories.@(js|jsx|ts|tsx)",
     "../libs/components/src/**/*.mdx",
     "../libs/components/src/**/*.stories.@(js|jsx|ts|tsx)",
@@ -36,10 +37,8 @@ const config: StorybookConfig = {
   },
   env: (config) => ({
     ...config,
-    FLAGS: JSON.stringify({
-      secretsManager: true,
+    FLAGS: JSON.stringify({}),
     }),
-  }),
   webpackFinal: async (config, { configType }) => {
     if (config.resolve) {
       config.resolve.plugins = [new TsconfigPathsPlugin()] as any;

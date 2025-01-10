@@ -1,8 +1,3 @@
-<!--
-<app-header></app-header>
-
-<bit-container>
--->
 <div class="page-header">
   <h1>{{ "preferences" | i18n }}</h1>
 </div>
@@ -10,7 +5,7 @@
 <form [formGroup]="form" (ngSubmit)="submit()" ngNativeValidate>
   <div class="row">
     <div class="col-6">
-      <app-callout type="info" *ngIf="vaultTimeoutPolicyCallout | async as policy">
+      <bit-callout type="info" *ngIf="vaultTimeoutPolicyCallout | async as policy">
         <span *ngIf="policy.timeout && policy.action">
           {{
             "vaultTimeoutPolicyWithActionInEffect"
@@ -23,106 +18,70 @@
         <span *ngIf="!policy.timeout && policy.action">
           {{ "vaultTimeoutActionPolicyInEffect" | i18n: (policy.action | i18n) }}
         </span>
-      </app-callout>
-      <app-vault-timeout-input
-        [vaultTimeoutOptions]="vaultTimeoutOptions"
-        [formControl]="form.controls.vaultTimeout"
-        ngDefaultControl
-      >
-      </app-vault-timeout-input>
-    </div>
-  </div>
+    </bit-callout>
+    <app-vault-timeout-input
+      [vaultTimeoutOptions]="vaultTimeoutOptions"
+      [formControl]="form.controls.vaultTimeout"
+      ngDefaultControl
+    >
+    </app-vault-timeout-input>
   <ng-container *ngIf="availableVaultTimeoutActions$ | async as availableVaultTimeoutActions">
-    <div *ngIf="availableVaultTimeoutActions.length > 1" class="form-group">
-      <label>{{ "vaultTimeoutAction" | i18n }}</label>
-      <div
+      <bit-radio-group
+        formControlName="vaultTimeoutAction"
+        *ngIf="availableVaultTimeoutActions.length > 1"
+      >
+        <bit-label>{{ "vaultTimeoutAction" | i18n }}</bit-label>
+        <bit-radio-button
         *ngIf="availableVaultTimeoutActions.includes(VaultTimeoutAction.Lock)"
-        class="form-check form-check-block"
-      >
-        <input
-          class="form-check-input"
-          type="radio"
-          name="vaultTimeoutAction"
           id="vaultTimeoutActionLock"
-          value="{{ VaultTimeoutAction.Lock }}"
-          formControlName="vaultTimeoutAction"
-        />
-        <label class="form-check-label" for="vaultTimeoutActionLock">
-          {{ "lock" | i18n }}
-          <small>{{ "vaultTimeoutActionLockDesc" | i18n }}</small>
-        </label>
-      </div>
-      <div
-        *ngIf="availableVaultTimeoutActions.includes(VaultTimeoutAction.LogOut)"
-        class="form-check mt-2 form-check-block"
+          [value]="VaultTimeoutAction.Lock"
       >
-        <input
-          class="form-check-input"
-          type="radio"
-          name="vaultTimeoutAction"
+          <bit-label>{{ "lock" | i18n }}</bit-label>
+          <bit-hint>{{ "vaultTimeoutActionLockDesc" | i18n }}</bit-hint>
+        </bit-radio-button>
+        <bit-radio-button
+        *ngIf="availableVaultTimeoutActions.includes(VaultTimeoutAction.LogOut)"
           id="vaultTimeoutActionLogOut"
-          value="{{ VaultTimeoutAction.LogOut }}"
-          formControlName="vaultTimeoutAction"
-        />
-        <label class="form-check-label" for="vaultTimeoutActionLogOut">
-          {{ "logOut" | i18n }}
-          <small>{{ "vaultTimeoutActionLogOutDesc" | i18n }}</small>
-        </label>
-      </div>
-    </div>
+          [value]="VaultTimeoutAction.LogOut"
+      >
+          <bit-label>{{ "logOut" | i18n }}</bit-label>
+          <bit-hint>{{ "vaultTimeoutActionLogOutDesc" | i18n }}</bit-hint>
+        </bit-radio-button>
+      </bit-radio-group>
   </ng-container>
-  <div class="row">
-    <div class="col-6">
-      <div class="form-group">
-        <div class="d-flex">
-          <label for="locale">{{ "language" | i18n }}</label>
-          <a
-            class="ml-auto"
+    <bit-form-field>
+      <bit-label
+        >{{ "language" | i18n }}
+        <a
+          bitLink
+          class="tw-float-right"
             href="https://bravurasecuritydocs.com/safe/#/home/30108/10/11"
-            target="_blank"
+          target="_blank"
               rel="noreferrer"
-            appA11yTitle="{{ 'learnMore' | i18n }}"
-          >
+          appA11yTitle="{{ 'learnMore' | i18n }}"
+        >
             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
           </a>
-        </div>
-        <select id="locale" name="Locale" formControlName="locale" class="form-control">
-          <option *ngFor="let o of localeOptions" [ngValue]="o.value">{{ o.name }}</option>
-        </select>
-        <small class="form-text text-muted">{{ "languageDesc" | i18n }}</small>
-      </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="form-check">
-      <input
-        class="form-check-input"
-        type="checkbox"
-        id="enableFavicons"
-        name="enableFavicons"
-        formControlName="enableFavicons"
-      />
-      <label class="form-check-label" for="enableFavicons">
-        {{ "enableFavicon" | i18n }}
-      </label>
-    </div>
-    <small class="form-text text-muted">{{ "faviconDesc" | i18n }}</small>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <div class="form-group">
-        <label for="theme">{{ "theme" | i18n }}</label>
-        <select id="theme" name="theme" formControlName="theme" class="form-control">
-          <option *ngFor="let o of themeOptions" [ngValue]="o.value">{{ o.name }}</option>
-        </select>
-        <small class="form-text text-muted">{{ "themeDesc" | i18n }}</small>
-      </div>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">
-    {{ "save" | i18n }}
-  </button>
+      </bit-label>
+      <bit-select formControlName="locale" id="locale">
+        <bit-option *ngFor="let o of localeOptions" [value]="o.value" [label]="o.name"></bit-option>
+      </bit-select>
+      <bit-hint>{{ "languageDesc" | i18n }}</bit-hint>
+    </bit-form-field>
+    <bit-form-control>
+      <input type="checkbox" bitCheckbox formControlName="enableFavicons" />
+      <bit-label
+        >{{ "enableFavicon" | i18n }}
+      </bit-label>
+      <bit-hint>{{ "faviconDesc" | i18n }}</bit-hint>
+    </bit-form-control>
+    <bit-form-field>
+      <bit-label>{{ "theme" | i18n }}</bit-label>
+      <bit-select formControlName="theme" id="theme">
+        <bit-option *ngFor="let o of themeOptions" [value]="o.value" [label]="o.name"></bit-option>
+      </bit-select>
+      <bit-hint>{{ "themeDesc" | i18n }}</bit-hint>
+    </bit-form-field>
+    <button bitButton bitFormButton type="submit" buttonType="primary">{{ "save" | i18n }}</button>
+</div></div>
 </form>
-<!--
-</bit-container>
--->

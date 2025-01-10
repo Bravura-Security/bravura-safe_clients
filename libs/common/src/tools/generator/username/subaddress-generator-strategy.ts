@@ -1,18 +1,22 @@
 import { PolicyType } from "../../../admin-console/enums";
-import { Policy } from "../../../admin-console/models/domain/policy";
 import { StateProvider } from "../../../platform/state";
-import { UserId } from "../../../types/guid";
 import { GeneratorStrategy } from "../abstractions";
-import { DefaultPolicyEvaluator } from "../default-policy-evaluator";
+import { Randomizer } from "../abstractions/randomizer";
 import { SUBADDRESS_SETTINGS } from "../key-definitions";
 import { NoPolicy } from "../no-policy";
+import { newDefaultEvaluator } from "../rx-operators";
+import { clone$PerUserId, sharedStateByUserId } from "../util";
 
-import { SubaddressGenerationOptions } from "./subaddress-generator-options";
-import { UsernameGenerationServiceAbstraction } from "./username-generation.service.abstraction";
+import {
+  DefaultSubaddressOptions,
+  SubaddressGenerationOptions,
+} from "./subaddress-generator-options";
 
-const ONE_MINUTE = 60 * 1000;
-
-/** Strategy for creating an email subaddress */
+/** Strategy for creating an email subaddress
+ *  @remarks The subaddress is the part following the `+`.
+ *  For example, if the email address is `jd+xyz@domain.io`,
+ *  the subaddress is `xyz`.
+ */
 export class SubaddressGeneratorStrategy
   implements GeneratorStrategy<SubaddressGenerationOptions, NoPolicy>
 {
@@ -20,46 +24,42 @@ export class SubaddressGeneratorStrategy
    *  @param usernameService generates an email subaddress from an email address
    */
   constructor(
-    private usernameService: UsernameGenerationServiceAbstraction,
+    private random: Randomizer,
     private stateProvider: StateProvider,
+    private defaultOptions: SubaddressGenerationOptions = DefaultSubaddressOptions,
   ) {}
 
-  /** {@link GeneratorStrategy.durableState} */
-  durableState(id: UserId) {
-    return this.stateProvider.getUser(id, SUBADDRESS_SETTINGS);
-  }
+  // configuration
+  durableState = sharedStateByUserId(SUBADDRESS_SETTINGS, this.stateProvider);
+  defaults$ = clone$PerUserId(this.defaultOptions);
+  toEvaluator = newDefaultEvaluator<SubaddressGenerationOptions>();
+  readonly policy = PolicyType.PasswordGenerator;
 
-  /** {@link GeneratorStrategy.policy} */
-  get policy() {
-    // Uses password generator since there aren't policies
-    // specific to usernames.
-    return PolicyType.PasswordGenerator;
-  }
+  // algorithm
+  async generate(options: SubaddressGenerationOptions) {
+    const o = Object.assign({}, DefaultSubaddressOptions, options);
 
-  /** {@link GeneratorStrategy.cache_ms} */
-  get cache_ms() {
-    return ONE_MINUTE;
-  }
-
-  /** {@link GeneratorStrategy.evaluator} */
-  evaluator(policy: Policy) {
-    if (!policy) {
-      return new DefaultPolicyEvaluator<SubaddressGenerationOptions>();
+    const subaddressEmail = o.subaddressEmail;
+    if (subaddressEmail == null || subaddressEmail.length < 3) {
+      return o.subaddressEmail;
+    }
+    const atIndex = subaddressEmail.indexOf("@");
+    if (atIndex < 1 || atIndex >= subaddressEmail.length - 1) {
+      return subaddressEmail;
+    }
+    if (o.subaddressType == null) {
+      o.subaddressType = "random";
     }
 
-    if (policy.type !== this.policy) {
-      const details = `Expected: ${this.policy}. Received: ${policy.type}`;
-      throw Error("Mismatched policy type. " + details);
+    const emailBeginning = subaddressEmail.substr(0, atIndex);
+    const emailEnding = subaddressEmail.substr(atIndex + 1, subaddressEmail.length);
+
+    let subaddressString = "";
+    if (o.subaddressType === "random") {
+      subaddressString = await this.random.chars(8);
+    } else if (o.subaddressType === "website-name") {
+      subaddressString = o.website;
     }
-
-    return new DefaultPolicyEvaluator<SubaddressGenerationOptions>();
-  }
-
-  /** {@link GeneratorStrategy.generate} */
-  generate(options: SubaddressGenerationOptions) {
-    return this.usernameService.generateSubaddress({
-      subaddressEmail: options.email,
-      subaddressType: options.type,
-    });
+    return emailBeginning + "+" + subaddressString + "@" + emailEnding;
   }
 }

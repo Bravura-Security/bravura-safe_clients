@@ -3,10 +3,17 @@ import { CryptoService } from "../../../../platform/abstractions/crypto.service"
 import { EncryptService } from "../../../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../../../platform/abstractions/i18n.service";
 import { StateProvider } from "../../../../platform/state";
-import { FASTMAIL_FORWARDER } from "../../key-definitions";
+import { FASTMAIL_FORWARDER, FASTMAIL_BUFFER } from "../../key-definitions";
 import { ForwarderGeneratorStrategy } from "../forwarder-generator-strategy";
 import { Forwarders } from "../options/constants";
 import { EmailPrefixOptions, ApiOptions } from "../options/forwarder-options";
+
+export const DefaultFastmailOptions: ApiOptions & EmailPrefixOptions = Object.freeze({
+  website: "",
+  domain: "",
+  prefix: "",
+  token: "",
+});
 
 /** Generates a forwarding address for Fastmail */
 export class FastmailForwarder extends ForwarderGeneratorStrategy<ApiOptions & EmailPrefixOptions> {
@@ -24,15 +31,14 @@ export class FastmailForwarder extends ForwarderGeneratorStrategy<ApiOptions & E
     keyService: CryptoService,
     stateProvider: StateProvider,
   ) {
-    super(encryptService, keyService, stateProvider);
+    super(encryptService, keyService, stateProvider, DefaultFastmailOptions);
   }
 
-  /** {@link ForwarderGeneratorStrategy.key} */
-  get key() {
-    return FASTMAIL_FORWARDER;
-  }
+  // configuration
+  readonly key = FASTMAIL_FORWARDER;
+  readonly rolloverKey = FASTMAIL_BUFFER;
 
-  /** {@link ForwarderGeneratorStrategy.generate} */
+  // request
   generate = async (options: ApiOptions & EmailPrefixOptions) => {
     if (!options.token || options.token === "") {
       const error = this.i18nService.t("forwaderInvalidToken", Forwarders.Fastmail.name);
@@ -56,7 +62,7 @@ export class FastmailForwarder extends ForwarderGeneratorStrategy<ApiOptions & E
               "new-masked-email": {
                 state: "enabled",
                 description: "",
-                forDomain: options.website,
+                forDomain: options.website ?? "",
                 emailPrefix: options.prefix,
               },
             },
@@ -141,3 +147,10 @@ export class FastmailForwarder extends ForwarderGeneratorStrategy<ApiOptions & E
     return null;
   }
 }
+
+export const DefaultOptions = Object.freeze({
+  website: null,
+  domain: "",
+  prefix: "",
+  token: "",
+});

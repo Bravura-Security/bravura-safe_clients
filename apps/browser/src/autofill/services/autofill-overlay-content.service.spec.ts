@@ -4,6 +4,8 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 import { EVENTS, AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
 
 import AutofillField from "../models/autofill-field";
+import AutofillForm from "../models/autofill-form";
+import AutofillPageDetails from "../models/autofill-page-details";
 import { createAutofillFieldMock } from "../spec/autofill-mocks";
 import { flushPromises } from "../spec/testing-utils";
 import { ElementWithOpId, FormFieldElement } from "../types";
@@ -146,6 +148,7 @@ describe("AutofillOverlayContentService", () => {
   describe("setupAutofillOverlayListenerOnField", () => {
     let autofillFieldElement: ElementWithOpId<FormFieldElement>;
     let autofillFieldData: AutofillField;
+    let pageDetailsMock: AutofillPageDetails;
 
     beforeEach(() => {
       document.body.innerHTML = `
@@ -166,105 +169,126 @@ describe("AutofillOverlayContentService", () => {
         placeholder: "username",
         elementNumber: 1,
       });
+      const passwordFieldData = createAutofillFieldMock({
+        opid: "password-field",
+        form: "validFormId",
+        elementNumber: 2,
+        autocompleteType: "current-password",
+        type: "password",
+      });
+      pageDetailsMock = mock<AutofillPageDetails>({
+        forms: { validFormId: mock<AutofillForm>() },
+        fields: [autofillFieldData, passwordFieldData],
+      });
     });
 
     describe("skips setup for ignored form fields", () => {
       beforeEach(() => {
-        autofillFieldData = mock<AutofillField>();
+        autofillFieldData = mock<AutofillField>({
+          type: "text",
+          htmlName: "username",
+          htmlID: "username",
+          placeholder: "username",
+        });
       });
 
-      it("ignores fields that are readonly", () => {
+      it("ignores fields that are readonly", async () => {
         autofillFieldData.readonly = true;
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
       });
 
-      it("ignores fields that contain a disabled attribute", () => {
+      it("ignores fields that contain a disabled attribute", async () => {
         autofillFieldData.disabled = true;
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
       });
 
-      it("ignores fields that are not viewable", () => {
+      it("ignores fields that are not viewable", async () => {
         autofillFieldData.viewable = false;
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
       });
 
       it("ignores fields that are part of the ExcludedOverlayTypes", () => {
-        AutoFillConstants.ExcludedOverlayTypes.forEach((excludedType) => {
+        AutoFillConstants.ExcludedOverlayTypes.forEach(async (excludedType) => {
           autofillFieldData.type = excludedType;
 
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+          await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
         });
       });
 
-      it("ignores fields that contain the keyword `search`", () => {
+      it("ignores fields that contain the keyword `search`", async () => {
         autofillFieldData.placeholder = "search";
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
       });
 
-      it("ignores fields that contain the keyword `captcha` ", () => {
+      it("ignores fields that contain the keyword `captcha` ", async () => {
         autofillFieldData.placeholder = "captcha";
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
       });
 
-      it("ignores fields that do not appear as a login field", () => {
+      it("ignores fields that do not appear as a login field", async () => {
         autofillFieldData.placeholder = "not-a-login-field";
 
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
       });
+    });
+
+    it("skips setup on fields that have been previously set up", async () => {
+      autofillOverlayContentService["formFieldElements"].add(autofillFieldElement);
+
+      await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+        autofillFieldElement,
+        autofillFieldData,
+        pageDetailsMock,
+      );
+
+      expect(autofillFieldElement.addEventListener).not.toHaveBeenCalled();
     });
 
     describe("identifies the overlay visibility setting", () => {
@@ -275,6 +299,7 @@ describe("AutofillOverlayContentService", () => {
         await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(sendExtensionMessageSpy).toHaveBeenCalledWith("getAutofillOverlayVisibility");
@@ -290,6 +315,7 @@ describe("AutofillOverlayContentService", () => {
         await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillOverlayContentService["autofillOverlayVisibility"]).toEqual(
@@ -313,6 +339,7 @@ describe("AutofillOverlayContentService", () => {
         await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
           autofillFieldElement,
           autofillFieldData,
+          pageDetailsMock,
         );
 
         expect(autofillFieldElement.removeEventListener).toHaveBeenNthCalledWith(
@@ -337,6 +364,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
         });
 
@@ -360,6 +388,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           jest.spyOn(globalThis.customElements, "define").mockImplementation();
         });
@@ -443,6 +472,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             spanAutofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           spanAutofillFieldElement.dispatchEvent(new Event("input"));
@@ -454,6 +484,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           autofillFieldElement.dispatchEvent(new Event("input"));
 
@@ -470,6 +501,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             passwordFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           passwordFieldElement.dispatchEvent(new Event("input"));
 
@@ -489,6 +521,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           autofillFieldElement.dispatchEvent(new Event("input"));
 
@@ -507,6 +540,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           autofillFieldElement.dispatchEvent(new Event("input"));
 
@@ -520,6 +554,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           autofillFieldElement.dispatchEvent(new Event("input"));
 
@@ -534,6 +569,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           autofillFieldElement.dispatchEvent(new Event("input"));
 
@@ -549,6 +585,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
           autofillFieldElement.dispatchEvent(new Event("input"));
 
@@ -566,6 +603,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
         });
 
@@ -616,6 +654,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -627,6 +666,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -644,6 +684,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -663,6 +704,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -681,6 +723,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -698,6 +741,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -714,6 +758,7 @@ describe("AutofillOverlayContentService", () => {
           await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
             autofillFieldElement,
             autofillFieldData,
+            pageDetailsMock,
           );
 
           autofillFieldElement.dispatchEvent(new Event("focus"));
@@ -736,6 +781,7 @@ describe("AutofillOverlayContentService", () => {
       await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
         autofillFieldElement,
         autofillFieldData,
+        pageDetailsMock,
       );
 
       expect(sendExtensionMessageSpy).toHaveBeenCalledWith("openAutofillOverlay");
@@ -750,6 +796,7 @@ describe("AutofillOverlayContentService", () => {
       await autofillOverlayContentService.setupAutofillOverlayListenerOnField(
         autofillFieldElement,
         autofillFieldData,
+        pageDetailsMock,
       );
 
       expect(autofillOverlayContentService["mostRecentlyFocusedField"]).toEqual(
@@ -1592,6 +1639,7 @@ describe("AutofillOverlayContentService", () => {
   describe("destroy", () => {
     let autofillFieldElement: ElementWithOpId<FormFieldElement>;
     let autofillFieldData: AutofillField;
+    let pageDetailsMock: AutofillPageDetails;
 
     beforeEach(() => {
       document.body.innerHTML = `
@@ -1611,11 +1659,21 @@ describe("AutofillOverlayContentService", () => {
         placeholder: "username",
         elementNumber: 1,
       });
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      autofillOverlayContentService.setupAutofillOverlayListenerOnField(
+      const passwordFieldData = createAutofillFieldMock({
+        opid: "password-field",
+        form: "validFormId",
+        elementNumber: 2,
+        autocompleteType: "current-password",
+        type: "password",
+      });
+      pageDetailsMock = mock<AutofillPageDetails>({
+        forms: { validFormId: mock<AutofillForm>() },
+        fields: [autofillFieldData, passwordFieldData],
+      });
+      void autofillOverlayContentService.setupAutofillOverlayListenerOnField(
         autofillFieldElement,
         autofillFieldData,
+        pageDetailsMock,
       );
       autofillOverlayContentService["mostRecentlyFocusedField"] = autofillFieldElement;
     });

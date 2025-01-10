@@ -44,7 +44,7 @@
         <bit-icon [icon]="Icons.UserVerificationBiometricsIcon" class="tw-mb-4"></bit-icon>
         <p class="tw-font-bold tw-mb-1">{{ "verifyWithBiometrics" | i18n }}</p>
         <div *ngIf="!biometricsVerificationFailed">
-          <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
+          <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
           {{ "awaitingConfirmation" | i18n }}
         </div>
       </div>
@@ -114,7 +114,7 @@
   </ng-container>
   <ng-container *ngIf="userVerificationOptions.server.otp">
     <div class="tw-mb-6" *ngIf="!sentInitialCode">
-      <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
+      <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
     </div>
 
     <div class="tw-mb-6" *ngIf="sentInitialCode">
@@ -126,7 +126,7 @@
         </button>
 
         <span class="tw-ml-2 tw-text-success" role="alert" @sent *ngIf="sentCode">
-          <i class="bwi bwi-check-circle" aria-hidden="true"></i>
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
           {{ "codeSent" | i18n }}
         </span>
       </p>

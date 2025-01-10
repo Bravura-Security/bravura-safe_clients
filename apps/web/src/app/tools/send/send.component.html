@@ -1,24 +1,3 @@
-<!--
-<app-header>
-  <ng-container slot="title-suffix">
-    <small #actionSpinner [appApiAction]="actionPromise">
-      <ng-container *ngIf="$any(actionSpinner).loading">
-        <i
-          class="bwi bwi-spinner bwi-spin text-muted"
-          title="{{ 'loading' | i18n }}"
-          aria-hidden="true"
-        ></i>
-        <span class="sr-only">{{ "loading" | i18n }}</span>
-      </ng-container>
-    </small>
-  </ng-container>
-
-  <button type="button" bitButton buttonType="primary" (click)="addSend()" [disabled]="disableSend">
-    <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
-    {{ "createSend" | i18n }}
-  </button>
-</app-header>
--->
 <div class="container page-content">
   <bit-callout type="warning" title="{{ 'sendDisabled' | i18n }}" *ngIf="disableSend">
     {{ "sendDisabledWarning" | i18n }}

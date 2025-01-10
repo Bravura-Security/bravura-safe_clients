@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, firstValueFrom, takeUntil } from "rxjs";
 
 import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { LoginEmailServiceAbstraction } from "@bitwarden/auth/common";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { AccountSwitcherService } from "./account-switching/services/account-switcher.service";
 
@@ -27,40 +28,55 @@ export class HomeComponent implements OnInit, OnDestroy {
     rememberEmail: [false],
   });
 
+  // TODO: remove when email verification flag is removed
+  registerRoute = "/register";
+  hasBaseUrlSet = false;
+  baseUrl = "";
+
   constructor(
     protected platformUtilsService: PlatformUtilsService,
-    private stateService: StateService,
     private formBuilder: FormBuilder,
     private router: Router,
     private i18nService: I18nService,
     private environmentService: EnvironmentService,
-    private loginService: LoginService,
+    private loginEmailService: LoginEmailServiceAbstraction,
     private accountSwitcherService: AccountSwitcherService,
+    private configService: ConfigService,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    let savedEmail = this.loginService.getEmail();
-    const rememberEmail = this.loginService.getRememberEmail();
+    // TODO: remove when email verification flag is removed
+    const emailVerification = await this.configService.getFeatureFlag(
+      FeatureFlag.EmailVerification,
+    );
 
-    if (savedEmail != null) {
-      this.formGroup.patchValue({
-        email: savedEmail,
-        rememberEmail: rememberEmail,
-      });
+    if (emailVerification) {
+      this.registerRoute = "/signup";
+    }
+
+    const email = this.loginEmailService.getEmail();
+    const rememberEmail = this.loginEmailService.getRememberEmail();
+
+    if (email != null) {
+      this.formGroup.patchValue({ email, rememberEmail });
     } else {
-      savedEmail = await this.stateService.getRememberedEmail();
-      if (savedEmail != null) {
-        this.formGroup.patchValue({
-          email: savedEmail,
-          rememberEmail: true,
-        });
+      const storedEmail = await firstValueFrom(this.loginEmailService.storedEmail$);
+
+      if (storedEmail != null) {
+        this.formGroup.patchValue({ email: storedEmail, rememberEmail: true });
       }
+    }
+
+    const env = await firstValueFrom(this.environmentService.environment$);
+    this.hasBaseUrlSet = env.hasBaseUrl();
+    if (this.hasBaseUrlSet) {
+      this.baseUrl = env.getWebVaultUrl();
     }
 
     this.environmentSelector.onOpenSelfHostedSettings
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
-        this.setFormValues();
+        this.setLoginEmailValues();
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.router.navigate(["environment"]);
@@ -76,8 +92,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this.accountSwitcherService.availableAccounts$;
   }
 
-  submit() {
+  async submit() {
     this.formGroup.markAllAsTouched();
+
     if (this.formGroup.invalid) {
       this.platformUtilsService.showToast(
         "error",
@@ -87,15 +104,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loginService.setEmail(this.formGroup.value.email);
-    this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
+    this.setLoginEmailValues();
+    await this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
   }
 
-  setFormValues() {
-    this.loginService.setEmail(this.formGroup.value.email);
-    this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
+  setLoginEmailValues() {
+    this.loginEmailService.setEmail(this.formGroup.value.email);
+    this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
   }
 }

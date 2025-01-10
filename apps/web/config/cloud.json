@@ -17,8 +17,7 @@
     "proxyNotifications": "https://notifications.hitachi-id.com"
   },
   "flags": {
-    "secretsManager": true,
     "showPasswordless": true,
-    "enableCipherKeyEncryption": false
+    "enableCipherKeyEncryption": true
   }
 }

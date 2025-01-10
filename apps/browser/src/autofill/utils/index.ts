@@ -2,6 +2,36 @@ import { AutofillPort } from "../enums/autofill-port.enums";
 import { FillableFormFieldElement, FormFieldElement } from "../types";
 
 /**
+ * Polyfills the requestIdleCallback API with a setTimeout fallback.
+ *
+ * @param callback - The callback function to run when the browser is idle.
+ * @param options - The options to pass to the requestIdleCallback function.
+ */
+export function requestIdleCallbackPolyfill(
+  callback: () => void,
+  options?: Record<string, any>,
+): number | NodeJS.Timeout {
+  if ("requestIdleCallback" in globalThis) {
+    return globalThis.requestIdleCallback(() => callback(), options);
+  }
+
+  return globalThis.setTimeout(() => callback(), 1);
+}
+
+/**
+ * Polyfills the cancelIdleCallback API with a clearTimeout fallback.
+ *
+ * @param id - The ID of the idle callback to cancel.
+ */
+export function cancelIdleCallbackPolyfill(id: NodeJS.Timeout | number) {
+  if ("cancelIdleCallback" in globalThis) {
+    return globalThis.cancelIdleCallback(id as number);
+  }
+
+  return globalThis.clearTimeout(id);
+}
+
+/**
  * Generates a random string of characters that formatted as a custom element name.
  */
 function generateRandomCustomElementName(): string {
@@ -104,18 +134,6 @@ function setElementStyles(
       priority ? "important" : undefined,
     );
   }
-}
-
-/**
- * Get data from local storage based on the keys provided.
- *
- * @param keys - String or array of strings of keys to get from local storage
- * @deprecated Do not call this, use state-relevant services instead
- */
-async function getFromLocalStorage(keys: string | string[]): Promise<Record<string, any>> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(keys, (storage: Record<string, any>) => resolve(storage));
-  });
 }
 
 /**
@@ -252,7 +270,11 @@ function elementIsDescriptionTermElement(element: Element): element is HTMLEleme
  * @param node - The node to check.
  */
 function nodeIsElement(node: Node): node is Element {
-  return node?.nodeType === Node.ELEMENT_NODE;
+  if (!node) {
+    return false;
+  }
+
+  return node.nodeType === Node.ELEMENT_NODE;
 }
 
 /**
@@ -278,7 +300,6 @@ export {
   buildSvgDomElement,
   sendExtensionMessage,
   setElementStyles,
-  getFromLocalStorage,
   setupExtensionDisconnectAction,
   setupAutofillInitDisconnectAction,
   elementIsFillableFormField,

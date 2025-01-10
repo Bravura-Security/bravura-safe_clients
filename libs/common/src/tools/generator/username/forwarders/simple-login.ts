@@ -3,10 +3,16 @@ import { CryptoService } from "../../../../platform/abstractions/crypto.service"
 import { EncryptService } from "../../../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../../../platform/abstractions/i18n.service";
 import { StateProvider } from "../../../../platform/state";
-import { SIMPLE_LOGIN_FORWARDER } from "../../key-definitions";
+import { SIMPLE_LOGIN_FORWARDER, SIMPLE_LOGIN_BUFFER } from "../../key-definitions";
 import { ForwarderGeneratorStrategy } from "../forwarder-generator-strategy";
 import { Forwarders } from "../options/constants";
 import { SelfHostedApiOptions } from "../options/forwarder-options";
+
+export const DefaultSimpleLoginOptions: SelfHostedApiOptions = Object.freeze({
+  website: null,
+  baseUrl: "https://app.simplelogin.io",
+  token: "",
+});
 
 /** Generates a forwarding address for Simple Login */
 export class SimpleLoginForwarder extends ForwarderGeneratorStrategy<SelfHostedApiOptions> {
@@ -24,15 +30,14 @@ export class SimpleLoginForwarder extends ForwarderGeneratorStrategy<SelfHostedA
     keyService: CryptoService,
     stateProvider: StateProvider,
   ) {
-    super(encryptService, keyService, stateProvider);
+    super(encryptService, keyService, stateProvider, DefaultSimpleLoginOptions);
   }
 
-  /** {@link ForwarderGeneratorStrategy.key} */
-  get key() {
-    return SIMPLE_LOGIN_FORWARDER;
-  }
+  // configuration
+  readonly key = SIMPLE_LOGIN_FORWARDER;
+  readonly rolloverKey = SIMPLE_LOGIN_BUFFER;
 
-  /** {@link ForwarderGeneratorStrategy.generate} */
+  // request
   generate = async (options: SelfHostedApiOptions) => {
     if (!options.token || options.token === "") {
       const error = this.i18nService.t("forwaderInvalidToken", Forwarders.SimpleLogin.name);
@@ -80,3 +85,9 @@ export class SimpleLoginForwarder extends ForwarderGeneratorStrategy<SelfHostedA
     }
   };
 }
+
+export const DefaultOptions = Object.freeze({
+  website: null,
+  baseUrl: "https://app.simplelogin.io",
+  token: "",
+});

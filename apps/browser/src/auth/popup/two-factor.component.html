@@ -149,6 +149,16 @@
         </div>
       </ng-template>
 
+    <!--<ng-container
+      *ngIf="
+        selectedProviderType === providerType.Duo ||
+        selectedProviderType === providerType.OrganizationDuo ||
+        selectedProviderType === providerType.OrganizationHypr
+      "
+    >
+    </ng-container>-->
+    </ng-container>
+
     <ng-container *ngIf="selectedProviderType === providerType.OrganizationHypr">
       <div id="hypr-frame" class="text-center">
         <h1>{{ "twoFactorHyprCheckDevice" | i18n }}</h1>
@@ -174,16 +184,7 @@
         ">{{ "twoFactorHyprSendRegEmail" | i18n }}</button>
       </div>
     </ng-container>
-
-    <!--<ng-container
-      *ngIf="
-        selectedProviderType === providerType.Duo ||
-        selectedProviderType === providerType.OrganizationDuo ||
-        selectedProviderType === providerType.OrganizationHypr
-      "
-    >
-    </ng-container>-->
-    </ng-container>
+    
     <div class="box-content-row" [hidden]="!showCaptcha()">
       <iframe id="hcaptcha_iframe" height="80" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>

@@ -69,7 +69,7 @@ async function run(context) {
     return await notarize({
       appBundleId: "com.hitachiid.desktop",
       appPath: appPath,
-      teamId: "LTZ2PFU5D6",
+      teamId: "P96648JUTV",
       appleId: appleId,
       appleIdPassword: appleIdPassword,
     });

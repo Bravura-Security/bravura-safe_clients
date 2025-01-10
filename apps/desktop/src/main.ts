@@ -1,20 +1,18 @@
 import * as path from "path";
 
 import { app } from "electron";
-import { firstValueFrom } from "rxjs";
+import { Subject, firstValueFrom } from "rxjs";
 
-import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
-import { TokenService } from "@bitwarden/common/auth/services/token.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ClientType } from "@bitwarden/common/enums";
 import { DefaultBiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
-import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
-import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { Message, MessageSender } from "@bitwarden/common/platform/messaging";
+// eslint-disable-next-line no-restricted-imports -- For dependency creation
+import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationBuilderService } from "@bitwarden/common/platform/services/migration-builder.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
-import { NoopMessagingService } from "@bitwarden/common/platform/services/noop-messaging.service";
 /* eslint-disable import/no-restricted-paths -- We need the implementation to inject, but generally this should not be accessed */
 import { StorageServiceProvider } from "@bitwarden/common/platform/services/storage-service.provider";
 import { DefaultActiveUserStateProvider } from "@bitwarden/common/platform/state/implementations/default-active-user-state.provider";
@@ -34,15 +32,12 @@ import { PowerMonitorMain } from "./main/power-monitor.main";
 import { TrayMain } from "./main/tray.main";
 import { UpdaterMain } from "./main/updater.main";
 import { WindowMain } from "./main/window.main";
-import { Account } from "./models/account";
 import { BiometricsService, BiometricsServiceAbstraction } from "./platform/main/biometric/index";
 import { ClipboardMain } from "./platform/main/clipboard.main";
 import { DesktopCredentialStorageListener } from "./platform/main/desktop-credential-storage-listener";
 import { MainCryptoFunctionService } from "./platform/main/main-crypto-function.service";
 import { DesktopSettingsService } from "./platform/services/desktop-settings.service";
 import { ElectronLogMainService } from "./platform/services/electron-log.main.service";
-import { ELECTRON_SUPPORTS_SECURE_STORAGE } from "./platform/services/electron-platform-utils.service";
-import { ElectronStateService } from "./platform/services/electron-state.service";
 import { ElectronStorageService } from "./platform/services/electron-storage.service";
 import { I18nMainService } from "./platform/services/i18n.main.service";
 import { ElectronMainMessagingService } from "./services/electron-main-messaging.service";
@@ -54,14 +49,12 @@ export class Main {
   storageService: ElectronStorageService;
   memoryStorageService: MemoryStorageService;
   memoryStorageForStateProviders: MemoryStorageServiceForStateProviders;
-  messagingService: ElectronMainMessagingService;
-  stateService: StateService;
+  messagingService: MessageSender;
   environmentService: DefaultEnvironmentService;
-  mainCryptoFunctionService: MainCryptoFunctionService;
   desktopCredentialStorageListener: DesktopCredentialStorageListener;
   desktopSettingsService: DesktopSettingsService;
+  mainCryptoFunctionService: MainCryptoFunctionService;
   migrationRunner: MigrationRunner;
-  tokenService: TokenServiceAbstraction;
 
   windowMain: WindowMain;
   messagingMain: MessagingMain;
@@ -109,9 +102,6 @@ export class Main {
     this.logService = new ElectronLogMainService(null, app.getPath("userData"));
 
     const storageDefaults: any = {};
-    // Default vault timeout to "on restart", and action to "lock"
-    storageDefaults["global.vaultTimeout"] = -1;
-    storageDefaults["global.vaultTimeoutAction"] = "lock";
     this.storageService = new ElectronStorageService(app.getPath("userData"), storageDefaults);
     this.memoryStorageService = new MemoryStorageService();
     this.memoryStorageForStateProviders = new MemoryStorageServiceForStateProviders();
@@ -123,8 +113,11 @@ export class Main {
 
     this.i18nService = new I18nMainService("en", "./locales/", globalStateProvider);
 
+    this.mainCryptoFunctionService = new MainCryptoFunctionService();
+    this.mainCryptoFunctionService.init();
+
     const accountService = new AccountServiceImplementation(
-      new NoopMessagingService(),
+      MessageSender.EMPTY,
       this.logService,
       globalStateProvider,
     );
@@ -148,46 +141,22 @@ export class Main {
       activeUserStateProvider,
       singleUserStateProvider,
       globalStateProvider,
-      new DefaultDerivedStateProvider(this.memoryStorageForStateProviders),
+      new DefaultDerivedStateProvider(),
     );
 
     this.environmentService = new DefaultEnvironmentService(stateProvider, accountService);
-
-    this.tokenService = new TokenService(
-      singleUserStateProvider,
-      globalStateProvider,
-      ELECTRON_SUPPORTS_SECURE_STORAGE,
-      this.storageService,
-    );
 
     this.migrationRunner = new MigrationRunner(
       this.storageService,
       this.logService,
       new MigrationBuilderService(),
-    );
-
-    // TODO: this state service will have access to on disk storage, but not in memory storage.
-    // If we could get this to work using the stateService singleton that the rest of the app uses we could save
-    // ourselves from some hacks, like having to manually update the app menu vs. the menu subscribing to events.
-    this.stateService = new ElectronStateService(
-      this.storageService,
-      null,
-      this.memoryStorageService,
-      this.logService,
-      new StateFactory(GlobalState, Account),
-      accountService, // will not broadcast logouts. This is a hack until we can remove messaging dependency
-      this.environmentService,
-      this.tokenService,
-      this.migrationRunner,
-      false, // Do not use disk caching because this will get out of sync with the renderer service
+      ClientType.Desktop,
     );
 
     this.desktopSettingsService = new DesktopSettingsService(stateProvider);
-
     const biometricStateService = new DefaultBiometricStateService(stateProvider);
 
     this.windowMain = new WindowMain(
-      this.stateService,
       biometricStateService,
       this.logService,
       this.storageService,
@@ -195,12 +164,24 @@ export class Main {
       (arg) => this.processDeepLink(arg),
       (win) => this.trayMain.setupWindowListeners(win),
     );
-    this.messagingMain = new MessagingMain(this, this.stateService, this.desktopSettingsService);
+    this.messagingMain = new MessagingMain(this, this.desktopSettingsService);
     this.updaterMain = new UpdaterMain(this.i18nService, this.windowMain);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.desktopSettingsService);
 
-    this.messagingService = new ElectronMainMessagingService(this.windowMain, (message) => {
-      this.messagingMain.onMessage(message);
+    const messageSubject = new Subject<Message<Record<string, unknown>>>();
+    this.messagingService = MessageSender.combine(
+      new SubjectMessageSender(messageSubject), // For local messages
+      new ElectronMainMessagingService(this.windowMain),
+    );
+
+    messageSubject.asObservable().subscribe((message) => {
+      void this.messagingMain.onMessage(message).catch((err) => {
+        this.logService.error(
+          "Error while handling message",
+          message?.command ?? "Unknown command",
+          err,
+        );
+      });
     });
 
     this.powerMonitorMain = new PowerMonitorMain(this.messagingService);
@@ -239,9 +220,6 @@ export class Main {
 
     this.clipboardMain = new ClipboardMain();
     this.clipboardMain.init();
-
-    this.mainCryptoFunctionService = new MainCryptoFunctionService();
-    this.mainCryptoFunctionService.init();
   }
 
   bootstrap() {
@@ -270,12 +248,20 @@ export class Main {
         this.powerMonitorMain.init();
         await this.updaterMain.init();
 
-        if (
-          (await this.stateService.getEnableBrowserIntegration()) ||
-          (await firstValueFrom(
-            this.desktopAutofillSettingsService.enableDuckDuckGoBrowserIntegration$,
-          ))
-        ) {
+        const [browserIntegrationEnabled, ddgIntegrationEnabled] = await Promise.all([
+          firstValueFrom(this.desktopSettingsService.browserIntegrationEnabled$),
+          firstValueFrom(this.desktopAutofillSettingsService.enableDuckDuckGoBrowserIntegration$),
+        ]);
+
+        if (browserIntegrationEnabled || ddgIntegrationEnabled) {
+          // Re-register the native messaging host integrations on startup, in case they are not present
+          if (browserIntegrationEnabled) {
+            this.nativeMessagingMain.generateManifests().catch(this.logService.error);
+          }
+          if (ddgIntegrationEnabled) {
+            this.nativeMessagingMain.generateDdgManifests().catch(this.logService.error);
+          }
+
           this.nativeMessagingMain.listen();
         }
 

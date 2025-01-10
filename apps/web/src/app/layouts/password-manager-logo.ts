@@ -7,7 +7,7 @@ export const PasswordManagerLogo = svgIcon`
 ">
   <img
   src="../../images/icons/favicon-32x32.png"
-  alt="Bravura Security"
+  alt="Bravura Safe"
   width="32"
   height="32"
   />

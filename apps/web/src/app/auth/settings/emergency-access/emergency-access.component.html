@@ -1,7 +1,3 @@
-<!--
-<app-header></app-header>
-<bit-container>
--->
 <div class="page-header">
   <h1>{{ "emergencyAccess" | i18n }}</h1>
 </div>
@@ -24,9 +20,9 @@
   </bit-section>
   <bit-section>
     <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
-      <h2 bitTypography="h2" noMargin class="tw-mb-0">
+      <h1 noMargin class="tw-mb-0">
         {{ "trustedEmergencyContacts" | i18n }}
-      </h2>
+      </h1>
       <app-premium-badge></app-premium-badge>
       <div class="tw-ml-auto tw-flex">
         <button
@@ -93,8 +89,9 @@
               [bitMenuTriggerFor]="trustedContactOptions"
               type="button"
               appA11yTitle="{{ 'options' | i18n }}"
-              bitIconButton="fa fa-ellipsis-v"
+              bitIconButton="fa-cog"
               buttonType="main"
+              class="tw-border-0 tw-bg-transparent tw-p-0"
             ></button>
             <bit-menu #trustedContactOptions>
               <ng-container>
@@ -160,7 +157,7 @@
   </bit-section>
 
   <bit-section>
-    <h2 bitTypography="h2">{{ "designatedEmergencyContacts" | i18n }}</h2>
+    <h1>{{ "designatedEmergencyContacts" | i18n }}</h1>
 
     <bit-table *ngIf="grantedContacts && grantedContacts.length">
       <ng-container header>
@@ -217,8 +214,9 @@
               [bitMenuTriggerFor]="grantedContactOptions"
               type="button"
               appA11yTitle="{{ 'options' | i18n }}"
-              bitIconButton="fa fa-ellipsis-v"
+              bitIconButton="fa-cog"
               buttonType="main"
+              class="tw-border-0 tw-bg-transparent tw-p-0"
             ></button>
             <bit-menu #grantedContactOptions>
               <ng-container>
@@ -278,9 +276,6 @@
     </ng-container>
   </bit-section>
 </div>
-<!--
-</bit-container>
--->
 
 <ng-template #addEdit></ng-template>
 <ng-template #takeoverTemplate></ng-template>

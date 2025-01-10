@@ -1,19 +1,11 @@
 <ng-container *ngIf="homepage$ | async">
-  <!--
-  <app-header></app-header>
-  -->
   <div class="page-header">
     <h1>{{ "reports" | i18n }}</h1>
   </div>
 
-  <p>{{ "orgsReportsDesc" | i18n }}</p>
+  <p bitTypography="body1">{{ "orgsReportsDesc" | i18n }}</p>
 
   <app-report-list [reports]="reports$ | async"></app-report-list>
 </ng-container>
 
 <router-outlet></router-outlet>
-
-<div class="row mt-4">
-  <div class="col">
-  </div>
-</div>

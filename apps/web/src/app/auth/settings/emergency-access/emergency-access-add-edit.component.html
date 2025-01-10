@@ -43,7 +43,7 @@
         <bit-select formControlName="waitTime">
           <bit-option *ngFor="let o of waitTimes" [value]="o.value" [label]="o.name"></bit-option>
         </bit-select>
-        <bit-hint class="tw-text-sm">{{ "waitTimeDesc" | i18n }}</bit-hint>
+        <bit-hint>{{ "waitTimeDesc" | i18n }}</bit-hint>
       </bit-form-field>
     </ng-container>
     <ng-container bitDialogFooter>
@@ -57,7 +57,7 @@
         type="button"
         bitFormButton
         class="tw-ml-auto"
-        bitIconButton="bwi-trash"
+        bitIconButton="fa-trash"
             buttonType="danger"
         [bitAction]="delete"
         *ngIf="editMode"

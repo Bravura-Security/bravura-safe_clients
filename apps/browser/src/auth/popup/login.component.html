@@ -52,12 +52,11 @@
         </div>
       </div>
       <div class="box-footer">
-        <button type="button" class="btn link" routerLink="/hint" (click)="setFormValues()">
+        <button type="button" class="btn link" routerLink="/hint" (click)="setLoginEmailValues()">
           <b>{{ "getMasterPasswordHint" | i18n }}</b>
         </button>
       </div>
     </div>
-    <app-private-mode-warning></app-private-mode-warning>
     <div class="content login-buttons">
       <button type="submit" class="btn primary block" [disabled]="form.loading">
         <span [hidden]="form.loading"
@@ -71,7 +70,7 @@
         </button>
       </div>
       <button type="button" (click)="launchSsoBrowser()" class="btn block">
-        <i class="fa fa-provider" aria-hidden="true"></i> {{ "enterpriseSingleSignOn" | i18n }}
+        <i class="fa fa-unlock" aria-hidden="true"></i> {{ "enterpriseSingleSignOn" | i18n }}
       </button>
       <div class="small">
         <p class="no-margin">{{ "loggingInAs" | i18n }} {{ loggedEmail }}</p>
