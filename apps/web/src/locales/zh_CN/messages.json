@@ -7957,7 +7957,7 @@
     "message": "Skip the personal two-step provider if a user is logging in via SSO. Only use if Two-step Login is already enforced through your Identity Provider."
   },
   "skip2faForSsoPolicyWarning": {
-    "message": "Skipping the Bravura Safe provided personal Two-step Login provider (ex OTP or email code ) is less secure. Ensure the SSO provider enforces multi-factor authentication."
+    "message": "Skipping the Bravura Safe provided personal Two-step Login provider (ex OTP or email code) is less secure. Ensure the SSO provider enforces multi-factor authentication."
   },
   "forcePasswordReset": {
     "message": "Force password reset"
