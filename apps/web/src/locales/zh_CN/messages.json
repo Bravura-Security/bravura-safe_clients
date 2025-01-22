@@ -1605,6 +1605,13 @@
   "faviconDesc": {
     "message": "在每个登录项目旁边显示一个可识别的图像。"
   },
+  "enableFullWidth": {
+    "message": "显示全宽布局",
+    "description": "Allows scaling the web vault UI's width"
+  },
+  "enableFullWidthDesc": {
+    "message": "允许网页密码库拓展到整个浏览器窗口宽度。"
+  },
   "default": {
     "message": "默认"
   },

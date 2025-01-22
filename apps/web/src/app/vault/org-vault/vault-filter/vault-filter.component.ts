@@ -76,24 +76,9 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
     this.removeCollapsibleCollection();
 
     const collectionFilterSection: VaultFilterSection = {
-      data$: this.vaultFilterService.buildTypeTree(
-        {
-          id: "AllCollections",
-          name: "collections",
-          type: "all",
-          icon: "fa-book",
-        },
-        [
-          {
-            id: "AllCollections",
-            name: "Collections",
-            type: "all",
-            icon: "fa-book",
-          },
-        ],
-      ),
+      data$: this.vaultFilterService.collectionTree$,
       header: {
-        showHeader: false,
+        showHeader: true,
         isSelectable: true,
       },
       action: this.applyCollectionFilter,

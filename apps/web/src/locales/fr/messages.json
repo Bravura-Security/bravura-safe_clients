@@ -1605,6 +1605,13 @@
   "faviconDesc": {
     "message": "Affichez une image reconnaissable à côté de chaque identifiant."
   },
+  "enableFullWidth": {
+    "message": "Afficher la mise en page en pleine largeur",
+    "description": "Allows scaling the web vault UI's width"
+  },
+  "enableFullWidthDesc": {
+    "message": "Permettez au coffre web de s'étendre sur toute la largeur de la fenêtre du navigateur."
+  },
   "default": {
     "message": "Par défaut"
   },

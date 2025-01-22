@@ -1605,6 +1605,13 @@
   "faviconDesc": {
     "message": "ログイン情報の隣にアイコン画像を表示します"
   },
+  "enableFullWidth": {
+    "message": "全幅レイアウトを有効化",
+    "description": "Allows scaling the web vault UI's width"
+  },
+  "enableFullWidthDesc": {
+    "message": "ウェブ保管庫の幅をブラウザウインドウ一杯に広げます。"
+  },
   "default": {
     "message": "デフォルト"
   },

@@ -18,7 +18,7 @@
           class="dropdown-menu dropdown-menu-right scrollable-menu"
           aria-labelledby="dropdownMenuButton"
         >
-          <app-organization-list [organizations]="allOrganizations"></app-organization-list>
+          <app-organization-list [organizations]="allOrganizations" [loading]="performingInitialLoad"></app-organization-list>
         </div>
       </div>
       <app-vault-filter

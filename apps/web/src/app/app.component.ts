@@ -57,6 +57,8 @@ import {
   Skip2faForSsoPolicy,
 } from "./admin-console/organizations/policies";
 
+import { DomainSettingsService } from "@bitwarden/common/autofill/services/domain-settings.service";
+
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
 const PaymentMethodWarningsRefresh = 60000; // 1 Minute
@@ -102,6 +104,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private paymentMethodWarningService: PaymentMethodWarningService,
     private organizationService: InternalOrganizationServiceAbstraction,
     private accountService: AccountService,
+    private domainSettingsService: DomainSettingsService,
   ) {}
 
   ngOnInit() {
@@ -273,6 +276,8 @@ export class AppComponent implements OnDestroy, OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe();
+
+    this.setFullWidth();
   }
 
   ngOnDestroy() {
@@ -388,6 +393,14 @@ export class AppComponent implements OnDestroy, OnInit {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.notificationsService.reconnectFromActivity();
+    }
+  }
+  private async setFullWidth() {
+    const enableFullWidth = await firstValueFrom(this.domainSettingsService.enableFullWidth$);
+    if (enableFullWidth) {
+      document.body.classList.add("full-width");
+    } else {
+      document.body.classList.remove("full-width");
     }
   }
 }

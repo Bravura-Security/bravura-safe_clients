@@ -1605,6 +1605,13 @@
   "faviconDesc": {
     "message": "Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen."
   },
+  "enableFullWidth": {
+    "message": "Darstellung in voller Breite aktivieren",
+    "description": "Allows scaling the web vault UI's width"
+  },
+  "enableFullWidthDesc": {
+    "message": "Dem Web-Tresor erlauben, die volle Breite des Browserfensters zu benutzen."
+  },
   "default": {
     "message": "Standard"
   },

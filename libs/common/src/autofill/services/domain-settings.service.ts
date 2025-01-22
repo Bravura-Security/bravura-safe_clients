@@ -20,6 +20,10 @@ const SHOW_FAVICONS = new KeyDefinition(DOMAIN_SETTINGS_DISK, "showFavicons", {
   deserializer: (value: boolean) => value ?? true,
 });
 
+const ENABLE_FULLWIDTH = new KeyDefinition(DOMAIN_SETTINGS_DISK, "enableFullWidth", {
+  deserializer: (value: boolean) => value ?? true,
+});
+
 const NEVER_DOMAINS = new KeyDefinition(DOMAIN_SETTINGS_DISK, "neverDomains", {
   deserializer: (value: NeverDomains) => value ?? null,
 });
@@ -41,6 +45,8 @@ const DEFAULT_URI_MATCH_STRATEGY = new UserKeyDefinition(
 export abstract class DomainSettingsService {
   showFavicons$: Observable<boolean>;
   setShowFavicons: (newValue: boolean) => Promise<void>;
+  enableFullWidth$: Observable<boolean>;
+  setEnableFullWidth: (newValue: boolean) => Promise<void>;
   neverDomains$: Observable<NeverDomains>;
   setNeverDomains: (newValue: NeverDomains) => Promise<void>;
   equivalentDomains$: Observable<EquivalentDomains>;
@@ -54,6 +60,9 @@ export class DefaultDomainSettingsService implements DomainSettingsService {
   private showFaviconsState: GlobalState<boolean>;
   readonly showFavicons$: Observable<boolean>;
 
+  private enableFullWidthState: GlobalState<boolean>;
+  readonly enableFullWidth$: Observable<boolean>;
+
   private neverDomainsState: GlobalState<NeverDomains>;
   readonly neverDomains$: Observable<NeverDomains>;
 
@@ -66,6 +75,9 @@ export class DefaultDomainSettingsService implements DomainSettingsService {
   constructor(private stateProvider: StateProvider) {
     this.showFaviconsState = this.stateProvider.getGlobal(SHOW_FAVICONS);
     this.showFavicons$ = this.showFaviconsState.state$.pipe(map((x) => x ?? true));
+
+    this.enableFullWidthState = this.stateProvider.getGlobal(ENABLE_FULLWIDTH);
+    this.enableFullWidth$ = this.enableFullWidthState.state$.pipe(map((x) => x ?? true));
 
     this.neverDomainsState = this.stateProvider.getGlobal(NEVER_DOMAINS);
     this.neverDomains$ = this.neverDomainsState.state$.pipe(map((x) => x ?? null));
@@ -81,6 +93,10 @@ export class DefaultDomainSettingsService implements DomainSettingsService {
 
   async setShowFavicons(newValue: boolean): Promise<void> {
     await this.showFaviconsState.update(() => newValue);
+  }
+
+  async setEnableFullWidth(newValue: boolean): Promise<void> {
+    await this.enableFullWidthState.update(() => newValue);
   }
 
   async setNeverDomains(newValue: NeverDomains): Promise<void> {

@@ -45,6 +45,7 @@ export class PreferencesComponent implements OnInit {
     vaultTimeout: [null as VaultTimeout | null],
     vaultTimeoutAction: [VaultTimeoutAction.Lock],
     enableFavicons: true,
+    enableFullWidth: false,
     theme: [ThemeType.Light],
     locale: [null as string | null],
   });
@@ -151,6 +152,7 @@ export class PreferencesComponent implements OnInit {
         this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(activeAcct.id),
       ),
       enableFavicons: await firstValueFrom(this.domainSettingsService.showFavicons$),
+      enableFullWidth: await firstValueFrom(this.domainSettingsService.enableFullWidth$),
       theme: await firstValueFrom(this.themeStateService.selectedTheme$),
       locale: (await firstValueFrom(this.i18nService.userSetLocale$)) ?? null,
     };
@@ -177,6 +179,7 @@ export class PreferencesComponent implements OnInit {
       values.vaultTimeoutAction,
     );
     await this.domainSettingsService.setShowFavicons(values.enableFavicons);
+    await this.domainSettingsService.setEnableFullWidth(values.enableFullWidth);
     await this.themeStateService.setSelectedTheme(values.theme);
     await this.i18nService.setLocale(values.locale);
     if (values.locale !== this.startingLocale) {
@@ -187,6 +190,12 @@ export class PreferencesComponent implements OnInit {
         null,
         this.i18nService.t("preferencesUpdated"),
       );
+
+      if (values.enableFullWidth) {
+        document.body.classList.add("full-width");
+      } else {
+        document.body.classList.remove("full-width");
+      }
     }
   };
 

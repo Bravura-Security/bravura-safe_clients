@@ -1605,6 +1605,13 @@
   "faviconDesc": {
     "message": "Mostrar una imagen reconocible junto a cada inicio de sesión."
   },
+  "enableFullWidth": {
+    "message": "Habilitar diseño de ancho completo",
+    "description": "Allows scaling the web vault UI's width"
+  },
+  "enableFullWidthDesc": {
+    "message": "Permite que la caja fuerte web se amplíe al ancho completo de la ventana del navegador."
+  },
   "default": {
     "message": "Por defecto"
   },

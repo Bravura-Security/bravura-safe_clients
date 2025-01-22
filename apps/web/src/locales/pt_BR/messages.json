@@ -1605,6 +1605,13 @@
   "faviconDesc": {
     "message": "Mostrar uma imagem reconhecível ao lado de cada login."
   },
+  "enableFullWidth": {
+    "message": "Habilitar Esquema de Largura Total",
+    "description": "Allows scaling the web vault UI's width"
+  },
+  "enableFullWidthDesc": {
+    "message": "Permitir que o cofre web expanda a largura total da janela do navegador."
+  },
   "default": {
     "message": "Padrão"
   },
