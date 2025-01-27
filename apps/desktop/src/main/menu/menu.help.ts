@@ -1,7 +1,8 @@
-import { shell, MenuItemConstructorOptions } from "electron";
+import { shell, MenuItemConstructorOptions, app } from "electron";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
+import { DesktopSettingsService } from "../../platform/services/desktop-settings.service";
 import { isMacAppStore, isWindowsStore } from "../../utils";
 
 import { AboutMenu } from "./menu.about";
@@ -20,23 +21,23 @@ export class HelpMenu implements IMenubarMenu {
       this.legal,
       this.separator,
       this.goToWebVault,
+      this.separator,
+      this.troubleshooting,
     ];
 
-    if (this._aboutMenu != null) {
-      items.push(...this._aboutMenu.items);
+    if (this.aboutMenu != null) {
+      items.push(...this.aboutMenu.items);
     }
     return items;
   }
 
-  private readonly _i18nService: I18nService;
-  private readonly _webVaultUrl: string;
-  private readonly _aboutMenu: AboutMenu;
-
-  constructor(i18nService: I18nService, webVaultUrl: string, aboutMenu: AboutMenu) {
-    this._i18nService = i18nService;
-    this._webVaultUrl = webVaultUrl;
-    this._aboutMenu = aboutMenu;
-  }
+  constructor(
+    private i18nService: I18nService,
+    private desktopSettingsService: DesktopSettingsService,
+    private webVaultUrl: string,
+    private hardwareAccelerationEnabled: boolean,
+    private aboutMenu: AboutMenu,
+  ) {}
 
   private get helpAndFeedback(): MenuItemConstructorOptions {
     return {
@@ -124,7 +125,7 @@ export class HelpMenu implements IMenubarMenu {
     return {
       id: "goToWebVault",
       label: this.localize("goToWebVault"),
-      click: () => shell.openExternal(this._webVaultUrl),
+      click: () => shell.openExternal(this.webVaultUrl),
     };
   }
 
@@ -142,21 +143,19 @@ export class HelpMenu implements IMenubarMenu {
       {
         id: "iOS",
         label: "iOS",
-        click: () => {
+        click: () =>
           shell.openExternal(
             "https://itunes.apple.com/app/" + "bravura-safe/id1635873468"
-          );
-        },
+          ),
       },
       {
         id: "android",
         label: "Android",
         visible: !isMacAppStore(), // Apple Guideline 2.3.10 - Accurate Metadata
-        click: () => {
+        click: () =>
           shell.openExternal(
             "https://play.google.com/store/apps/" + "details?id=com.hitachi_id.safe"
-          );
-        },
+          ),
       },
     ];
   }
@@ -175,53 +174,79 @@ export class HelpMenu implements IMenubarMenu {
       {
         id: "chrome",
         label: "Chrome",
-        click: () => {
+        click: () =>
           shell.openExternal(
             "https://chromewebstore.google.com/detail/" +
               "bravura-safe/cjidmfgdjckibjdfnglfdgohkaballnn"
-          );
-        },
+          ),
       },
       {
         id: "firefox",
         label: "Firefox",
-        click: () => {
+        click: () =>
           shell.openExternal(
             "https://github.com/Hitachi-ID/bravura-safe_browser/releases/"
 
-          );
-        },
+          ),
       },
       {
         id: "firefox",
         label: "Opera",
-        click: () => {
+        click: () =>
           shell.openExternal(
             "https://addons.opera.com/extensions/details/" + "bravura-safe/"
-          );
-        },
+          ),
       },
       {
         id: "firefox",
         label: "Edge",
-        click: () => {
+        click: () =>
           shell.openExternal(
             "https://microsoftedge.microsoft.com/addons/" +
               "detail/lgjgabmkhcjfpcmflkhmhjgmnnpfgmnc"
-          );
-        },
+          ),
       },
       {
         id: "safari",
         label: "Safari",
-        click: () => {
-          shell.openExternal("https://apps.apple.com/us/app/bravura-safe-desktop/id1633310016");
+        click: () => shell.openExternal("https://apps.apple.com/us/app/bravura-safe-desktop/id1633310016"),
+      },
+    ];
+  }
+
+  private get troubleshooting(): MenuItemConstructorOptions {
+    return {
+      id: "troubleshooting",
+      label: this.localize("troubleshooting"),
+      submenu: this.troubleshootingSubmenu,
+    };
+  }
+
+  private get troubleshootingSubmenu(): MenuItemConstructorOptions[] {
+    return [
+      {
+        id: "hardwareAcceleration",
+        label: this.localize(
+          this.hardwareAccelerationEnabled
+            ? "disableHardwareAccelerationRestart"
+            : "enableHardwareAccelerationRestart",
+        ),
+        click: async () => {
+          await this.desktopSettingsService.setHardwareAcceleration(
+            !this.hardwareAccelerationEnabled,
+          );
+          // `app.relaunch` crashes the app on Mac Store builds. Disabling it for now.
+          // https://github.com/electron/electron/issues/41690
+          if (!isMacAppStore()) {
+            app.relaunch();
+          }
+          app.exit();
         },
       },
     ];
   }
 
   private localize(s: string) {
-    return this._i18nService.t(s);
+    return this.i18nService.t(s);
   }
 }

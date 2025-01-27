@@ -1,19 +1,16 @@
 import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { map, switchMap } from "rxjs";
 
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { EventType } from "@bitwarden/common/enums";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
-import { VaultExportServiceAbstraction } from "@bitwarden/exporter/vault-export";
+import { DialogService, ToastService } from "@bitwarden/components";
+import { VaultExportServiceAbstraction } from "@bitwarden/vault-export-core";
 
 import { ExportComponent } from "../../../../tools/vault-export/export.component";
 
@@ -25,13 +22,12 @@ import { ExportComponent } from "../../../../tools/vault-export/export.component
 export class OrganizationVaultExportComponent extends ExportComponent {
   constructor(
     i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService,
+    toastService: ToastService,
     exportService: VaultExportServiceAbstraction,
     eventCollectionService: EventCollectionService,
     private route: ActivatedRoute,
     policyService: PolicyService,
     logService: LogService,
-    userVerificationService: UserVerificationService,
     formBuilder: UntypedFormBuilder,
     fileDownloadService: FileDownloadService,
     dialogService: DialogService,
@@ -39,12 +35,11 @@ export class OrganizationVaultExportComponent extends ExportComponent {
   ) {
     super(
       i18nService,
-      platformUtilsService,
+      toastService,
       exportService,
       eventCollectionService,
       policyService,
       logService,
-      userVerificationService,
       formBuilder,
       fileDownloadService,
       dialogService,
@@ -62,20 +57,15 @@ export class OrganizationVaultExportComponent extends ExportComponent {
       this.organizationId = params.organizationId;
     });
 
-    this.flexibleCollectionsEnabled$ = this.route.parent.parent.params.pipe(
-      switchMap((params) => this.organizationService.get$(params.organizationId)),
-      map((organization) => organization.flexibleCollections),
-    );
-
     await super.ngOnInit();
   }
 
   getExportData() {
-    if (this.isFileEncryptedExport) {
-      return this.exportService.getPasswordProtectedExport(this.filePassword, this.organizationId);
-    } else {
-      return this.exportService.getOrganizationExport(this.organizationId, this.format);
-    }
+    return this.exportService.getOrganizationExport(
+      this.organizationId,
+      this.format,
+      this.filePassword,
+    );
   }
 
   getFileName() {

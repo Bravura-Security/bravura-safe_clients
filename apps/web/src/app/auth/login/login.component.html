@@ -1,27 +1,13 @@
 <form
-  #form
-  (ngSubmit)="submit()"
+  [bitSubmit]="submitForm.bind(null, false)"
   [appApiAction]="formPromise"
-  class="tw-container tw-mx-auto"
   [formGroup]="formGroup"
 >
-  <div
-    class="tw-mx-auto tw-mt-5 tw-flex tw-max-w-lg tw-flex-col tw-items-center tw-justify-center tw-p-8"
-  >
-    <div>
-      <img class="logo logo-themed" alt="Bravura Security" />
-      <p class="tw-mx-4 tw-mb-4 tw-mt-3 tw-text-center tw-text-xl">
-        {{ "loginOrCreateNewAccount" | i18n }}
-      </p>
-      <div
-        class="tw-mt-3 tw-rounded-md tw-border tw-border-solid tw-border-secondary-300 tw-bg-background tw-p-6"
-      >
         <ng-container *ngIf="!validatedEmail">
           <div class="tw-mb-3">
             <bit-form-field>
               <bit-label>{{ "emailAddress" | i18n }}</bit-label>
               <input
-                id="login_input_email"
                 bitInput
                 type="email"
                 formControlName="email"
@@ -44,36 +30,16 @@
               type="button"
               buttonType="primary"
               class="tw-w-full"
-              [disabled]="form.loading"
               (click)="validateEmail()"
             >
               <span> {{ "continue" | i18n }} </span>
             </button>
           </div>
-
-          <div
-            class="tw-mb-3 tw-flex tw-flex-col tw-items-center tw-justify-center"
-            *ngIf="showWebauthnLogin$ | async"
-          >
-            <p class="tw-mb-3">{{ "or" | i18n }}</p>
-
-            <a
-              bitLink
-              block
-              linkType="primary"
-              routerLink="/login-with-passkey"
-              (mousedown)="$event.preventDefault()"
-            >
-              <span><i class="fa fa-key"></i> {{ "loginWithPasskey" | i18n }}</span>
-            </a>
-          </div>
-
           <hr />
-
           <p class="tw-m-0 tw-text-sm">
             {{ "newAroundHere" | i18n }}
             <!--mousedown event is used over click because it prevents the validation from firing  -->
-            <a routerLink="/register" (mousedown)="goToRegister()">{{ "createAccount" | i18n }}</a>
+      <a bitLink href="#" (mousedown)="goToRegister()">{{ "createAccount" | i18n }}</a>
           </p>
         </ng-container>
 
@@ -81,33 +47,17 @@
   <div class="tw-mb-6 tw-h-28">
     <bit-form-field class="!tw-mb-1">
       <bit-label>{{ "masterPass" | i18n }}</bit-label>
-      <input
-        id="login_input_master-password"
-        type="password"
-        bitInput
-                #masterPasswordInput
-        formControlName="masterPassword"
-      />
+        <input type="password" bitInput #masterPasswordInput formControlName="masterPassword" />
       <button type="button" bitSuffix bitIconButton bitPasswordInputToggle></button>
     </bit-form-field>
   </div>
 
           <div [hidden]="!showCaptcha()">
-            <iframe
-              id="hcaptcha_iframe"
-              height="80"
-              sandbox="allow-scripts allow-same-origin"
-            ></iframe>
+      <iframe id="hcaptcha_iframe" height="80" sandbox="allow-scripts allow-same-origin"></iframe>
           </div>
 
   <div class="tw-mb-3 tw-flex tw-space-x-4">
-            <button
-              bitButton
-              buttonType="primary"
-              type="submit"
-              [block]="true"
-              [loading]="form.loading"
-            >
+      <button bitButton buttonType="primary" bitFormButton type="submit" [block]="true">
       <span> {{ "loginWithMasterPassword" | i18n }} </span>
     </button>
   </div>
@@ -133,7 +83,7 @@
       buttonType="secondary"
       class="tw-w-full"
     >
-      <i class="fa fa-provider tw-mr-2"></i>
+      <i class="fa fa-unlock tw-mr-2"></i>
       {{ "enterpriseSingleSignOn" | i18n }}
     </a>
   </div>
@@ -145,7 +95,4 @@
     <a [routerLink]="[]" (click)="toggleValidateEmail(false)">{{ "notYou" | i18n }}</a>
   </div>
         </div>
-      </div>
-    </div>
-  </div>
 </form>

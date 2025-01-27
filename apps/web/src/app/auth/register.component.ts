@@ -7,7 +7,7 @@ import { first } from "rxjs/operators";
 import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/auth/components/register.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { LoginStrategyServiceAbstraction } from "@bitwarden/auth/common";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
@@ -25,6 +25,8 @@ import { ReferenceEventRequest } from "@bitwarden/common/models/request/referenc
 import { DialogService } from "@bitwarden/components";
 
 import { RouterService } from "../core";
+import { AcceptOrganizationInviteService } from "./organization-invite/accept-organization.service";
+import { OrganizationInvite } from "./organization-invite/organization-invite";
 
 @Component({
   selector: "app-register",
@@ -42,7 +44,7 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
     formBuilder: UntypedFormBuilder,
-    authService: AuthService,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     i18nService: I18nService,
     cryptoService: CryptoService,
@@ -57,12 +59,13 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     logService: LogService,
     private routerService: RouterService,
     auditService: AuditService,
-    dialogService: DialogService
+    dialogService: DialogService,
+    private acceptOrgInviteService: AcceptOrganizationInviteService,
   ) {
     super(
       formValidationErrorService,
       formBuilder,
-      authService,
+      loginStrategyService,
       router,
       i18nService,
       cryptoService,
@@ -118,7 +121,10 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
         this.referenceData.id = null;
       }
     });
-    const invite = await this.stateService.getOrganizationInvitation();
+
+
+
+/*    const invite = await this.stateService.getOrganizationInvitation();
     if (invite != null) {
       try {
         const policies = await this.policyApiService.getPoliciesByToken(
@@ -143,6 +149,11 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
         .subscribe((enforcedPasswordPolicyOptions) => {
           this.enforcedPolicyOptions = enforcedPasswordPolicyOptions;
         });
+    }*/
+    // If there's a deep linked org invite, use it to get the password policies
+    const orgInvite = await this.acceptOrgInviteService.getOrganizationInvite();
+    if (orgInvite != null) {
+      await this.initPasswordPolicies(orgInvite);
     }
 
     await super.ngOnInit();
@@ -151,5 +162,34 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private async initPasswordPolicies(invite: OrganizationInvite): Promise<void> {
+    if (invite == null) {
+      return;
+    }
+    try {
+      const policies = await this.policyApiService.getPoliciesByToken(
+        invite.organizationId,
+        invite.token,
+        invite.email,
+        invite.organizationUserId
+      );
+/*      if (policies.data != null) {
+        const policiesData = policies.data.map((p) => new PolicyData(p));
+        this.policies = policiesData.map((p) => new Policy(p));
+      }*/
+    } catch (e) {
+      this.logService.error(e);
+    }
+
+    if (this.policies != null) {
+      this.policyService
+        .masterPasswordPolicyOptions$(this.policies)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((enforcedPasswordPolicyOptions) => {
+          this.enforcedPolicyOptions = enforcedPasswordPolicyOptions;
+        });
+    }
   }
 }

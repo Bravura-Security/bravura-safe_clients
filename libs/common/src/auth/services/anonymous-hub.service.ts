@@ -5,15 +5,16 @@ import {
   IHubProtocol,
 } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
+import { firstValueFrom } from "rxjs";
 
+import { AuthRequestServiceAbstraction } from "../../../../auth/src/common/abstractions";
+import { NotificationType } from "../../enums";
 import {
   AuthRequestPushNotification,
   NotificationResponse,
 } from "../../models/response/notification.response";
 import { EnvironmentService } from "../../platform/abstractions/environment.service";
-import { LogService } from "../../platform/abstractions/log.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "../abstractions/anonymous-hub.service";
-import { AuthService } from "../abstractions/auth.service";
 
 export class AnonymousHubService implements AnonymousHubServiceAbstraction {
   private anonHubConnection: HubConnection;
@@ -22,51 +23,39 @@ export class AnonymousHubService implements AnonymousHubServiceAbstraction {
 
   constructor(
     private environmentService: EnvironmentService,
-    private authService: AuthService,
-    private logService: LogService,
+    private authRequestService: AuthRequestServiceAbstraction,
   ) {}
 
   async createHubConnection(token: string) {
-    this.url = this.environmentService.getNotificationsUrl();
+    this.url = (await firstValueFrom(this.environmentService.environment$)).getNotificationsUrl();
 
     this.anonHubConnection = new HubConnectionBuilder()
       .withUrl(this.url + "/anonymous-hub?Token=" + token, {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
       })
-      //.withAutomaticReconnect()
       .withHubProtocol(new MessagePackHubProtocol() as IHubProtocol)
       .build();
+
+    await this.anonHubConnection.start();
 
     this.anonHubConnection.on("AuthRequestResponseRecieved", (data: any) => {
       this.ProcessNotification(new NotificationResponse(data));
     });
-
-    // eslint-disable-next-line
-    this.anonHubConnection.on("Heartbeat", (data: any) => {
-      if (this.logHeartbeat) {
-        const currentTime = new Date();
-        console.log('Anon Heartbeat!', currentTime);
-      }
-    });
-
-    this.anonHubConnection.on("error", (error) => {
-      //const currentTime = new Date();
-      console.log('Anon Connection generated error !!!', error);
-    });
-
-    await this.anonHubConnection.start().catch((error) => this.logService.error(error));
   }
 
-  stopHubConnection() {
+  async stopHubConnection() {
     if (this.anonHubConnection) {
-      this.anonHubConnection.stop();
+      await this.anonHubConnection.stop();
     }
   }
 
-  private async ProcessNotification(notification: NotificationResponse) {
-    await this.authService.authResponsePushNotification(
+  private ProcessNotification(notification: NotificationResponse) {
+    switch (notification.type) {
+      case NotificationType.AuthRequestResponse:
+        this.authRequestService.sendAuthRequestPushNotification(
       notification.payload as AuthRequestPushNotification,
     );
   }
+}
 }

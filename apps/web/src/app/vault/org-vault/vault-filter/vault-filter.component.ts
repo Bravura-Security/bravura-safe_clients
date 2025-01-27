@@ -11,8 +11,8 @@ import { VaultFilterComponent as BaseVaultFilterComponent } from "../../individu
 import { VaultFilterService } from "../../individual-vault/vault-filter/services/abstractions/vault-filter.service";
 import {
   VaultFilterList,
-  VaultFilterType,
   VaultFilterSection,
+  VaultFilterType,
 } from "../../individual-vault/vault-filter/shared/models/vault-filter-section.type";
 import { CollectionFilter, CipherTypeFilter } from "../../individual-vault/vault-filter/shared/models/vault-filter.type";
 
@@ -71,27 +71,14 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
 
   protected async addCollectionFilter(): Promise<VaultFilterSection> {
     // Ensure the Collections filter is never collapsed for the org vault
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.removeCollapsibleCollection();
 
     const collectionFilterSection: VaultFilterSection = {
-      data$: this.vaultFilterService.buildTypeTree(
-        {
-          id: "AllCollections",
-          name: "collections",
-          type: "all",
-          icon: "fa-book",
-        },
-        [
-          {
-            id: "AllCollections",
-            name: "Collections",
-            type: "all",
-            icon: "fa-book",
-          },
-        ],
-      ),
+      data$: this.vaultFilterService.collectionTree$,
       header: {
-        showHeader: false,
+        showHeader: true,
         isSelectable: true,
       },
       action: this.applyCollectionFilter,
@@ -102,11 +89,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   async buildAllFilters(): Promise<VaultFilterList> {
     const builderFilter = {} as VaultFilterList;
     builderFilter.typeFilter = await this.addTypeFilter("organizationVaultItems", ["favorites"]);
-    if (this._organization?.flexibleCollections) {
     builderFilter.collectionFilter = await this.addCollectionFilter();
-    } else {
-      builderFilter.collectionFilter = await super.addCollectionFilter();
-    }
     return builderFilter;
   }
 

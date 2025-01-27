@@ -20,13 +20,23 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { SsoComponent } from "@bitwarden/angular/auth/components/sso.component";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
 import { firstValueFrom } from "rxjs";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import {
+  UserDecryptionOptionsServiceAbstraction,
+  LoginStrategyServiceAbstraction,
+} from "@bitwarden/auth/common";
+
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
+import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
+import { OrganizationUserResetPasswordService } from "../members/services/organization-user-reset-password/organization-user-reset-password.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 
 @Component({
   selector: "app-org-account-options",
@@ -54,12 +64,19 @@ export class AccountComponent {
     private i18nService: I18nService,
     private syncService: SyncService,
     private authService: AuthService,
+    private ssoLoginService: SsoLoginServiceAbstraction,
+    private loginStrategyService: LoginStrategyServiceAbstraction,
     private router: Router,
     private cryptoFunctionService: CryptoFunctionService,
     private environmentService: EnvironmentService,
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private dialogService: DialogService,
-    private configService: ConfigServiceAbstraction,
+    private userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
+    private configService: ConfigService,
+    private organizationUserService: OrganizationUserService,
+    private resetPasswordService: OrganizationUserResetPasswordService,
+    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    private accountService: AccountService,
   ) {}
 
   async ngOnInit() {
@@ -107,12 +124,16 @@ export class AccountComponent {
 
   async enrollPasswordReset() {
     if( !this.organizationUser.resetPasswordEnrolled ){
-      const ref = EnrollMasterPasswordReset.open(this.dialogService, {
-        organization: this.organization
-      });
-
-      await firstValueFrom(ref.closed);
-      await this.load();
+      await EnrollMasterPasswordReset.open(
+        this.dialogService,
+        { organization: this.organization },
+        this.resetPasswordService,
+        this.organizationUserService,
+        this.platformUtilsService,
+        this.i18nService,
+        this.syncService,
+        this.logService,
+      );
     }
   }
 
@@ -126,11 +147,13 @@ export class AccountComponent {
   async openOneAuthDeviceManager() {
     if (this.organizationOneAuthEnabled) {
       const ref = OpenHyprDeviceManager.open(this.dialogService, {
+          data: {
         organization: this.organization,
         userId: this.organizationUser.userId
+          },
       });
       await firstValueFrom(ref.closed);
-      await this.load();
+//      await this.load();
     }
   }
 
@@ -162,7 +185,8 @@ export class AccountComponent {
     let returnUri = "/settings/organizations";
 
     ssoComponent = new SsoComponent(
-      this.authService,
+      this.ssoLoginService,
+      this.loginStrategyService,
       this.router,
       this.i18nService,
       this.route,
@@ -173,7 +197,10 @@ export class AccountComponent {
       this.environmentService,
       this.passwordGenerationService,
       this.logService,
-      this.configService);
+      this.userDecryptionOptionsService,
+      this.configService,
+      this.masterPasswordService,
+      this.accountService);
     ssoComponent.setRedirectUri(window.location.origin + "/sso-connector.html");
     ssoComponent.setClientId("web");
     ssoComponent.identifier = this.organization.identifier;

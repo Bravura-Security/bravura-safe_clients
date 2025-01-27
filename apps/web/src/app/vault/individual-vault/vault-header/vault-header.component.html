@@ -12,7 +12,7 @@
       <ng-container>
         <bit-breadcrumb
           *ngFor="let collection of collections"
-          icon="fa-collection"
+          icon="fa-cube"
           [route]="[]"
           [queryParams]="{ collectionId: collection.id }"
           queryParamsHandling="merge"
@@ -34,7 +34,7 @@
           [bitMenuTriggerFor]="editCollectionMenu"
           size="small"
           type="button"
-          aria-haspopup
+        aria-haspopup="true"
         ></button>
         <bit-menu #editCollectionMenu>
           <button
@@ -55,12 +55,7 @@
             <i class="fa fa-fw fa-users" aria-hidden="true"></i>
             {{ "access" | i18n }}
           </button>
-          <button
-            type="button"
-            *ngIf="canDeleteCollection"
-            bitMenuItem
-            (click)="deleteCollection()"
-          >
+        <button type="button" *ngIf="canDeleteCollection" bitMenuItem (click)="deleteCollection()">
             <span class="tw-text-danger">
               <i class="fa fa-fw fa-trash" aria-hidden="true"></i>
               {{ "delete" | i18n }}
@@ -69,11 +64,11 @@
         </bit-menu>
       </ng-container>
       <small *ngIf="loading">
-          <i
+      <i
             class="fa fa-spinner fa-spin text-muted"
-            title="{{ 'loading' | i18n }}"
-            aria-hidden="true"
-          ></i>
+        title="{{ 'loading' | i18n }}"
+        aria-hidden="true"
+      ></i>
         <span class="tw-sr-only">{{ "loading" | i18n }}</span>
       </small>
     </h1>

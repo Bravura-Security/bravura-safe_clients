@@ -12,8 +12,15 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { SendView } from "@bitwarden/common/tools/send/models/view/send.view";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
-import { DialogService, NoItemsModule, SearchModule, TableDataSource } from "@bitwarden/components";
+import {
+  DialogService,
+  NoItemsModule,
+  SearchModule,
+  TableDataSource,
+  ToastService,
+} from "@bitwarden/components";
 
+import { HeaderModule } from "../../layouts/header/header.module";
 import { SharedModule } from "../../shared";
 import { LooseComponentsModule } from "../../shared/loose-components.module";
 
@@ -25,7 +32,7 @@ const BroadcasterSubscriptionId = "SendComponent";
 @Component({
   selector: "app-send",
   standalone: true,
-  imports: [SharedModule, SearchModule, NoItemsModule, LooseComponentsModule],
+  imports: [SharedModule, SearchModule, NoItemsModule, HeaderModule, LooseComponentsModule],
   templateUrl: "send.component.html",
 })
 export class SendComponent extends BaseSendComponent {
@@ -56,6 +63,7 @@ export class SendComponent extends BaseSendComponent {
     logService: LogService,
     sendApiService: SendApiService,
     dialogService: DialogService,
+    toastService: ToastService,
   ) {
     super(
       sendService,
@@ -68,6 +76,7 @@ export class SendComponent extends BaseSendComponent {
       logService,
       sendApiService,
       dialogService,
+      toastService,
     );
   }
 
@@ -77,6 +86,8 @@ export class SendComponent extends BaseSendComponent {
 
     // Broadcaster subscription - load if sync completes in the background
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.ngZone.run(async () => {
         switch (message.command) {
           case "syncCompleted":
@@ -90,6 +101,7 @@ export class SendComponent extends BaseSendComponent {
   }
 
   ngOnDestroy() {
+    this.dialogService.closeAll();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 

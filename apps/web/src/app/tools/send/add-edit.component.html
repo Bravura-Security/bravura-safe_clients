@@ -98,7 +98,7 @@
           </bit-form-field>
         </div>
       </ng-container>
-      <h4 bitTypography="h4" class="tw-mt-5">{{ "share" | i18n }}</h4>
+      <h2 class="tw-mt-5">{{ "share" | i18n }}</h2>
 
       <bit-form-field *ngIf="link">
         <bit-label for="link">{{ "sendLinkLabel" | i18n }}</bit-label>
@@ -110,12 +110,12 @@
         <bit-label>{{ "copySendLinkOnSave" | i18n }}</bit-label>
       </bit-form-control>
       <div class="tw-mt-5 tw-flex" (click)="toggleOptions()">
-        <h4 bitTypography="h4" class="tw-mb-0 tw-mr-2">
+        <h4 class="tw-mb-0 tw-mr-2">
           <button type="button" bitLink appStopClick>
             <i
               class="fa"
               aria-hidden="true"
-                [ngClass]="{ 'fa-angle-right': !showOptions, 'fa-angle-down': showOptions }"
+              [ngClass]="{ 'fa-angle-right': !showOptions, 'fa-angle-down': showOptions }"
             ></i>
               {{ "options" | i18n }}
             </button>
@@ -130,7 +130,7 @@
                 id="deletionDate"
                 name="SelectedDeletionDatePreset"
                 formControlName="selectedDeletionDatePreset"
-          >
+              >
                 <bit-option
                   *ngFor="let o of deletionDatePresets"
                   [value]="o.value"

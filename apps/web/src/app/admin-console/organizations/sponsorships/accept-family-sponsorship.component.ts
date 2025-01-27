@@ -14,14 +14,20 @@ export class AcceptFamilySponsorshipComponent extends BaseAcceptComponent {
   requiredParameters = ["email", "token"];
 
   async authedHandler(qParams: Params) {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/setup/families-for-enterprise"], { queryParams: qParams });
   }
 
   async unauthedHandler(qParams: Params) {
     if (!qParams.register) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(["/login"], { queryParams: { email: qParams.email } });
     } else {
-      this.router.navigate(["/register"], { queryParams: { email: qParams.email } });
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.router.navigate([this.registerRoute], { queryParams: { email: qParams.email } });
     }
   }
 }

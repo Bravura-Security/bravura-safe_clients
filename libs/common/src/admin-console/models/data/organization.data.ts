@@ -1,4 +1,6 @@
-import { ProductType } from "../../../enums";
+import { Jsonify } from "type-fest";
+
+import { ProductTierType } from "../../../billing/enums";
 import { OrganizationUserStatusType, OrganizationUserType, ProviderType } from "../../enums";
 import { PermissionsApi } from "../api/permissions.api";
 import { ProfileOrganizationResponse } from "../response/profile-organization.response";
@@ -35,6 +37,7 @@ export class OrganizationData {
   permissions: PermissionsApi;
   resetPasswordEnrolled: boolean;
   userId: string;
+  organizationUserId: string;
   hasPublicAndPrivateKeys: boolean;
   providerId: string;
   providerName: string;
@@ -43,7 +46,7 @@ export class OrganizationData {
   isMember: boolean;
   familySponsorshipFriendlyName: string;
   familySponsorshipAvailable: boolean;
-  planProductType: ProductType;
+  productTierType: ProductTierType;
   keyConnectorEnabled: boolean;
   keyConnectorUrl: string;
   familySponsorshipLastSyncDate?: Date;
@@ -57,12 +60,16 @@ export class OrganizationData {
   skip2faForSso: boolean;
 
   constructor(
-    response: ProfileOrganizationResponse,
-    options: {
+    response?: ProfileOrganizationResponse,
+    options?: {
       isMember: boolean;
       isProviderUser: boolean;
     },
   ) {
+    if (response == null) {
+      return;
+    }
+
     this.id = response.id;
     this.name = response.name;
     this.status = response.status;
@@ -93,13 +100,14 @@ export class OrganizationData {
     this.permissions = response.permissions;
     this.resetPasswordEnrolled = response.resetPasswordEnrolled;
     this.userId = response.userId;
+    this.organizationUserId = response.organizationUserId;
     this.hasPublicAndPrivateKeys = response.hasPublicAndPrivateKeys;
     this.providerId = response.providerId;
     this.providerName = response.providerName;
     this.providerType = response.providerType;
     this.familySponsorshipFriendlyName = response.familySponsorshipFriendlyName;
     this.familySponsorshipAvailable = response.familySponsorshipAvailable;
-    this.planProductType = response.planProductType;
+    this.productTierType = response.planProductType;
     this.keyConnectorEnabled = response.keyConnectorEnabled;
     this.keyConnectorUrl = response.keyConnectorUrl;
     this.familySponsorshipLastSyncDate = response.familySponsorshipLastSyncDate;
@@ -114,5 +122,18 @@ export class OrganizationData {
 
     this.isMember = options.isMember;
     this.isProviderUser = options.isProviderUser;
+  }
+
+  static fromJSON(obj: Jsonify<OrganizationData>) {
+    return Object.assign(new OrganizationData(), obj, {
+      familySponsorshipLastSyncDate:
+        obj.familySponsorshipLastSyncDate != null
+          ? new Date(obj.familySponsorshipLastSyncDate)
+          : obj.familySponsorshipLastSyncDate,
+      familySponsorshipValidUntil:
+        obj.familySponsorshipValidUntil != null
+          ? new Date(obj.familySponsorshipValidUntil)
+          : obj.familySponsorshipValidUntil,
+    });
   }
 }

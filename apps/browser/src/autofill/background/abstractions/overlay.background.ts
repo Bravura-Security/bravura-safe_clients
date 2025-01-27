@@ -3,6 +3,8 @@ import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-repromp
 
 import AutofillPageDetails from "../../models/autofill-page-details";
 
+import { LockedVaultPendingNotificationsData } from "./notification.background";
+
 type WebsiteIconData = {
   imageEnabled: boolean;
   image: string;
@@ -27,13 +29,7 @@ type OverlayBackgroundExtensionMessage = {
   details?: AutofillPageDetails;
   overlayElement?: string;
   display?: string;
-  data?: {
-    commandToRetry?: {
-      msg?: {
-        command?: string;
-      };
-    };
-  };
+  data?: LockedVaultPendingNotificationsData;
 } & OverlayAddNewItemMessage;
 
 type OverlayPortMessage = {
@@ -46,6 +42,7 @@ type OverlayPortMessage = {
 type FocusedFieldData = {
   focusedFieldStyles: Partial<CSSStyleDeclaration>;
   focusedFieldRects: Partial<DOMRect>;
+  tabId?: number;
 };
 
 type OverlayCipherData = {
@@ -70,17 +67,19 @@ type BackgroundOnMessageHandlerParams = BackgroundMessageParam & BackgroundSende
 type OverlayBackgroundExtensionMessageHandlers = {
   [key: string]: CallableFunction;
   openAutofillOverlay: () => void;
-  autofillOverlayElementClosed: ({ message }: BackgroundMessageParam) => void;
+  autofillOverlayElementClosed: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   autofillOverlayAddNewVaultItem: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   getAutofillOverlayVisibility: () => void;
   checkAutofillOverlayFocused: () => void;
   focusAutofillOverlayList: () => void;
-  updateAutofillOverlayPosition: ({ message }: BackgroundMessageParam) => void;
+  updateAutofillOverlayPosition: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   updateAutofillOverlayHidden: ({ message }: BackgroundMessageParam) => void;
-  updateFocusedFieldData: ({ message }: BackgroundMessageParam) => void;
+  updateFocusedFieldData: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   collectPageDetailsResponse: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   unlockCompleted: ({ message }: BackgroundMessageParam) => void;
+  addedCipher: () => void;
   addEditCipherSubmitted: () => void;
+  editedCipher: () => void;
   deletedCipher: () => void;
 };
 

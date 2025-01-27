@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { BreadcrumbsModule } from "@bitwarden/components";
+import { BreadcrumbsModule, NoItemsModule, SearchModule } from "@bitwarden/components";
 
 import { LooseComponentsModule } from "../../shared/loose-components.module";
 import { SharedModule } from "../../shared/shared.module";
@@ -31,6 +31,8 @@ import { VaultComponent } from "./vault.component";
     VaultItemsModule,
     CollectionDialogModule,
     CollectionAccessRestrictedComponent,
+    NoItemsModule,
+    SearchModule,
   ],
   declarations: [VaultComponent, VaultHeaderComponent],
   exports: [VaultComponent],

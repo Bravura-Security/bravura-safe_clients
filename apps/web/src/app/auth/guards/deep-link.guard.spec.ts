@@ -74,7 +74,7 @@ describe("Deep Link Guard", () => {
   it('should persist routerService.previousUrl when routerService.previousUrl does not contain "lock"', async () => {
     // Arrange
     authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Locked);
-    routerService.getPreviousUrl.mockReturnValue(Promise.resolve("/previous-url"));
+    routerService.getPreviousUrl.mockReturnValue("/previous-url");
 
     // Act
     await routerHarness.navigateByUrl("/lock-route");
@@ -87,7 +87,7 @@ describe("Deep Link Guard", () => {
   it('should not persist routerService.previousUrl when routerService.previousUrl contains "lock"', async () => {
     // Arrange
     authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Locked);
-    routerService.getPreviousUrl.mockReturnValue(Promise.resolve("/lock"));
+    routerService.getPreviousUrl.mockReturnValue("/lock");
 
     // Act
     await routerHarness.navigateByUrl("/lock-route");
@@ -137,7 +137,7 @@ describe("Deep Link Guard", () => {
   it("should persist currentUrl over previousUrl", async () => {
     // Arrange
     authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Locked);
-    routerService.getPreviousUrl.mockReturnValue(Promise.resolve("/previous-url"));
+    routerService.getPreviousUrl.mockReturnValue("/previous-url");
 
     // Act
     await routerHarness.navigateByUrl("/guarded-route?item=123");

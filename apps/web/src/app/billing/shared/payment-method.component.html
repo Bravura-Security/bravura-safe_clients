@@ -15,6 +15,7 @@
     {{ "refresh" | i18n }}
   </button>
 </div>
+
 <ng-container *ngIf="!firstLoaded && loading">
   <i
     class="fa fa-spinner fa-spin text-muted"
@@ -29,22 +30,9 @@
     <strong>{{ creditOrBalance | currency: "$" }}</strong>
   </p>
   <p>{{ "creditAppliedDesc" | i18n }}</p>
-  <button
-    type="button"
-    bitButton
-    buttonType="secondary"
-    (click)="addCredit()"
-    *ngIf="!showAddCredit"
-  >
+    <button type="button" bitButton buttonType="secondary" [bitAction]="addCredit">
     {{ "addCredit" | i18n }}
   </button>
-  <app-add-credit
-    [organizationId]="organizationId"
-    (onAdded)="closeAddCredit(true)"
-    (onCanceled)="closeAddCredit(false)"
-    *ngIf="showAddCredit"
-  >
-  </app-add-credit>
   <h2 class="spaced-header">{{ "paymentMethod" | i18n }}</h2>
   <p *ngIf="!paymentSource">{{ "noPaymentMethod" | i18n }}</p>
   <ng-container *ngIf="paymentSource">
@@ -84,7 +72,11 @@
           class="btn-submit"
           [disabled]="verifyForm.loading"
         >
-          <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
+            <i
+              class="fa fa-spinner fa-spin"
+              title="{{ 'loading' | i18n }}"
+              aria-hidden="true"
+            ></i>
           <span>{{ "verifyBankAccount" | i18n }}</span>
         </button>
       </form>
@@ -94,23 +86,9 @@
       {{ paymentSource.description }}
     </p>
   </ng-container>
-  <button
-    type="button"
-    bitButton
-    buttonType="secondary"
-    (click)="changePayment()"
-    *ngIf="!showAdjustPayment"
-  >
+    <button type="button" bitButton buttonType="secondary" [bitAction]="changePayment">
     {{ (paymentSource ? "changePaymentMethod" : "addPaymentMethod") | i18n }}
   </button>
-  <app-adjust-payment
-    [organizationId]="organizationId"
-    [currentType]="paymentSource != null ? paymentSource.type : null"
-    (onAdjusted)="closePayment(true)"
-    (onCanceled)="closePayment(false)"
-    *ngIf="showAdjustPayment"
-  >
-  </app-adjust-payment>
   <p *ngIf="isUnpaid">{{ "paymentChargedWithUnpaidSubscription" | i18n }}</p>
   <ng-container *ngIf="forOrganization">
     <h2 class="spaced-header">{{ "taxInformation" | i18n }}</h2>

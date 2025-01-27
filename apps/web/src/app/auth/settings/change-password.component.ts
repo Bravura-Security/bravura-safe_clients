@@ -1,15 +1,16 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { firstValueFrom, map } from "rxjs";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "@bitwarden/angular/auth/components/change-password.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -35,8 +36,6 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   checkForBreaches = true;
   characterMinimumMessage = "";
 
-  protected showWebauthnLoginSettings$: Observable<boolean>;
-
   constructor(
     i18nService: I18nService,
     cryptoService: CryptoService,
@@ -52,8 +51,10 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     private router: Router,
     dialogService: DialogService,
     private userVerificationService: UserVerificationService,
-    private configService: ConfigServiceAbstraction,
     private keyRotationService: UserKeyRotationService,
+    kdfConfigService: KdfConfigService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    accountService: AccountService,
   ) {
     super(
       i18nService,
@@ -64,15 +65,16 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
       policyService,
       stateService,
       dialogService,
+      kdfConfigService,
+      masterPasswordService,
+      accountService,
     );
   }
 
   async ngOnInit() {
-    this.showWebauthnLoginSettings$ = this.configService.getFeatureFlag$(
-      FeatureFlag.PasswordlessLogin,
-    );
-
     if (!(await this.userVerificationService.hasMasterPassword())) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(["/settings/security/two-factor"]);
     }
 
@@ -173,7 +175,22 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
     newMasterKey: MasterKey,
     newUserKey: [UserKey, EncString],
   ) {
-    const masterKey = await this.cryptoService.getOrDeriveMasterKey(this.currentMasterPassword);
+    const masterKey = await this.cryptoService.makeMasterKey(
+      this.currentMasterPassword,
+      await firstValueFrom(this.accountService.activeAccount$.pipe(map((a) => a?.email))),
+      await this.kdfConfigService.getKdfConfig(),
+    );
+
+    const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
+    if (userKey == null) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("invalidMasterPassword"),
+      );
+      return;
+    }
+
     const request = new PasswordRequest();
     request.masterPasswordHash = await this.cryptoService.hashMasterKey(
       this.currentMasterPassword,
@@ -206,6 +223,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   private async updateKey() {
-    await this.keyRotationService.rotateUserKeyAndEncryptedData(this.masterPassword);
+    const user = await firstValueFrom(this.accountService.activeAccount$);
+    await this.keyRotationService.rotateUserKeyAndEncryptedData(this.masterPassword, user);
   }
 }

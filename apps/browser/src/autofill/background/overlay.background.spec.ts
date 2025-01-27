@@ -1,63 +1,93 @@
-import { mock, mockReset } from "jest-mock-extended";
+import { mock, MockProxy, mockReset } from "jest-mock-extended";
+import { BehaviorSubject, of } from "rxjs";
 
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
+import {
+  SHOW_AUTOFILL_BUTTON,
+  AutofillOverlayVisibility,
+} from "@bitwarden/common/autofill/constants";
+import { AutofillSettingsService } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import {
+  DefaultDomainSettingsService,
+  DomainSettingsService,
+} from "@bitwarden/common/autofill/services/domain-settings.service";
+import {
+  EnvironmentService,
+  Region,
+} from "@bitwarden/common/platform/abstractions/environment.service";
 import { ThemeType } from "@bitwarden/common/platform/enums";
-import { EnvironmentService } from "@bitwarden/common/platform/services/environment.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { CloudEnvironment } from "@bitwarden/common/platform/services/default-environment.service";
 import { I18nService } from "@bitwarden/common/platform/services/i18n.service";
-import { SettingsService } from "@bitwarden/common/services/settings.service";
+import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
+import {
+  FakeStateProvider,
+  FakeAccountService,
+  mockAccountServiceWith,
+} from "@bitwarden/common/spec";
+import { UserId } from "@bitwarden/common/types/guid";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
-import BrowserPlatformUtilsService from "../../platform/services/browser-platform-utils.service";
-import { BrowserStateService } from "../../platform/services/browser-state.service";
-import { SHOW_AUTOFILL_BUTTON } from "../constants";
+import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
+//import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
+import { PlatformUtilsService as BrowserPlatformUtilsService} from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { AutofillService } from "../services/abstractions/autofill.service";
 import {
   createAutofillPageDetailsMock,
   createChromeTabMock,
   createFocusedFieldDataMock,
   createPageDetailMock,
   createPortSpyMock,
-} from "../jest/autofill-mocks";
-import { flushPromises, sendExtensionRuntimeMessage, sendPortMessage } from "../jest/testing-utils";
-import { AutofillService } from "../services/abstractions/autofill.service";
+} from "../spec/autofill-mocks";
+import { flushPromises, sendMockExtensionMessage, sendPortMessage } from "../spec/testing-utils";
 import {
   AutofillOverlayElement,
   AutofillOverlayPort,
-  AutofillOverlayVisibility,
   RedirectFocusDirection,
 } from "../utils/autofill-overlay.enum";
 
 import OverlayBackground from "./overlay.background";
 
-const iconServerUrl = "https://icons.bitwarden.com/";
-
 describe("OverlayBackground", () => {
+  const mockUserId = Utils.newGuid() as UserId;
+  const accountService: FakeAccountService = mockAccountServiceWith(mockUserId);
+  const fakeStateProvider: FakeStateProvider = new FakeStateProvider(accountService);
+  let domainSettingsService: DomainSettingsService;
   let buttonPortSpy: chrome.runtime.Port;
   let listPortSpy: chrome.runtime.Port;
   let overlayBackground: OverlayBackground;
   const cipherService = mock<CipherService>();
   const autofillService = mock<AutofillService>();
-  const authService = mock<AuthService>();
-  const environmentService = mock<EnvironmentService>({
-    getIconsUrl: () => iconServerUrl,
-  });
-  const settingsService = mock<SettingsService>();
-  const stateService = mock<BrowserStateService>();
+  let activeAccountStatusMock$: BehaviorSubject<AuthenticationStatus>;
+  let authService: MockProxy<AuthService>;
+
+  const environmentService = mock<EnvironmentService>();
+  environmentService.environment$ = new BehaviorSubject(
+    new CloudEnvironment({
+      key: Region.US,
+      domain: "bravurasecurity.com",
+      urls: { icons: "https://icons.bravurasecurity.com/" },
+    }),
+  );
+  const stateService = mock<DefaultBrowserStateService>();
+  const autofillSettingsService = mock<AutofillSettingsService>();
   const i18nService = mock<I18nService>();
   const platformUtilsService = mock<BrowserPlatformUtilsService>();
-  const initOverlayElementPorts = (options = { initList: true, initButton: true }) => {
+  const themeStateService = mock<ThemeStateService>();
+  const initOverlayElementPorts = async (options = { initList: true, initButton: true }) => {
     const { initList, initButton } = options;
     if (initButton) {
-      overlayBackground["handlePortOnConnect"](createPortSpyMock(AutofillOverlayPort.Button));
+      await overlayBackground["handlePortOnConnect"](createPortSpyMock(AutofillOverlayPort.Button));
       buttonPortSpy = overlayBackground["overlayButtonPort"];
     }
 
     if (initList) {
-      overlayBackground["handlePortOnConnect"](createPortSpyMock(AutofillOverlayPort.List));
+      await overlayBackground["handlePortOnConnect"](createPortSpyMock(AutofillOverlayPort.List));
       listPortSpy = overlayBackground["overlayListPort"];
     }
 
@@ -65,17 +95,31 @@ describe("OverlayBackground", () => {
   };
 
   beforeEach(() => {
+    domainSettingsService = new DefaultDomainSettingsService(fakeStateProvider);
+    activeAccountStatusMock$ = new BehaviorSubject(AuthenticationStatus.Unlocked);
+    authService = mock<AuthService>();
+    authService.activeAccountStatus$ = activeAccountStatusMock$;
     overlayBackground = new OverlayBackground(
       cipherService,
       autofillService,
       authService,
       environmentService,
-      settingsService,
+      domainSettingsService,
       stateService,
+      autofillSettingsService,
       i18nService,
       platformUtilsService,
+      themeStateService,
     );
-    overlayBackground.init();
+
+    jest
+      .spyOn(overlayBackground as any, "getOverlayVisibility")
+      .mockResolvedValue(AutofillOverlayVisibility.OnFieldFocus);
+
+    themeStateService.selectedTheme$ = of(ThemeType.Light);
+    domainSettingsService.showFavicons$ = of(true);
+
+    void overlayBackground.init();
   });
 
   afterEach(() => {
@@ -86,7 +130,8 @@ describe("OverlayBackground", () => {
   describe("removePageDetails", () => {
     it("removes the page details for a specific tab from the pageDetailsForTab object", () => {
       const tabId = 1;
-      overlayBackground["pageDetailsForTab"][tabId] = [createPageDetailMock()];
+      const frameId = 2;
+      overlayBackground["pageDetailsForTab"][tabId] = new Map([[frameId, createPageDetailMock()]]);
       overlayBackground.removePageDetails(tabId);
 
       expect(overlayBackground["pageDetailsForTab"][tabId]).toBeUndefined();
@@ -126,11 +171,11 @@ describe("OverlayBackground", () => {
     });
 
     beforeEach(() => {
-      overlayBackground["userAuthStatus"] = AuthenticationStatus.Unlocked;
+      activeAccountStatusMock$.next(AuthenticationStatus.Unlocked);
     });
 
     it("ignores updating the overlay ciphers if the user's auth status is not unlocked", async () => {
-      overlayBackground["userAuthStatus"] = AuthenticationStatus.Locked;
+      activeAccountStatusMock$.next(AuthenticationStatus.Locked);
       jest.spyOn(BrowserApi, "getTabFromCurrentWindowId");
       jest.spyOn(cipherService, "getAllDecryptedForUrl");
 
@@ -194,7 +239,7 @@ describe("OverlayBackground", () => {
             },
             id: "overlay-cipher-0",
             login: {
-              username: "us*******2",
+              username: "username-2",
             },
             name: "name-2",
             reprompt: cipher2.reprompt,
@@ -211,7 +256,7 @@ describe("OverlayBackground", () => {
             },
             id: "overlay-cipher-1",
             login: {
-              username: "us*******1",
+              username: "username-1",
             },
             name: "name-1",
             reprompt: cipher1.reprompt,
@@ -258,7 +303,7 @@ describe("OverlayBackground", () => {
       card: { subTitle: "Mastercard, *1234" },
     });
 
-    it("formats and returns the cipher data", () => {
+    it("formats and returns the cipher data", async () => {
       overlayBackground["overlayLoginCiphers"] = new Map([
         ["overlay-cipher-0", cipher2],
         ["overlay-cipher-1", cipher1],
@@ -266,7 +311,7 @@ describe("OverlayBackground", () => {
         ["overlay-cipher-3", cipher4],
       ]);
 
-      const overlayCipherData = overlayBackground["getOverlayCipherData"]();
+      const overlayCipherData = await overlayBackground["getOverlayCipherData"]();
 
       expect(overlayCipherData).toStrictEqual([
         {
@@ -280,7 +325,7 @@ describe("OverlayBackground", () => {
           },
           id: "overlay-cipher-0",
           login: {
-            username: "us*******2",
+            username: "username-2",
           },
           name: "name-2",
           reprompt: cipher2.reprompt,
@@ -297,7 +342,7 @@ describe("OverlayBackground", () => {
           },
           id: "overlay-cipher-1",
           login: {
-            username: "us*******1",
+            username: "username-1",
           },
           name: "name-1",
           reprompt: cipher1.reprompt,
@@ -334,48 +379,6 @@ describe("OverlayBackground", () => {
           type: 3,
         },
       ]);
-    });
-  });
-
-  describe("obscureName", () => {
-    it("returns an empty string if the name is falsy", () => {
-      const name: string = undefined;
-
-      const obscureName = overlayBackground["obscureName"](name);
-
-      expect(obscureName).toBe("");
-    });
-
-    it("will not attempt to obscure a username that is only a domain", () => {
-      const name = "@domain.com";
-
-      const obscureName = overlayBackground["obscureName"](name);
-
-      expect(obscureName).toBe(name);
-    });
-
-    it("will obscure all characters of a name that is less than 5 characters expect for the first character", () => {
-      const name = "name@domain.com";
-
-      const obscureName = overlayBackground["obscureName"](name);
-
-      expect(obscureName).toBe("n***@domain.com");
-    });
-
-    it("will obscure all characters of a name that is greater than 4 characters by less than 6 ", () => {
-      const name = "name1@domain.com";
-
-      const obscureName = overlayBackground["obscureName"](name);
-
-      expect(obscureName).toBe("na***@domain.com");
-    });
-
-    it("will obscure all characters of a name that is greater than 5 characters except for the first two characters and the last character", () => {
-      const name = "name12@domain.com";
-
-      const obscureName = overlayBackground["obscureName"](name);
-
-      expect(obscureName).toBe("na***2@domain.com");
     });
   });
 
@@ -515,7 +518,7 @@ describe("OverlayBackground", () => {
 
       expect(returnValue).toBe(undefined);
       expect(sendResponse).not.toHaveBeenCalled();
-      expect(overlayBackground["overlayElementClosed"]).toHaveBeenCalledWith(message);
+      expect(overlayBackground["overlayElementClosed"]).toHaveBeenCalledWith(message, sender);
     });
 
     it("will return a response if the message handler returns a response", async () => {
@@ -548,7 +551,7 @@ describe("OverlayBackground", () => {
           jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValueOnce(sender.tab);
           jest.spyOn(BrowserApi, "tabSendMessageData").mockImplementation();
 
-          sendExtensionRuntimeMessage({ command: "openAutofillOverlay" });
+          sendMockExtensionMessage({ command: "openAutofillOverlay" });
           await flushPromises();
 
           expect(BrowserApi.tabSendMessageData).toHaveBeenCalledWith(
@@ -564,12 +567,32 @@ describe("OverlayBackground", () => {
       });
 
       describe("autofillOverlayElementClosed message handler", () => {
-        beforeEach(() => {
-          initOverlayElementPorts();
+        beforeEach(async () => {
+          await initOverlayElementPorts();
+        });
+
+        it("disconnects any expired ports if the sender is not from the same page as the most recently focused field", () => {
+          const port1 = mock<chrome.runtime.Port>();
+          const port2 = mock<chrome.runtime.Port>();
+          overlayBackground["expiredPorts"] = [port1, port2];
+          const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+          const focusedFieldData = createFocusedFieldDataMock({ tabId: 2 });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
+
+          sendMockExtensionMessage(
+            {
+              command: "autofillOverlayElementClosed",
+              overlayElement: AutofillOverlayElement.Button,
+            },
+            sender,
+          );
+
+          expect(port1.disconnect).toHaveBeenCalled();
+          expect(port2.disconnect).toHaveBeenCalled();
         });
 
         it("disconnects the button element port", () => {
-          sendExtensionRuntimeMessage({
+          sendMockExtensionMessage({
             command: "autofillOverlayElementClosed",
             overlayElement: AutofillOverlayElement.Button,
           });
@@ -579,7 +602,7 @@ describe("OverlayBackground", () => {
         });
 
         it("disconnects the list element port", () => {
-          sendExtensionRuntimeMessage({
+          sendMockExtensionMessage({
             command: "autofillOverlayElementClosed",
             overlayElement: AutofillOverlayElement.List,
           });
@@ -594,20 +617,22 @@ describe("OverlayBackground", () => {
         beforeEach(() => {
           sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
           jest
-            .spyOn(overlayBackground["stateService"], "setAddEditCipherInfo")
+            .spyOn(overlayBackground["cipherService"], "setAddEditCipherInfo")
             .mockImplementation();
           jest.spyOn(overlayBackground as any, "openAddEditVaultItemPopout").mockImplementation();
         });
 
         it("will not open the add edit popout window if the message does not have a login cipher provided", () => {
-          sendExtensionRuntimeMessage({ command: "autofillOverlayAddNewVaultItem" }, sender);
+          sendMockExtensionMessage({ command: "autofillOverlayAddNewVaultItem" }, sender);
 
-          expect(overlayBackground["stateService"].setAddEditCipherInfo).not.toHaveBeenCalled();
+          expect(overlayBackground["cipherService"].setAddEditCipherInfo).not.toHaveBeenCalled();
           expect(overlayBackground["openAddEditVaultItemPopout"]).not.toHaveBeenCalled();
         });
 
         it("will open the add edit popout window after creating a new cipher", async () => {
-          sendExtensionRuntimeMessage(
+          jest.spyOn(BrowserApi, "sendMessage");
+
+          sendMockExtensionMessage(
             {
               command: "autofillOverlayAddNewVaultItem",
               login: {
@@ -621,7 +646,10 @@ describe("OverlayBackground", () => {
           );
           await flushPromises();
 
-          expect(overlayBackground["stateService"].setAddEditCipherInfo).toHaveBeenCalled();
+          expect(overlayBackground["cipherService"].setAddEditCipherInfo).toHaveBeenCalled();
+          expect(BrowserApi.sendMessage).toHaveBeenCalledWith(
+            "inlineAutofillMenuRefreshAddEditCipher",
+          );
           expect(overlayBackground["openAddEditVaultItemPopout"]).toHaveBeenCalled();
         });
       });
@@ -629,15 +657,15 @@ describe("OverlayBackground", () => {
       describe("getAutofillOverlayVisibility message handler", () => {
         beforeEach(() => {
           jest
-            .spyOn(overlayBackground["settingsService"], "getAutoFillOverlayVisibility")
+            .spyOn(overlayBackground as any, "getOverlayVisibility")
             .mockResolvedValue(AutofillOverlayVisibility.OnFieldFocus);
         });
 
         it("will set the overlayVisibility property", async () => {
-          sendExtensionRuntimeMessage({ command: "getAutofillOverlayVisibility" });
+          sendMockExtensionMessage({ command: "getAutofillOverlayVisibility" });
           await flushPromises();
 
-          expect(overlayBackground["overlayVisibility"]).toBe(
+          expect(await overlayBackground["getOverlayVisibility"]()).toBe(
             AutofillOverlayVisibility.OnFieldFocus,
           );
         });
@@ -645,7 +673,7 @@ describe("OverlayBackground", () => {
         it("returns the overlayVisibility property", async () => {
           const sendMessageSpy = jest.fn();
 
-          sendExtensionRuntimeMessage(
+          sendMockExtensionMessage(
             { command: "getAutofillOverlayVisibility" },
             undefined,
             sendMessageSpy,
@@ -657,12 +685,12 @@ describe("OverlayBackground", () => {
       });
 
       describe("checkAutofillOverlayFocused message handler", () => {
-        beforeEach(() => {
-          initOverlayElementPorts();
+        beforeEach(async () => {
+          await initOverlayElementPorts();
         });
 
         it("will check if the overlay list is focused if the list port is open", () => {
-          sendExtensionRuntimeMessage({ command: "checkAutofillOverlayFocused" });
+          sendMockExtensionMessage({ command: "checkAutofillOverlayFocused" });
 
           expect(listPortSpy.postMessage).toHaveBeenCalledWith({
             command: "checkAutofillOverlayListFocused",
@@ -675,7 +703,7 @@ describe("OverlayBackground", () => {
         it("will check if the overlay button is focused if the list port is not open", () => {
           overlayBackground["overlayListPort"] = undefined;
 
-          sendExtensionRuntimeMessage({ command: "checkAutofillOverlayFocused" });
+          sendMockExtensionMessage({ command: "checkAutofillOverlayFocused" });
 
           expect(buttonPortSpy.postMessage).toHaveBeenCalledWith({
             command: "checkAutofillOverlayButtonFocused",
@@ -687,25 +715,47 @@ describe("OverlayBackground", () => {
       });
 
       describe("focusAutofillOverlayList message handler", () => {
-        it("will send a `focusOverlayList` message to the overlay list port", () => {
-          initOverlayElementPorts({ initList: true, initButton: false });
+        it("will send a `focusOverlayList` message to the overlay list port", async () => {
+          await initOverlayElementPorts({ initList: true, initButton: false });
 
-          sendExtensionRuntimeMessage({ command: "focusAutofillOverlayList" });
+          sendMockExtensionMessage({ command: "focusAutofillOverlayList" });
 
           expect(listPortSpy.postMessage).toHaveBeenCalledWith({ command: "focusOverlayList" });
         });
       });
 
       describe("updateAutofillOverlayPosition message handler", () => {
-        beforeEach(() => {
-          overlayBackground["handlePortOnConnect"](createPortSpyMock(AutofillOverlayPort.List));
+        beforeEach(async () => {
+          await overlayBackground["handlePortOnConnect"](
+            createPortSpyMock(AutofillOverlayPort.List),
+          );
           listPortSpy = overlayBackground["overlayListPort"];
-          overlayBackground["handlePortOnConnect"](createPortSpyMock(AutofillOverlayPort.Button));
+
+          await overlayBackground["handlePortOnConnect"](
+            createPortSpyMock(AutofillOverlayPort.Button),
+          );
           buttonPortSpy = overlayBackground["overlayButtonPort"];
         });
 
         it("ignores updating the position if the overlay element type is not provided", () => {
-          sendExtensionRuntimeMessage({ command: "updateAutofillOverlayPosition" });
+          sendMockExtensionMessage({ command: "updateAutofillOverlayPosition" });
+
+          expect(listPortSpy.postMessage).not.toHaveBeenCalledWith({
+            command: "updateIframePosition",
+            styles: expect.anything(),
+          });
+          expect(buttonPortSpy.postMessage).not.toHaveBeenCalledWith({
+            command: "updateIframePosition",
+            styles: expect.anything(),
+          });
+        });
+
+        it("skips updating the position if the most recently focused field is different than the message sender", () => {
+          const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+          const focusedFieldData = createFocusedFieldDataMock({ tabId: 2 });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
+
+          sendMockExtensionMessage({ command: "updateAutofillOverlayPosition" }, sender);
 
           expect(listPortSpy.postMessage).not.toHaveBeenCalledWith({
             command: "updateIframePosition",
@@ -719,9 +769,9 @@ describe("OverlayBackground", () => {
 
         it("updates the overlay button's position", () => {
           const focusedFieldData = createFocusedFieldDataMock();
-          sendExtensionRuntimeMessage({ command: "updateFocusedFieldData", focusedFieldData });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
 
-          sendExtensionRuntimeMessage({
+          sendMockExtensionMessage({
             command: "updateAutofillOverlayPosition",
             overlayElement: AutofillOverlayElement.Button,
           });
@@ -736,9 +786,9 @@ describe("OverlayBackground", () => {
           const focusedFieldData = createFocusedFieldDataMock({
             focusedFieldRects: { top: 1, left: 2, height: 35, width: 4 },
           });
-          sendExtensionRuntimeMessage({ command: "updateFocusedFieldData", focusedFieldData });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
 
-          sendExtensionRuntimeMessage({
+          sendMockExtensionMessage({
             command: "updateAutofillOverlayPosition",
             overlayElement: AutofillOverlayElement.Button,
           });
@@ -753,9 +803,9 @@ describe("OverlayBackground", () => {
           const focusedFieldData = createFocusedFieldDataMock({
             focusedFieldRects: { top: 1, left: 2, height: 50, width: 4 },
           });
-          sendExtensionRuntimeMessage({ command: "updateFocusedFieldData", focusedFieldData });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
 
-          sendExtensionRuntimeMessage({
+          sendMockExtensionMessage({
             command: "updateAutofillOverlayPosition",
             overlayElement: AutofillOverlayElement.Button,
           });
@@ -770,9 +820,9 @@ describe("OverlayBackground", () => {
           const focusedFieldData = createFocusedFieldDataMock({
             focusedFieldStyles: { paddingRight: "20px", paddingLeft: "6px" },
           });
-          sendExtensionRuntimeMessage({ command: "updateFocusedFieldData", focusedFieldData });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
 
-          sendExtensionRuntimeMessage({
+          sendMockExtensionMessage({
             command: "updateAutofillOverlayPosition",
             overlayElement: AutofillOverlayElement.Button,
           });
@@ -784,13 +834,15 @@ describe("OverlayBackground", () => {
         });
 
         it("will post a message to the overlay list facilitating an update of the list's position", () => {
+          const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
           const focusedFieldData = createFocusedFieldDataMock();
-          sendExtensionRuntimeMessage({ command: "updateFocusedFieldData", focusedFieldData });
+          sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData });
 
-          overlayBackground["updateOverlayPosition"]({
-            overlayElement: AutofillOverlayElement.List,
-          });
-          sendExtensionRuntimeMessage({
+          overlayBackground["updateOverlayPosition"](
+            { overlayElement: AutofillOverlayElement.List },
+            sender,
+          );
+          sendMockExtensionMessage({
             command: "updateAutofillOverlayPosition",
             overlayElement: AutofillOverlayElement.List,
           });
@@ -803,8 +855,8 @@ describe("OverlayBackground", () => {
       });
 
       describe("updateOverlayHidden", () => {
-        beforeEach(() => {
-          initOverlayElementPorts();
+        beforeEach(async () => {
+          await initOverlayElementPorts();
         });
 
         it("returns early if the display value is not provided", () => {
@@ -812,7 +864,7 @@ describe("OverlayBackground", () => {
             command: "updateAutofillOverlayHidden",
           };
 
-          sendExtensionRuntimeMessage(message);
+          sendMockExtensionMessage(message);
 
           expect(buttonPortSpy.postMessage).not.toHaveBeenCalledWith(message);
           expect(listPortSpy.postMessage).not.toHaveBeenCalledWith(message);
@@ -821,7 +873,7 @@ describe("OverlayBackground", () => {
         it("posts a message to the overlay button and list with the display value", () => {
           const message = { command: "updateAutofillOverlayHidden", display: "none" };
 
-          sendExtensionRuntimeMessage(message);
+          sendMockExtensionMessage(message);
 
           expect(overlayBackground["overlayButtonPort"].postMessage).toHaveBeenCalledWith({
             command: "updateOverlayHidden",
@@ -852,34 +904,45 @@ describe("OverlayBackground", () => {
         });
 
         it("stores the page details provided by the message by the tab id of the sender", () => {
-          sendExtensionRuntimeMessage(
+          sendMockExtensionMessage(
             { command: "collectPageDetailsResponse", details: pageDetails1 },
             sender,
           );
 
-          expect(overlayBackground["pageDetailsForTab"][sender.tab.id]).toStrictEqual([
-            { frameId: sender.frameId, tab: sender.tab, details: pageDetails1 },
-          ]);
+          expect(overlayBackground["pageDetailsForTab"][sender.tab.id]).toStrictEqual(
+            new Map([
+              [sender.frameId, { frameId: sender.frameId, tab: sender.tab, details: pageDetails1 }],
+            ]),
+          );
         });
 
         it("updates the page details for a tab that already has a set of page details stored ", () => {
-          overlayBackground["pageDetailsForTab"][sender.tab.id] = [
-            {
-              frameId: sender.frameId,
-              tab: sender.tab,
-              details: pageDetails1,
-            },
-          ];
+          const secondFrameSender = mock<chrome.runtime.MessageSender>({
+            tab: { id: 1 },
+            frameId: 3,
+          });
+          overlayBackground["pageDetailsForTab"][sender.tab.id] = new Map([
+            [sender.frameId, { frameId: sender.frameId, tab: sender.tab, details: pageDetails1 }],
+          ]);
 
-          sendExtensionRuntimeMessage(
+          sendMockExtensionMessage(
             { command: "collectPageDetailsResponse", details: pageDetails2 },
-            sender,
+            secondFrameSender,
           );
 
-          expect(overlayBackground["pageDetailsForTab"][sender.tab.id]).toStrictEqual([
-            { frameId: sender.frameId, tab: sender.tab, details: pageDetails1 },
-            { frameId: sender.frameId, tab: sender.tab, details: pageDetails2 },
-          ]);
+          expect(overlayBackground["pageDetailsForTab"][sender.tab.id]).toStrictEqual(
+            new Map([
+              [sender.frameId, { frameId: sender.frameId, tab: sender.tab, details: pageDetails1 }],
+              [
+                secondFrameSender.frameId,
+                {
+                  frameId: secondFrameSender.frameId,
+                  tab: secondFrameSender.tab,
+                  details: pageDetails2,
+                },
+              ],
+            ]),
+          );
         });
       });
 
@@ -901,11 +964,11 @@ describe("OverlayBackground", () => {
           const message = {
             command: "unlockCompleted",
             data: {
-              commandToRetry: { msg: { command: "" } },
+              commandToRetry: { message: { command: "" } },
             },
           };
 
-          sendExtensionRuntimeMessage(message);
+          sendMockExtensionMessage(message);
           await flushPromises();
 
           expect(getAuthStatusSpy).toHaveBeenCalled();
@@ -917,12 +980,12 @@ describe("OverlayBackground", () => {
           const message = {
             command: "unlockCompleted",
             data: {
-              commandToRetry: { msg: { command: "openAutofillOverlay" } },
+              commandToRetry: { message: { command: "openAutofillOverlay" } },
             },
           };
           jest.spyOn(BrowserApi, "getTabFromCurrentWindowId").mockResolvedValueOnce(sender.tab);
 
-          sendExtensionRuntimeMessage(message);
+          sendMockExtensionMessage(message);
           await flushPromises();
 
           expect(getAuthStatusSpy).toHaveBeenCalled();
@@ -938,29 +1001,23 @@ describe("OverlayBackground", () => {
         });
       });
 
-      describe("addEditCipherSubmitted message handler", () => {
-        it("updates the overlay ciphers", () => {
-          const message = {
-            command: "addEditCipherSubmitted",
-          };
-          jest.spyOn(overlayBackground as any, "updateOverlayCiphers").mockImplementation();
+      describe("extension messages that trigger an update of the inline menu ciphers", () => {
+        const extensionMessages = [
+          "addedCipher",
+          "addEditCipherSubmitted",
+          "editedCipher",
+          "deletedCipher",
+        ];
 
-          sendExtensionRuntimeMessage(message);
-
-          expect(overlayBackground["updateOverlayCiphers"]).toHaveBeenCalled();
+        beforeEach(() => {
+          jest.spyOn(overlayBackground, "updateOverlayCiphers").mockImplementation();
         });
-      });
 
-      describe("deletedCipher message handler", () => {
-        it("updates the overlay ciphers", () => {
-          const message = {
-            command: "deletedCipher",
-          };
-          jest.spyOn(overlayBackground as any, "updateOverlayCiphers").mockImplementation();
-
-          sendExtensionRuntimeMessage(message);
-
-          expect(overlayBackground["updateOverlayCiphers"]).toHaveBeenCalled();
+        extensionMessages.forEach((message) => {
+          it(`triggers an update of the overlay ciphers when the ${message} message is received`, () => {
+            sendMockExtensionMessage({ command: message });
+            expect(overlayBackground.updateOverlayCiphers).toHaveBeenCalled();
+          });
         });
       });
     });
@@ -974,17 +1031,17 @@ describe("OverlayBackground", () => {
       jest.spyOn(overlayBackground as any, "getOverlayCipherData").mockImplementation();
     });
 
-    it("skips setting up the overlay port if the port connection is not for an overlay element", () => {
+    it("skips setting up the overlay port if the port connection is not for an overlay element", async () => {
       const port = createPortSpyMock("not-an-overlay-element");
 
-      overlayBackground["handlePortOnConnect"](port);
+      await overlayBackground["handlePortOnConnect"](port);
 
       expect(port.onMessage.addListener).not.toHaveBeenCalled();
       expect(port.postMessage).not.toHaveBeenCalled();
     });
 
     it("sets up the overlay list port if the port connection is for the overlay list", async () => {
-      initOverlayElementPorts({ initList: true, initButton: false });
+      await initOverlayElementPorts({ initList: true, initButton: false });
       await flushPromises();
 
       expect(overlayBackground["overlayButtonPort"]).toBeUndefined();
@@ -994,13 +1051,14 @@ describe("OverlayBackground", () => {
       expect(chrome.runtime.getURL).toHaveBeenCalledWith("overlay/list.css");
       expect(overlayBackground["getTranslations"]).toHaveBeenCalled();
       expect(overlayBackground["getOverlayCipherData"]).toHaveBeenCalled();
-      expect(overlayBackground["updateOverlayPosition"]).toHaveBeenCalledWith({
-        overlayElement: AutofillOverlayElement.List,
-      });
+      expect(overlayBackground["updateOverlayPosition"]).toHaveBeenCalledWith(
+        { overlayElement: AutofillOverlayElement.List },
+        listPortSpy.sender,
+      );
     });
 
     it("sets up the overlay button port if the port connection is for the overlay button", async () => {
-      initOverlayElementPorts({ initList: false, initButton: true });
+      await initOverlayElementPorts({ initList: false, initButton: true });
       await flushPromises();
 
       expect(overlayBackground["overlayListPort"]).toBeUndefined();
@@ -1009,25 +1067,36 @@ describe("OverlayBackground", () => {
       expect(overlayBackground["getAuthStatus"]).toHaveBeenCalled();
       expect(chrome.runtime.getURL).toHaveBeenCalledWith("overlay/button.css");
       expect(overlayBackground["getTranslations"]).toHaveBeenCalled();
-      expect(overlayBackground["updateOverlayPosition"]).toHaveBeenCalledWith({
-        overlayElement: AutofillOverlayElement.Button,
-      });
+      expect(overlayBackground["updateOverlayPosition"]).toHaveBeenCalledWith(
+        { overlayElement: AutofillOverlayElement.Button },
+        buttonPortSpy.sender,
+      );
+    });
+
+    it("stores an existing overlay port so that it can be disconnected at a later time", async () => {
+      overlayBackground["overlayButtonPort"] = mock<chrome.runtime.Port>();
+
+      await initOverlayElementPorts({ initList: false, initButton: true });
+      await flushPromises();
+
+      expect(overlayBackground["expiredPorts"].length).toBe(1);
     });
 
     it("gets the system theme", async () => {
-      jest.spyOn(overlayBackground["stateService"], "getTheme").mockResolvedValue(ThemeType.System);
-      window.matchMedia = jest.fn(() => mock<MediaQueryList>({ matches: true }));
+      themeStateService.selectedTheme$ = of(ThemeType.System);
 
-      initOverlayElementPorts({ initList: true, initButton: false });
+      await initOverlayElementPorts({ initList: true, initButton: false });
       await flushPromises();
 
-      expect(window.matchMedia).toHaveBeenCalledWith("(prefers-color-scheme: dark)");
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith(
+        expect.objectContaining({ theme: ThemeType.System }),
+      );
     });
   });
 
   describe("handleOverlayElementPortMessage", () => {
-    beforeEach(() => {
-      initOverlayElementPorts();
+    beforeEach(async () => {
+      await initOverlayElementPorts();
       overlayBackground["userAuthStatus"] = AuthenticationStatus.Unlocked;
     });
 
@@ -1171,7 +1240,7 @@ describe("OverlayBackground", () => {
             "addToLockedVaultPendingNotifications",
             {
               commandToRetry: {
-                msg: { command: "openAutofillOverlay" },
+                message: { command: "openAutofillOverlay" },
                 sender: listPortSpy.sender,
               },
               target: "overlay.background",
@@ -1188,6 +1257,10 @@ describe("OverlayBackground", () => {
         let getLoginCiphersSpy: jest.SpyInstance;
         let isPasswordRepromptRequiredSpy: jest.SpyInstance;
         let doAutoFillSpy: jest.SpyInstance;
+        let sender: chrome.runtime.MessageSender;
+        const pageDetails = createAutofillPageDetailsMock({
+          login: { username: "username1", password: "password1" },
+        });
 
         beforeEach(() => {
           getLoginCiphersSpy = jest.spyOn(overlayBackground["overlayLoginCiphers"], "get");
@@ -1196,10 +1269,23 @@ describe("OverlayBackground", () => {
             "isPasswordRepromptRequired",
           );
           doAutoFillSpy = jest.spyOn(overlayBackground["autofillService"], "doAutoFill");
+          sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
         });
 
         it("ignores the fill request if the overlay cipher id is not provided", async () => {
           sendPortMessage(listPortSpy, { command: "fillSelectedListItem" });
+          await flushPromises();
+
+          expect(getLoginCiphersSpy).not.toHaveBeenCalled();
+          expect(isPasswordRepromptRequiredSpy).not.toHaveBeenCalled();
+          expect(doAutoFillSpy).not.toHaveBeenCalled();
+        });
+
+        it("ignores the fill request if the tab does not contain any identified page details", async () => {
+          sendPortMessage(listPortSpy, {
+            command: "fillSelectedListItem",
+            overlayCipherId: "overlay-cipher-1",
+          });
           await flushPromises();
 
           expect(getLoginCiphersSpy).not.toHaveBeenCalled();
@@ -1213,6 +1299,9 @@ describe("OverlayBackground", () => {
             type: CipherType.Login,
           });
           overlayBackground["overlayLoginCiphers"] = new Map([["overlay-cipher-1", cipher]]);
+          overlayBackground["pageDetailsForTab"][sender.tab.id] = new Map([
+            [sender.frameId, { frameId: sender.frameId, tab: sender.tab, details: pageDetails }],
+          ]);
           getLoginCiphersSpy = jest.spyOn(overlayBackground["overlayLoginCiphers"], "get");
           isPasswordRepromptRequiredSpy.mockResolvedValue(true);
 
@@ -1239,6 +1328,14 @@ describe("OverlayBackground", () => {
             ["overlay-cipher-2", cipher2],
             ["overlay-cipher-3", cipher3],
           ]);
+          const pageDetailsForTab = {
+            frameId: sender.frameId,
+            tab: sender.tab,
+            details: pageDetails,
+          };
+          overlayBackground["pageDetailsForTab"][sender.tab.id] = new Map([
+            [sender.frameId, pageDetailsForTab],
+          ]);
           isPasswordRepromptRequiredSpy.mockResolvedValue(false);
 
           sendPortMessage(listPortSpy, {
@@ -1254,7 +1351,7 @@ describe("OverlayBackground", () => {
           expect(doAutoFillSpy).toHaveBeenCalledWith({
             tab: listPortSpy.sender.tab,
             cipher: cipher2,
-            pageDetails: undefined,
+            pageDetails: [pageDetailsForTab],
             fillNewPassword: true,
             allowTotpAutofill: true,
           });
@@ -1270,6 +1367,9 @@ describe("OverlayBackground", () => {
         it("copies the cipher's totp code to the clipboard after filling", async () => {
           const cipher1 = mock<CipherView>({ id: "overlay-cipher-1" });
           overlayBackground["overlayLoginCiphers"] = new Map([["overlay-cipher-1", cipher1]]);
+          overlayBackground["pageDetailsForTab"][sender.tab.id] = new Map([
+            [sender.frameId, { frameId: sender.frameId, tab: sender.tab, details: pageDetails }],
+          ]);
           isPasswordRepromptRequiredSpy.mockResolvedValue(false);
           const copyToClipboardSpy = jest
             .spyOn(overlayBackground["platformUtilsService"], "copyToClipboard")
@@ -1282,7 +1382,7 @@ describe("OverlayBackground", () => {
           });
           await flushPromises();
 
-          expect(copyToClipboardSpy).toHaveBeenCalledWith("totp-code", { window });
+          expect(copyToClipboardSpy).toHaveBeenCalledWith("totp-code");
         });
       });
 
