@@ -90,16 +90,10 @@
               <button hidden id="hyprEmailRegistration" type="button" class="btn btn-primary" method="post">{{ "twoFactorHyprSendRegEmail" | i18n }}</button>
             </div>
           </ng-container>
-          <div class="form-check" *ngIf="selectedProviderType != null">
-            <input
-              id="remember"
-              type="checkbox"
-              name="Remember"
-              class="form-check-input"
-              [(ngModel)]="remember"
-            />
-            <label for="remember" class="form-check-label">{{ "rememberMe" | i18n }}</label>
-          </div>
+    <bit-form-control *ngIf="selectedProviderType != null">
+      <bit-label>{{ "rememberMe" | i18n }}</bit-label>
+      <input type="checkbox" bitCheckbox formControlName="remember" />
+    </bit-form-control>
           <ng-container *ngIf="selectedProviderType == null">
       <p bitTypography="body1">{{ "noTwoStepProviders" | i18n }}</p>
       <p bitTypography="body1">{{ "noTwoStepProviders2" | i18n }}</p>
