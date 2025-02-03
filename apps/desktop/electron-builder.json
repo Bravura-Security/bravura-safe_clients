@@ -2,7 +2,7 @@
   "extraMetadata": {
     "name": "bravurasafe"
   },
-  "buildVersion" : "62",
+  "buildVersion" : "64",
   "productName": "Bravura Safe",
   "appId": "com.hitachiid.desktop",
   "buildDependenciesFromSource": true,
