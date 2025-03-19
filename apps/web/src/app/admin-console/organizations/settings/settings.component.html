@@ -44,14 +44,6 @@
           >
             {{ "exportVault" | i18n }}
           </a>
-<!--          <a
-            routerLink="domain-verification"
-            class="list-group-item"
-            routerLinkActive="active"
-            *ngIf="org?.canManageDomainVerification"
-          >
-            {{ "domainVerification" | i18n }}
-          </a>-->
           <a
             routerLink="sso"
             class="list-group-item"
@@ -60,24 +52,6 @@
           >
             {{ "singleSignOn" | i18n }}
           </a>
-<!--          <ng-container>
-            <a
-              routerLink="device-approvals"
-              class="list-group-item"
-              routerLinkActive="active"
-              *ngIf="org.canManageDeviceApprovals"
-            >
-              {{ "deviceApprovals" | i18n }}
-            </a>
-          </ng-container>-->
-<!--          <a
-            routerLink="scim"
-            class="list-group-item"
-            routerLinkActive="active"
-            *ngIf="org.canManageScim"
-          >
-            {{ "scim" | i18n }}
-          </a> -->
         </div>
       </div>
     </div>

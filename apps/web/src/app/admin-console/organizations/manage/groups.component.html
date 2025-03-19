@@ -86,12 +86,10 @@
           </td>
           <td bitCell (click)="edit(g, ModalTabType.Collections)" class="tw-cursor-pointer">
             <bit-badge-list
-              *ngIf="!g.details.accessAll"
               [items]="g.collectionNames"
               [maxItems]="3"
               variant="secondary"
             ></bit-badge-list>
-            <span *ngIf="g.details.accessAll">{{ "all" | i18n }}</span>
           </td>
           <td bitCell>
             <button
@@ -116,7 +114,7 @@
               <button type="button" bitMenuItem (click)="delete(g)">
                 <span class="tw-text-danger"
                   ><i aria-hidden="true" class="fa fa-fw fa-trash-o"></i> {{ "delete" | i18n }}</span
-            >
+              >
             </button>
             </bit-menu>
         </td>
@@ -127,4 +125,3 @@
 <app-footer></app-footer>
 </ng-container>
 <ng-template #addEdit></ng-template>
-</div>

@@ -1,4 +1,8 @@
 <!-- eslint-disable tailwindcss/no-custom-classname -->
+<app-secrets-manager-trial
+  *ngIf="layout === layouts.secretsManager; else passwordManagerTrial"
+></app-secrets-manager-trial>
+<ng-template #passwordManagerTrial>
 <div *ngIf="accountCreateOnly" class="">
   <h1 class="tw-mt-12 tw-text-center tw-text-xl">{{ "createAccount" | i18n }}</h1>
   <div
@@ -39,7 +43,9 @@
         <app-cnet-individual-content
           *ngIf="layout === layouts.cnetcmpgnind"
         ></app-cnet-individual-content>
-        <app-cnet-teams-content *ngIf="layout === layouts.cnetcmpgnteams"></app-cnet-teams-content>
+          <app-cnet-teams-content
+            *ngIf="layout === layouts.cnetcmpgnteams"
+          ></app-cnet-teams-content>
         <app-abm-enterprise-content
           *ngIf="layout === layouts.abmenterprise"
         ></app-abm-enterprise-content>
@@ -59,10 +65,12 @@
         </div>
       </div>
       <div class="tw-pt-44" *ngIf="useTrialStepper">
-        <div class="tw-rounded tw-border tw-border-solid tw-border-secondary-300 tw-bg-background">
+          <div
+            class="tw-rounded tw-border tw-border-solid tw-border-secondary-300 tw-bg-background"
+          >
           <div class="tw-flex tw-h-auto tw-w-full tw-gap-5 tw-rounded-t tw-bg-secondary-100">
             <h2 class="tw-pb-4 tw-pl-4 tw-pt-5 tw-text-base tw-font-bold tw-uppercase">
-              {{ "startYour7DayFreeTrialOfBitwardenFor" | i18n: orgDisplayName }}
+                {{ freeTrialText }}
             </h2>
             <environment-selector
               class="tw-mr-4 tw-mt-6 tw-flex-shrink-0 tw-text-end"
@@ -89,14 +97,18 @@
               </button>
             </app-vertical-step>
             <app-vertical-step label="Billing" [subLabel]="billingSubLabel">
-              <app-billing
+                <app-trial-billing-step
                 *ngIf="stepper.selectedIndex === 2"
-                [plan]="plan"
-                [product]="product"
-                [orgInfoForm]="orgInfoFormGroup"
-                (previousStep)="previousStep()"
-                (onTrialBillingSuccess)="billingSuccess($event)"
-              ></app-billing>
+                  [organizationInfo]="{
+                    name: orgInfoFormGroup.get('name').value,
+                    email: orgInfoFormGroup.get('email').value,
+                    type: trialOrganizationType
+                  }"
+                  [subscriptionProduct]="SubscriptionProduct.PasswordManager"
+                  (steppedBack)="previousStep()"
+                  (organizationCreated)="createdOrganization($event)"
+                >
+                </app-trial-billing-step>
             </app-vertical-step>
             <app-vertical-step label="Confirmation Details" [applyBorder]="false">
               <app-trial-confirmation-details
@@ -104,7 +116,12 @@
                 [orgLabel]="orgLabel"
               ></app-trial-confirmation-details>
               <div class="tw-mb-3 tw-flex">
-                <button type="button" bitButton buttonType="primary" (click)="navigateToOrgVault()">
+                  <button
+                    type="button"
+                    bitButton
+                    buttonType="primary"
+                    (click)="navigateToOrgVault()"
+                  >
                   {{ "getStarted" | i18n | titlecase }}
                 </button>
                 <button
@@ -124,3 +141,4 @@
     </div>
   </div>
 </div>
+</ng-template>

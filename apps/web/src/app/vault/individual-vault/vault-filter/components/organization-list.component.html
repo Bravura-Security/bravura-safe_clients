@@ -1,3 +1,14 @@
+<ng-container *ngIf="loading">
+  <p class="text-center">
+    <i
+      class="fa fa-spinner fa-spin text-muted"
+      title="{{ 'loading' | i18n }}"
+      aria-hidden="true"
+    ></i>
+  </p>
+</ng-container>
+
+<ng-container *ngIf="!loading">
 <ng-container [ngSwitch]="displayMode">
   <ng-container *ngSwitchCase="'noOrganizations'">
     <p>{{ "noOrganizationsList" | i18n }}</p>
@@ -68,4 +79,5 @@
       {{ "newOrganization" | i18n }}
     </a>
   </ng-container>
+</ng-container>
 </ng-container>

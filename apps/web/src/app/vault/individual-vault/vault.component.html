@@ -18,7 +18,7 @@
           class="dropdown-menu dropdown-menu-right scrollable-menu"
           aria-labelledby="dropdownMenuButton"
         >
-          <app-organization-list [organizations]="allOrganizations"></app-organization-list>
+          <app-organization-list [organizations]="allOrganizations" [loading]="performingInitialLoad"></app-organization-list>
         </div>
       </div>
       <app-vault-filter
@@ -29,7 +29,7 @@
         (onEditFolder)="editFolder($event)"
       ></app-vault-filter>
     </div>
-    <div [ngClass]="{ 'col-6': isShowingCards, 'col-9': !isShowingCards }">
+    <div class="col-9">
       <app-vault-header
         [filter]="filter"
         [loading]="refreshing && !performingInitialLoad"
@@ -42,9 +42,10 @@
         (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
         (onDeleteCollection)="deleteCollection(selectedCollection.node)"
       ></app-vault-header>
-      <app-callout type="warning" *ngIf="activeFilter.isDeleted" icon="fa-exclamation-triangle">
+      <div class="tw-basis-3/4 tw-px-2.5">
+    <bit-callout type="warning" *ngIf="activeFilter.isDeleted">
         {{ trashCleanupWarning }}
-      </app-callout>
+    </bit-callout>
       <app-vault-items
         [ciphers]="ciphers"
         [collections]="collections"
@@ -58,10 +59,9 @@
         [showBulkMove]="showBulkMove"
         [showBulkTrashOptions]="filter.type === 'trash'"
         [useEvents]="false"
-        [cloneableOrganizationCiphers]="false"
         [showAdminActions]="false"
         (onEvent)="onVaultItemsEvent($event)"
-        [showBulkEditCollectionAccess]="showBulkCollectionAccess$ | async"
+      [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled$ | async"
         [showHeaderCheckboxMenu]="filter.collectionId !== 'all'"
       >
       </app-vault-items>
@@ -93,9 +93,9 @@
           {{ "newItem" | i18n }}
         </button>
       </div>
+    </div>
       <div class="vertical-spacer"></div>
       <app-footer></app-footer>
-    </div>
   </div>
 </div>
 
@@ -105,3 +105,4 @@
 <ng-template #share></ng-template>
 <ng-template #collectionsModal></ng-template>
 <ng-template #updateKeyTemplate></ng-template>
+</div>

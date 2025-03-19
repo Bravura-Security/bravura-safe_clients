@@ -1,11 +1,11 @@
 <form [formGroup]="formGroup" [bitSubmit]="submit">
   <bit-dialog>
     <span bitDialogTitle>{{ "twoFactorHyprOpenDeviceManager" | i18n }}</span>
-    <div bitDialogContent>
+    <ng-container bitDialogContent>
       <p>
         {{ "twoFactorHyprConfirmOpenDeviceManager" | i18n }}
       </p>
-    </div>
+    </ng-container>
     <ng-container bitDialogFooter>
       <button type="submit" buttonType="primary" bitButton>
         {{ "yes" | i18n }}

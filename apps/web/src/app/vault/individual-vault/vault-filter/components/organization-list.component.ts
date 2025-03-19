@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { OrganizationFilterComponent as BaseOrganizationFilterComponent } from "@bitwarden/angular/vault/vault-filter/components/organization-filter.component";
@@ -9,6 +9,7 @@ import { OrganizationFilterComponent as BaseOrganizationFilterComponent } from "
 })
 export class OrganizationListComponent extends BaseOrganizationFilterComponent {
   displayText = "allVaults";
+  @Input() loading = true;
 
   constructor(
     private router: Router

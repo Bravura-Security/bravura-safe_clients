@@ -1,23 +1,28 @@
 import { Injectable, NgZone } from "@angular/core";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { MasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { KeySuffixOptions } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { UserId } from "@bitwarden/common/types/guid";
 import { DialogService } from "@bitwarden/components";
 
 import { BrowserSyncVerificationDialogComponent } from "../app/components/browser-sync-verification-dialog.component";
 import { LegacyMessage } from "../models/native-messaging/legacy-message";
 import { LegacyMessageWrapper } from "../models/native-messaging/legacy-message-wrapper";
 import { Message } from "../models/native-messaging/message";
+import { DesktopSettingsService } from "../platform/services/desktop-settings.service";
 
 import { NativeMessageHandlerService } from "./native-message-handler.service";
 
@@ -29,15 +34,18 @@ export class NativeMessagingService {
   private sharedSecrets = new Map<string, SymmetricCryptoKey>();
 
   constructor(
+    private masterPasswordService: MasterPasswordServiceAbstraction,
     private cryptoFunctionService: CryptoFunctionService,
     private cryptoService: CryptoService,
     private platformUtilService: PlatformUtilsService,
     private logService: LogService,
-    private i18nService: I18nService,
     private messagingService: MessagingService,
-    private stateService: StateService,
+    private desktopSettingService: DesktopSettingsService,
+    private biometricStateService: BiometricStateService,
     private nativeMessageHandler: NativeMessageHandlerService,
     private dialogService: DialogService,
+    private accountService: AccountService,
+    private authService: AuthService,
     private ngZone: NgZone,
   ) {}
 
@@ -48,7 +56,8 @@ export class NativeMessagingService {
   private async messageHandler(msg: LegacyMessageWrapper | Message) {
     const outerMessage = msg as Message;
     if (outerMessage.version) {
-      this.nativeMessageHandler.handleMessage(outerMessage);
+      // If there is a version, it is a using the protocol created for the DuckDuckGo integration
+      await this.nativeMessageHandler.handleMessage(outerMessage);
       return;
     }
 
@@ -59,7 +68,7 @@ export class NativeMessagingService {
       const remotePublicKey = Utils.fromB64ToArray(rawMessage.publicKey);
 
       // Validate the UserId to ensure we are logged into the same account.
-      const accounts = await firstValueFrom(this.stateService.accounts$);
+      const accounts = await firstValueFrom(this.accountService.accounts$);
       const userIds = Object.keys(accounts);
       if (!userIds.includes(rawMessage.userId)) {
         ipc.platform.nativeMessaging.sendMessage({
@@ -69,14 +78,14 @@ export class NativeMessagingService {
         return;
       }
 
-      if (await this.stateService.getEnableBrowserIntegrationFingerprint()) {
+      if (await firstValueFrom(this.desktopSettingService.browserIntegrationFingerprintEnabled$)) {
         ipc.platform.nativeMessaging.sendMessage({
           command: "verifyFingerprint",
           appId: appId,
         });
 
         const fingerprint = await this.cryptoService.getFingerprint(
-          await this.stateService.getUserId(),
+          rawMessage.userId,
           remotePublicKey,
         );
 
@@ -93,7 +102,7 @@ export class NativeMessagingService {
         }
       }
 
-      this.secureCommunication(remotePublicKey, appId);
+      await this.secureCommunication(remotePublicKey, appId);
       return;
     }
 
@@ -132,8 +141,25 @@ export class NativeMessagingService {
           return this.send({ command: "biometricUnlock", response: "not supported" }, appId);
         }
 
-        if (!(await this.stateService.getBiometricUnlock({ userId: message.userId }))) {
-          this.send({ command: "biometricUnlock", response: "not enabled" }, appId);
+        const userId =
+          (message.userId as UserId) ??
+          (await firstValueFrom(this.accountService.activeAccount$.pipe(map((a) => a?.id))));
+
+        if (userId == null) {
+          return this.send({ command: "biometricUnlock", response: "not unlocked" }, appId);
+        }
+
+        const authStatus = await firstValueFrom(this.authService.authStatusFor$(userId));
+        if (authStatus !== AuthenticationStatus.Unlocked) {
+          return this.send({ command: "biometricUnlock", response: "not unlocked" }, appId);
+        }
+
+        const biometricUnlockPromise =
+          message.userId == null
+            ? firstValueFrom(this.biometricStateService.biometricUnlockEnabled$)
+            : this.biometricStateService.getBiometricUnlockEnabled(message.userId as UserId);
+        if (!(await biometricUnlockPromise)) {
+          await this.send({ command: "biometricUnlock", response: "not enabled" }, appId);
 
           return this.ngZone.run(() =>
             this.dialogService.openSimpleDialog({
@@ -146,27 +172,33 @@ export class NativeMessagingService {
           );
         }
 
-        const userKey = await this.cryptoService.getUserKeyFromStorage(
-          KeySuffixOptions.Biometric,
-          message.userId,
-        );
-        const masterKey = await this.cryptoService.getMasterKey(message.userId);
-
-        if (userKey != null) {
-          // we send the master key still for backwards compatibility
-          // with older browser extensions
-          // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
-          this.send(
-            {
-              command: "biometricUnlock",
-              response: "unlocked",
-              keyB64: masterKey?.keyB64,
-              userKeyB64: userKey.keyB64,
-            },
-            appId,
+        try {
+          const userKey = await this.cryptoService.getUserKeyFromStorage(
+            KeySuffixOptions.Biometric,
+            message.userId,
           );
-        } else {
-          this.send({ command: "biometricUnlock", response: "canceled" }, appId);
+          const masterKey = await firstValueFrom(
+            this.masterPasswordService.masterKey$(message.userId as UserId),
+          );
+
+          if (userKey != null) {
+            // we send the master key still for backwards compatibility
+            // with older browser extensions
+            // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
+            await this.send(
+              {
+                command: "biometricUnlock",
+                response: "unlocked",
+                keyB64: masterKey?.keyB64,
+                userKeyB64: userKey.keyB64,
+              },
+              appId,
+            );
+          } else {
+            await this.send({ command: "biometricUnlock", response: "canceled" }, appId);
+          }
+        } catch (e) {
+          await this.send({ command: "biometricUnlock", response: "canceled" }, appId);
         }
 
         break;

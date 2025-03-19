@@ -2,12 +2,12 @@
   <div class="content">
     <div class="inner-content" *ngIf="send">
       <div class="box">
-        <app-callout *ngIf="disableSend">
+        <bit-callout *ngIf="disableSend">
           <span>{{ "sendDisabledWarning" | i18n }}</span>
-        </app-callout>
-        <app-callout type="info" *ngIf="disableHideEmail && !disableSend">
+        </bit-callout>
+        <bit-callout type="info" *ngIf="disableHideEmail && !disableSend">
           {{ "sendOptionsPolicyInEffect" | i18n }}
-        </app-callout>
+        </bit-callout>
       </div>
       <div class="box">
         <h2 class="box-header">
@@ -75,7 +75,7 @@
           {{ "sendTextDesc" | i18n }}
         </div>
       </div>
-      <div class="box" *ngIf="send.type === sendType.Text">
+      <div class="box" *ngIf="type === sendType.Text">
         <div class="box-content">
           <div class="box-content-row box-content-row-checkbox" appBoxRow>
             <label for="hideText">{{ "textHiddenByDefault" | i18n }}</label>

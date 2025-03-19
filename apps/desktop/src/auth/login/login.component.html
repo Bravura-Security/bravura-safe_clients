@@ -37,9 +37,6 @@
               />
             </div>
           </div>
-          <div class="box-footer" *ngIf="selfHostedDomain">
-            {{ "loggingInTo" | i18n : selfHostedDomain }}
-          </div>
         </div>
         <div class="checkbox remember-email">
           <label for="rememberEmail">
@@ -61,7 +58,7 @@
         </div>
         <div class="sub-options">
           <p class="no-margin">{{ "newAroundHere" | i18n }}</p>
-          <button type="button" class="text text-primary" routerLink="/register">
+          <button type="button" class="text text-primary" [routerLink]="registerRoute">
             {{ "createAccount" | i18n }}
           </button>
         </div>
@@ -112,7 +109,7 @@
                 class="btn block"
                 type="button"
                 routerLink="/accessibility-cookie"
-                (click)="setFormValues()"
+                (click)="setLoginEmailValues()"
               >
                 <i class="fa fa-universal-access" aria-hidden="true"></i>
                 {{ "loadAccessibilityCookie" | i18n }}
@@ -142,7 +139,7 @@
               (click)="launchSsoBrowser('desktop', 'bravurasafe://sso-callback')"
               class="btn block"
             >
-              <i class="fa fa-provider" aria-hidden="true"></i>
+              <i class="fa fa-unlock" aria-hidden="true"></i>
               {{ "enterpriseSingleSignOn" | i18n }}
             </button>
           </div>
@@ -152,7 +149,7 @@
             type="button"
             class="text text-primary password-hint-btn"
             routerLink="/hint"
-            (click)="setFormValues()"
+            (click)="setLoginEmailValues()"
           >
             {{ "getMasterPasswordHint" | i18n }}
           </button>

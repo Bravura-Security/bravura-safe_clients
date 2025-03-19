@@ -2,95 +2,87 @@
   <h1>{{ "domainRules" | i18n }}</h1>
 </div>
 <p>{{ "domainRulesDesc" | i18n }}</p>
-<form #form (ngSubmit)="submit()" [appApiAction]="formPromise" ngNativeValidate>
+<form [formGroup]="formGroup" [bitSubmit]="submit">
   <h2>{{ "customEqDomains" | i18n }}</h2>
-  <p *ngIf="loading">
+  <p bitTypography="body1" *ngIf="loading">
     <i
-      class="fa fa-spinner fa-spin text-muted"
+      class="fa fa-spinner fa-spin tw-text-muted"
       title="{{ 'loading' | i18n }}"
       aria-hidden="true"
     ></i>
-    <span class="sr-only">{{ "loading" | i18n }}</span>
+      <span class="tw-sr-only">{{ "loading" | i18n }}</span>
   </p>
-  <ng-container *ngIf="!loading">
-    <div class="form-group d-flex" *ngFor="let d of custom; let i = index; trackBy: indexTrackBy">
-      <div class="flex-fill">
-        <label for="customDomain_{{ i }}" class="sr-only">{{
-          "customDomainX" | i18n: i + 1
-        }}</label>
+    <ng-container formArrayName="customDomain" *ngIf="!loading">
+      <div
+        class="tw-flex tw-items-center tw-gap-2 tw-mb-6"
+        *ngFor="let d of custom; let i = index; trackBy: indexTrackBy"
+      >
+        <bit-form-field class="tw-flex-1 !tw-mb-0" formGroupName="{{ i }}">
+          <bit-label class="tw-sr-only">{{ "customDomainX" | i18n: i + 1 }} </bit-label>
         <textarea
-          class="form-control"
-          name="CustomDomain[{{ i }}]"
-          id="customDomain_{{ i }}"
-          [(ngModel)]="custom[i]"
+            rows="2"
+            bitInput
+            [value]="d"
+            formControlName="domain"
           placeholder="{{ 'ex' | i18n }} google.com, gmail.com"
-          required
         ></textarea>
-      </div>
+        </bit-form-field>
       <button
+          bitIconButton="fa-minus-circle"
         type="button"
-        class="btn btn-link text-danger ml-2"
+          buttonType="danger"
         (click)="remove(i)"
         appA11yTitle="{{ 'remove' | i18n }}"
-      >
-        <i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i>
-      </button>
+        ></button>
     </div>
-    <button type="button" (click)="add()" class="btn btn-outline-secondary btn-sm mb-2">
+      <button bitButton type="button" (click)="add()" buttonType="secondary" class="tw-mb-2">
       <i class="fa fa-plus fa-fw" aria-hidden="true"></i> {{ "newCustomDomain" | i18n }}
     </button>
-    <small class="text-muted d-block mb-3">{{ "newCustomDomainDesc" | i18n }}</small>
+      <small class="tw-text-muted tw-block tw-mb-3">{{ "newCustomDomainDesc" | i18n }}</small>
   </ng-container>
-  <button type="submit" class="btn btn-primary btn-submit" [disabled]="form.loading">
-    <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
-    <span>{{ "save" | i18n }}</span>
+    <button type="submit" bitButton bitFormButton buttonType="primary">
+      {{ "save" | i18n }}
   </button>
-  <h2 class="spaced-header">{{ "globalEqDomains" | i18n }}</h2>
-  <p *ngIf="loading">
+    <h2 class="spaced-header">{{ "globalEqDomains" | i18n }}</h2>
+    <p bitTypography="body1" *ngIf="loading">
     <i
-      class="fa fa-spinner fa-spin text-muted"
+      class="fa fa-spinner fa-spin tw-text-muted"
       title="{{ 'loading' | i18n }}"
       aria-hidden="true"
     ></i>
-    <span class="sr-only">{{ "loading" | i18n }}</span>
+      <span class="tw-sr-only">{{ "loading" | i18n }}</span>
   </p>
-  <table class="table table-hover table-list" *ngIf="!loading && global.length > 0">
-    <tbody>
-      <tr *ngFor="let d of global">
-        <td [ngClass]="{ 'table-list-strike': d.excluded }">{{ d.domains }}</td>
-        <td class="table-list-options">
-          <div class="list-options">
+    <bit-table *ngIf="!loading && global.length > 0" class="table">
+      <ng-template body>
+        <tr bitRow *ngFor="let d of global" class="tw-group">
+          <td bitCell [ngClass]="{ 'table-list-strike': d.excluded }">{{ d.domains }}</td>
+          <td bitCell>
             <button
-              [disabled]=false
-              [bitMenuTriggerFor]="domainOptions"
-              bitIconButton="fa fa-cog"
-              size="small"
               type="button"
-              appA11yTitle="{{ 'options' | i18n }}"
-              class="btn btn-sm btn-outline-secondary dropdown-toggle"
-              appStopProp
+              bitIconButton="fa-cog"
+              buttonType="secondary"
+              [bitMenuTriggerFor]="appListDropdown"
+              class="tw-border-0 tw-bg-transparent tw-p-0"
             ></button>
-            <bit-menu #domainOptions>
-              <button *ngIf="!d.excluded" type="button" bitMenuItem (click)="toggleExcluded(d)">
+            <bit-menu #appListDropdown>
+              <a href="#" bitMenuItem appStopClick (click)="toggleExcluded(d)" *ngIf="!d.excluded">
                 <i class="fa fa-fw fa-close" aria-hidden="true"></i>
                 {{ "exclude" | i18n }}
-              </button>
-              <button *ngIf="d.excluded" type="button" bitMenuItem (click)="toggleExcluded(d)">
+              </a>
+              <a href="#" bitMenuItem appStopClick (click)="toggleExcluded(d)" *ngIf="d.excluded">
                 <i class="fa fa-fw fa-plus" aria-hidden="true"></i>
                 {{ "include" | i18n }}
-              </button>
+              </a>
               <button type="button" bitMenuItem (click)="customize(d)">
                 <i class="fa fa-fw fa-scissors" aria-hidden="true"></i>
                 {{ "customize" | i18n }}
               </button>
             </bit-menu>
-          </div>
         </td>
       </tr>
-    </tbody>
-  </table>
-  <button type="submit" class="btn btn-primary btn-submit" [disabled]="form.loading">
-    <i class="fa fa-spinner fa-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
-    <span>{{ "save" | i18n }}</span>
+      </ng-template>
+    </bit-table>
+    <button type="submit" bitButton buttonType="primary">
+      {{ "save" | i18n }}
   </button>
 </form>

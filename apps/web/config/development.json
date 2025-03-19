@@ -1,10 +1,18 @@
 {
   "urls": {},
   "dev": {},
+  "additionalRegions": [
+    {
+      "key": "LOCAL",
+      "domain": "localhost",
+      "urls": {
+        "webVault": "https://localhost:8080"
+      }
+    }
+  ],
   "flags": {
-    "secretsManager": false,
     "showPasswordless": true,
-    "enableCipherKeyEncryption": false
+    "enableCipherKeyEncryption": true
   },
   "devFlags": {}
 }

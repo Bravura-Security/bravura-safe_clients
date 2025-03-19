@@ -1,3 +1,5 @@
+import "jest-preset-angular/setup-jest";
+
 // Add chrome storage api
 const QUOTA_BYTES = 10;
 const storage = {
@@ -30,6 +32,7 @@ const runtime = {
     addListener: jest.fn(),
     removeListener: jest.fn(),
   },
+  reload: jest.fn(),
 };
 
 const contextMenus = {
@@ -43,6 +46,7 @@ const i18n = {
 };
 
 const tabs = {
+  get: jest.fn(),
   executeScript: jest.fn(),
   sendMessage: jest.fn(),
   query: jest.fn(),
@@ -66,6 +70,8 @@ const tabs = {
 
 const scripting = {
   executeScript: jest.fn(),
+  registerContentScripts: jest.fn(),
+  unregisterContentScripts: jest.fn(),
 };
 
 const windows = {
@@ -105,6 +111,38 @@ const privacy = {
   },
 };
 
+const extension = {
+  getBackgroundPage: jest.fn(),
+  getViews: jest.fn(),
+};
+
+const offscreen = {
+  createDocument: jest.fn(),
+  closeDocument: jest.fn((callback) => {
+    if (callback) {
+      callback();
+    }
+  }),
+  Reason: {
+    CLIPBOARD: "clipboard",
+  },
+};
+
+const permissions = {
+  contains: jest.fn((permissions, callback) => {
+    callback(true);
+  }),
+};
+
+const webNavigation = {
+  getFrame: jest.fn(),
+  getAllFrames: jest.fn(),
+  onCommitted: {
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  },
+};
+
 // set chrome
 global.chrome = {
   i18n,
@@ -116,4 +154,8 @@ global.chrome = {
   windows,
   port,
   privacy,
+  extension,
+  offscreen,
+  permissions,
+  webNavigation,
 } as any;

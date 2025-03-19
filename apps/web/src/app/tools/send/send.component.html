@@ -221,13 +221,7 @@
           <bit-no-items [icon]="noItemIcon" class="tw-text-main">
             <ng-container slot="title">{{ "sendsNoItemsTitle" | i18n }}</ng-container>
             <ng-container slot="description">{{ "sendsNoItemsMessage" | i18n }}</ng-container>
-          <button
-              slot="button"
-            type="button"
-              bitButton
-              buttonType="secondary"
-            (click)="addSend()"
-          >
+          <button slot="button" type="button" bitButton buttonType="secondary" (click)="addSend()">
               <i class="fa fa-plus" aria-hidden="true"></i>
               {{ "createSend" | i18n }}
           </button>

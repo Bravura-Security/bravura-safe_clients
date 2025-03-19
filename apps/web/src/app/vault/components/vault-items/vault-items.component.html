@@ -21,8 +21,10 @@
           }}</label>
           </ng-container>
         </th>
-        <th bitCell [class]="showExtraColumn ? 'tw-w-3/5' : 'tw-w-full'">{{ "name" | i18n }}</th>
-        <th bitCell class="tw-w-2/5" *ngIf="showOwner">{{ "owner" | i18n }}</th>
+        <th bitCell [class]="showExtraColumn ? 'lg:tw-w-3/5' : 'tw-w-full'">{{ "name" | i18n }}</th>
+        <th bitCell *ngIf="showOwner" class="tw-hidden tw-w-2/5 lg:tw-table-cell">
+          {{ "owner" | i18n }}
+        </th>
         <th bitCell class="tw-w-2/5" *ngIf="showCollections">{{ "collections" | i18n }}</th>
         <th bitCell class="tw-w-2/5" *ngIf="showGroups">{{ "groups" | i18n }}</th>
         <th bitCell class="tw-w-2/5" *ngIf="showPermissionsColumn && viewingOrgVault">
@@ -55,6 +57,15 @@
             >
               <i class="fa fa-fw fa-users" aria-hidden="true"></i>
               {{ "access" | i18n }}
+            </button>
+            <button
+              *ngIf="showAdminActions && bulkAssignToCollectionsAllowed"
+              type="button"
+              bitMenuItem
+              (click)="assignToCollections()"
+            >
+              <i class="fa fa-fw fa-cube" aria-hidden="true"></i>
+              {{ "assignToCollections" | i18n }}
             </button>
             <button
               *ngIf="bulkMoveAllowed"
@@ -97,12 +108,19 @@
           [groups]="allGroups"
           [canDeleteCollection]="canDeleteCollection(item.collection)"
           [canEditCollection]="canEditCollection(item.collection)"
+          [canViewCollectionInfo]="canViewCollectionInfo(item.collection)"
+          [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled"
+          [restrictProviderAccess]="restrictProviderAccess"
           [checked]="selection.isSelected(item)"
           (checkedToggled)="selection.toggle(item)"
           (onEvent)="event($event)"
         ></tr>
+        <!--
+          addAccessStatus check here so ciphers do not show if user
+          has filtered for collections with addAccess
+        -->
         <tr
-          *ngIf="item.cipher"
+          *ngIf="item.cipher && (!addAccessToggle || (addAccessToggle && addAccessStatus !== 1))"
           bitRow
           appVaultCipherRow
           alignContent="middle"

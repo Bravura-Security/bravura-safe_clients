@@ -1,5 +1,4 @@
 <app-navbar></app-navbar>
-<app-payment-method-banners></app-payment-method-banners>
 <div class="org-nav !tw-h-32 position-sticky" *ngIf="organization$ | async as organization">
   <div class="container d-flex">
     <div class="d-flex flex-column">
@@ -11,7 +10,8 @@
         <bit-tab-link
           *ngIf="canShowVaultTab(organization) && organization.flexibleCollections; else vaultTab"
           route="vault"
-          >{{ "collections" | i18n }}</bit-tab-link
+          iconClass="fa fa-lock"
+          >{{ "vault" | i18n }}</bit-tab-link
         >
         <ng-template #vaultTab>
           <bit-tab-link *ngIf="canShowVaultTab(organization)" route="vault" iconClass="fa fa-lock">{{

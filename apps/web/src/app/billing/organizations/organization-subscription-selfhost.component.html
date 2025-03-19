@@ -37,10 +37,10 @@
         "subscriptionExpiration" | i18n
       }}</span>
       <a
-        href="https://bitwarden.com/help/licensing-on-premise/#update-organization-license"
+        href="https://bravurasafe.com/help/licensing-on-premise/#update-organization-license"
         target="_blank"
         [appA11yTitle]="'licensePaidFeaturesHelp' | i18n"
-        rel="noopener"
+          rel="noreferrer"
       >
         <i class="fa fa-question-circle" aria-hidden="true"></i>
         <span class="sr-only">{{ "licensePaidFeaturesHelp" | i18n }}</span>
@@ -53,7 +53,10 @@
           : subscription.expirationWithGracePeriod
         ) | date: "mediumDate"
       }}
-      <div *ngIf="subscription.hasSeparateGracePeriod" class="tw-text-muted">
+        <div
+          *ngIf="subscription.hasSeparateGracePeriod && !subscription.isInTrial"
+          class="tw-text-muted"
+        >
         {{
           "selfHostGracePeriodHelp"
             | i18n: (subscription.expirationWithGracePeriod | date: "mediumDate")
@@ -101,7 +104,11 @@
         </button>
       </ng-container>
 
-      <bit-radio-button id="manual-upload" [value]="licenseOptions.UPLOAD" class="tw-mt-6 tw-block">
+        <bit-radio-button
+          id="manual-upload"
+          [value]="licenseOptions.UPLOAD"
+          class="tw-mt-6 tw-block"
+        >
         <bit-label>{{ "manualUpload" | i18n }}</bit-label>
         <bit-hint>
           {{ "manualUploadDesc" | i18n }}

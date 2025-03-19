@@ -3,17 +3,17 @@
 </div>
 <ng-container *ngIf="loading">
   <i
-    class="fa fa-spinner fa-spin text-muted"
+    class="fa fa-spinner fa-spin tw-text-muted"
     title="{{ 'loading' | i18n }}"
     aria-hidden="true"
   ></i>
-  <span class="sr-only">{{ "loading" | i18n }}</span>
+    <span class="tw-sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
-<table class="table table-hover table-list" *ngIf="!loading">
-  <tbody>
+  <bit-table *ngIf="!loading">
+    <ng-template body>
     <ng-template ngFor let-p [ngForOf]="policies">
-    <tr *ngIf="p.display(organization)">
-      <td>
+    <tr bitRow *ngIf="p.display(organization)">
+      <td bitCell>
         <a href="#" appStopClick (click)="edit(p)">{{ p.name | i18n }}</a>
         <span bitBadge variant="success" *ngIf="policiesEnabledMap.get(p.type)">{{
           "on" | i18n
@@ -22,6 +22,6 @@
       </td>
     </tr>
     </ng-template>
-  </tbody>
-</table>
+    </ng-template>
+  </bit-table>
 <ng-template #editTemplate></ng-template>
