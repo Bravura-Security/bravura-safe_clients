@@ -243,16 +243,16 @@ export class ServiceContainer {
     const relativeDataDir = path.join(path.dirname(process.execPath), "bw-data");
     if (fs.existsSync(relativeDataDir)) {
       p = relativeDataDir;
-    } else if (process.env.BITWARDENCLI_APPDATA_DIR) {
-      p = path.resolve(process.env.BITWARDENCLI_APPDATA_DIR);
+    } else if (process.env.BRAVURASAFECLI_APPDATA_DIR) {
+      p = path.resolve(process.env.BRAVURASAFECLI_APPDATA_DIR);
     } else if (process.platform === "darwin") {
-      p = path.join(process.env.HOME, "Library/Application Support/Bitwarden CLI");
+      p = path.join(process.env.HOME, "Library/Application Support/Bravura Safe CLI");
     } else if (process.platform === "win32") {
-      p = path.join(process.env.APPDATA, "Bitwarden CLI");
+      p = path.join(process.env.APPDATA, "Bravura Safe CLI");
     } else if (process.env.XDG_CONFIG_HOME) {
-      p = path.join(process.env.XDG_CONFIG_HOME, "Bitwarden CLI");
+      p = path.join(process.env.XDG_CONFIG_HOME, "Bravura Safe CLI");
     } else {
-      p = path.join(process.env.HOME, ".config/Bitwarden CLI");
+      p = path.join(process.env.HOME, ".config/Bravura Safe CLI");
     }
 
     const logoutCallback = async () => await this.logout();
@@ -260,7 +260,7 @@ export class ServiceContainer {
     this.platformUtilsService = new CliPlatformUtilsService(ClientType.Cli, packageJson);
     this.logService = new ConsoleLogService(
       this.platformUtilsService.isDev(),
-      (level) => process.env.BITWARDENCLI_DEBUG !== "true" && level <= LogLevelType.Info,
+      (level) => process.env.BRAVURASAFECLI_DEBUG !== "true" && level <= LogLevelType.Info,
     );
     this.cryptoFunctionService = new NodeCryptoFunctionService();
     this.encryptService = new EncryptServiceImplementation(
@@ -399,7 +399,7 @@ export class ServiceContainer {
     this.appIdService = new AppIdService(this.globalStateProvider);
 
     const customUserAgent =
-      "Bitwarden_CLI/" +
+      "Bravura_Safe_CLI/" +
       this.platformUtilsService.getApplicationVersionSync() +
       " (" +
       this.platformUtilsService.getDeviceString().toUpperCase() +

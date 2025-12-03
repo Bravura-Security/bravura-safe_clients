@@ -5,9 +5,8 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { Response } from "../models/response";
 import { MessageResponse } from "../models/response/message.response";
 
-const CLIENTS_RELEASE_LIST_ENDPOINT = "https://api.github.com/repos/bitwarden/clients/releases";
-const DEFAULT_DOWNLOAD_URL = "https://github.com/bitwarden/clients/releases";
-const UPDATE_COMMAND = "npm install -g @bitwarden/cli";
+const CLIENTS_RELEASE_LIST_ENDPOINT = "https://api.github.com/repos/Bravura-Security/bravura-safe_clients/releases";
+const DEFAULT_DOWNLOAD_URL = "https://github.com/Bravura-Security/bravura-safe_clients/releases";
 
 export class UpdateCommand {
   inPkg = false;
@@ -64,12 +63,6 @@ export class UpdateCommand {
       message +=
         "\n\nIf you installed this CLI through a package manager " +
         "you should probably update using its update command instead.";
-    } else {
-      message +=
-        "\n\nIf you installed this CLI through NPM " +
-        "you should update using `" +
-        UPDATE_COMMAND +
-        "`";
     }
 
     return message;
