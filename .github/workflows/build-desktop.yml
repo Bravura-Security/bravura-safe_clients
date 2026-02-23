@@ -37,7 +37,7 @@ jobs:
             script: dist:win:ci
             artifact: apps/desktop/dist
           - os: macOS
-            runner: macos-13
+            runner: macos-15
             script: dist:mac
             artifact: apps/desktop/dist
 

@@ -31,15 +31,15 @@ jobs:
           - os: Linux
             runner: ubuntu-22.04
             script: dist:oss:lin
-            artifact: apps/cli/dist/oss/linux/bsafe
+            artifact: apps/cli/dist/oss/linux/bw
           - os: Windows
             runner: windows-2022
             script: dist:oss:win
-            artifact: apps/cli/dist/oss/windows/bsafe.exe
+            artifact: apps/cli/dist/oss/windows/bw.exe
           - os: macOS
-            runner: macos-13
+            runner: macos-15
             script: dist:oss:mac
-            artifact: apps/cli/dist/oss/macos/bsafe
+            artifact: apps/cli/dist/oss/macos/bw
 
     steps:
       - name: Checkout repository
