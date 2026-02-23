@@ -36,6 +36,10 @@ jobs:
             runner: windows-2022
             script: dist:win:ci
             artifact: apps/desktop/dist
+          - os: macOS
+            runner: macos-13
+            script: dist:mac
+            artifact: apps/desktop/dist
 
     steps:
       - name: Checkout repository
