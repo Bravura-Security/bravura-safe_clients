@@ -1,0 +1,77 @@
+name: Build Desktop
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "apps/desktop/**"
+      - "libs/**"
+      - "package*.json"
+      - ".github/workflows/build-desktop.yml"
+  pull_request:
+    paths:
+      - "apps/desktop/**"
+      - "libs/**"
+      - "package*.json"
+      - ".github/workflows/build-desktop.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Desktop - ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: Linux
+            runner: ubuntu-22.04
+            script: dist:lin
+            artifact: apps/desktop/dist
+          - os: Windows
+            runner: windows-2022
+            script: dist:win:ci
+            artifact: apps/desktop/dist
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux build dependencies
+        if: matrix.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libsecret-1-dev \
+            libglib2.0-dev \
+            rpm \
+            squashfs-tools \
+            libfuse2 \
+            snapcraft
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Desktop (${{ matrix.os }})
+        working-directory: apps/desktop
+        run: npm run ${{ matrix.script }}
+
+      - name: Upload Desktop artifact (${{ matrix.os }})
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.os }}
+          path: ${{ matrix.artifact }}
+          if-no-files-found: error

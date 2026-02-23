@@ -1,0 +1,61 @@
+name: Build Browser Extension
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "apps/browser/**"
+      - "libs/**"
+      - "package*.json"
+      - ".github/workflows/build-browser.yml"
+  pull_request:
+    paths:
+      - "apps/browser/**"
+      - "libs/**"
+      - "package*.json"
+      - ".github/workflows/build-browser.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Browser Extension
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Chrome extension
+        working-directory: apps/browser
+        run: npm run dist:chrome
+
+      - name: Build Firefox extension
+        working-directory: apps/browser
+        run: npm run dist:firefox
+
+      - name: Upload Chrome extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-extension-chrome
+          path: apps/browser/dist/dist-chrome*.zip
+          if-no-files-found: error
+
+      - name: Upload Firefox extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-extension-firefox
+          path: apps/browser/dist/dist-firefox*.zip
+          if-no-files-found: error
